@@ -28,15 +28,14 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto getSingleProduct(int productId) {
         Optional<Product> product = Optional.ofNullable(productDao.getProduct(productId));
         if (product.isPresent()) {
-            return ProductDto.builder()
-                    .id(product.get().getId())
-                    .name(product.get().getName())
-                    .description(product.get().getDescription())
-                    .price(product.get().getPrice())
-                    .productCount(product.get().getProductCount())
-                    .build();
+            return new ProductDto(
+                    product.get().getId(),
+                    product.get().getName(),
+                    product.get().getDescription(),
+                    product.get().getPrice(),
+                    product.get().getProductCount());
         }else {
-            return ProductDto.builder().build();
+            return null;
         }
     }
 

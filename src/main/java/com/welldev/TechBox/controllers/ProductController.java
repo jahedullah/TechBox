@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -25,7 +26,8 @@ public class ProductController {
 
     @GetMapping(PRODUCT_URL.PRODUCT_WITH_ID)
     public ResponseEntity<ProductDto> getSingleProduct(@PathVariable int productId) {
-        return ResponseEntity.ok(productService.getSingleProduct(productId));
+        Optional<ProductDto> productDto = Optional.ofNullable(productService.getSingleProduct(productId));
+        return productDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 

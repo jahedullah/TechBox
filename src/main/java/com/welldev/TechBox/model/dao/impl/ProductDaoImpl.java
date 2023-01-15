@@ -77,13 +77,12 @@ public class ProductDaoImpl implements ProductDao {
         productList.forEach(
                 (tempProduct) -> {
                     ProductDto productDto
-                            = ProductDto.builder()
-                            .id(tempProduct.getId())
-                            .name(tempProduct.getName())
-                            .description(tempProduct.getDescription())
-                            .price(tempProduct.getPrice())
-                            .productCount(tempProduct.getProductCount())
-                            .build();
+                            = new ProductDto(
+                            tempProduct.getId(),
+                            tempProduct.getName(),
+                            tempProduct.getDescription(),
+                            tempProduct.getPrice(),
+                            tempProduct.getProductCount());
                     newProductList.add(productDto);
                 }
         );

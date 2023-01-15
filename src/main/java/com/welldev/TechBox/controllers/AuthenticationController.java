@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -42,7 +43,7 @@ public class AuthenticationController {
 
     @PostMapping(AUTH_URL.AUTHENTICATE)
     public ResponseEntity<AuthenticationResponseDto> authenticate(
-            @RequestBody AuthenticationRequestDto request
+           @Valid @RequestBody AuthenticationRequestDto request
     ) {
         return ResponseEntity.ok(authService.authenticate(request));
     }

@@ -7,7 +7,6 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @Getter
-@Builder
 public class ProductDto {
     private int id;
     private String name;
