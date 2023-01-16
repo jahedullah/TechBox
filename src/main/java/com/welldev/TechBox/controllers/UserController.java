@@ -36,9 +36,10 @@ public class UserController {
 
     }
     @GetMapping(USER_URL.USER_WITH_ID)
-    public ResponseEntity<UserDto> getSingleUser(@PathVariable int userId) {
-        Optional<UserDto> userDto = Optional.ofNullable(userService.getSingleUser(userId));
-        return userDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<UserDto> getSingleUser(@Valid @PathVariable int userId){
+
+            Optional<UserDto> userDto = Optional.ofNullable(userService.getSingleUser(userId));
+            return userDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping(value = USER_URL.USER_UPDATE_BY_ID)
@@ -60,7 +61,7 @@ public class UserController {
         return ResponseEntity.ok(productList);
     }
 
-    @PutMapping(USER_URL.USER_PRODUCTS_DELETE_BY_ID)
+    @DeleteMapping (USER_URL.USER_PRODUCTS_DELETE_BY_ID)
     public ResponseEntity<HttpStatus> productsDeleteById(@PathVariable int pid,
                                                          HttpServletRequest request) {
         try {
@@ -79,4 +80,13 @@ public class UserController {
         return userDto.map(ResponseEntity::ok).orElseGet(() ->
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
+
+    @PutMapping(value = USER_URL.USER_BUY_PRODUCT_WITH_ID)
+    public ResponseEntity<ProductDto> buyProduct(@PathVariable int productId,
+                                                 @PathVariable int userId){
+        Optional<ProductDto> productDto = Optional.ofNullable(userService.addProduct(userId,productId));
+        return productDto.map(ResponseEntity::ok).orElseGet(() ->
+                ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
+
 }

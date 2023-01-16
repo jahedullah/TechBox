@@ -1,8 +1,11 @@
 package com.welldev.TechBox.model.service.impl;
 
+import com.welldev.TechBox.model.dao.ProductDao;
 import com.welldev.TechBox.model.dao.UserDao;
+import com.welldev.TechBox.model.dto.Product.ProductDto;
 import com.welldev.TechBox.model.dto.UserDto.UserDto;
 import com.welldev.TechBox.model.dto.UserDto.UserUpdateRequestDto;
+import com.welldev.TechBox.model.entity.Product;
 import com.welldev.TechBox.model.entity.User;
 import com.welldev.TechBox.model.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
+    private final ProductDao productDao;
 
     @Override
     public UserDto getSingleUser(int userId) {
@@ -73,6 +77,28 @@ public class UserServiceImpl implements UserService {
         }else {
             return null;
         }
+    }
+
+    @Override
+    public ProductDto addProduct(int userId, int productId) {
+        if (Objects.equals(userDao.getUser(userId).getEmail(),
+                SecurityContextHolder.getContext().getAuthentication().getName())) {
+            User user = userDao.getUser(userId);
+            Product product = productDao.getProduct(productId);
+            userDao.addProduct(user, product);
+            productDao.updateProductUserList(product, user);
+            productDao.updateProductCount(product);
+            return new ProductDto(
+                    product.getId(),
+                    product.getName(),
+                    product.getDescription(),
+                    product.getPrice(),
+                    product.getProductCount()
+            );
+        }else {
+            return null;
+        }
+
     }
 
 }

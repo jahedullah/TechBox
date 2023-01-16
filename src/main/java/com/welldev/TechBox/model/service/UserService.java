@@ -12,4 +12,5 @@ public interface UserService {
 
     UserDto updateUser(int userId, UserUpdateRequestDto userUpdateRequestDto);
     UserDto deleteUser(int userId);
+    ProductDto addProduct(int userid, int productId);
 }

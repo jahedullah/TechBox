@@ -43,6 +43,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
+    @ExceptionHandler(NumberFormatException.class)
+    public ResponseEntity<Map<String, String>> handleNumberFormatException(
+            NumberFormatException ex){
+        Map<String, String> response = new HashMap<>();
+        response.put("Specific Input Format Required", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
 
 
 }

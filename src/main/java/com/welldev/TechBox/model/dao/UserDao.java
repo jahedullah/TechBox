@@ -1,7 +1,6 @@
 package com.welldev.TechBox.model.dao;
 
 
-import com.welldev.TechBox.model.dto.Product.ProductUpdateRequestDto;
 import com.welldev.TechBox.model.dto.UserDto.UserDto;
 import com.welldev.TechBox.model.dto.UserDto.UserUpdateRequestDto;
 import com.welldev.TechBox.model.entity.Product;
@@ -32,7 +31,7 @@ public interface UserDao {
 
 //    String buyProductByID(int id, HttpServletRequest request);
 
-    void updateUserProductList(User user, Product product);
+    void addProduct(User user, Product product);
 
     List<Product> productsList(HttpServletRequest request);
 

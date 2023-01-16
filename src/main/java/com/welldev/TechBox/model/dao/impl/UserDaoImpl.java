@@ -174,14 +174,25 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void updateUserProductList(User user, Product product) {
+    public void addProduct(User user, Product product) {
         Session session = HibernateUtils.getSessionFactory().openSession();
         session.beginTransaction();
         user.getProductList().add(product);
         session.update(user);
         session.getTransaction().commit();
         session.close();
+
     }
+
+//    @Override
+//    public void updateUserProductList(User user, Product product) {
+//        Session session = HibernateUtils.getSessionFactory().openSession();
+//        session.beginTransaction();
+//        user.getProductList().add(product);
+//        session.update(user);
+//        session.getTransaction().commit();
+//        session.close();
+//    }
 
 //    @Override
 //    public String buyProductByID(int id, HttpServletRequest request) {
