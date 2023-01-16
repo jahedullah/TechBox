@@ -28,14 +28,14 @@ public class AuthenticationController {
 
     @PostMapping(AUTH_URL.USER_REGISTRATION)
     public ResponseEntity<UserRegisterResponseDto> registerUser(
-            @RequestBody UserRegisterRequestDto request
+            @Valid @RequestBody UserRegisterRequestDto request
     ) throws IOException {
         return ResponseEntity.ok(authService.register(request));
     }
 
     @PostMapping(AUTH_URL.ADMIN_REGISTRATION)
     public ResponseEntity<UserRegisterResponseDto> registerAdmin(
-            @RequestBody UserRegisterRequestDto request,
+            @Valid @RequestBody UserRegisterRequestDto request,
             HttpServletResponse response
     ) throws IOException {
         return ResponseEntity.ok(authService.register(request));

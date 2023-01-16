@@ -34,8 +34,9 @@ public class UserRegisterRequestDto {
                     "Minimum eight in length.")
     private String password;
 
-
-    private int mobilenumber;
+    @Pattern(regexp = "^0[0-9]{10}$",
+            message = "Number should be equal to 11 digits.")
+    private String mobilenumber;
 
     @NotBlank
     @Size(min = 4, max = 10)

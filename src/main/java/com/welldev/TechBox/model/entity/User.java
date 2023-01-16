@@ -25,7 +25,7 @@ public class User implements UserDetails {
     private String lastname;
     private String email;
     private String password;
-    private int mobilenumber;
+    private String mobilenumber;
     private String usertype;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_prod_join",

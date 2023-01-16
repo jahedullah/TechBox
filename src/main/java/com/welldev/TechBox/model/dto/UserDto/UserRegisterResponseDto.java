@@ -10,6 +10,6 @@ public class UserRegisterResponseDto {
     private String firstname;
     private String lastname;
     private String email;
-    private int mobilenumber;
+    private String mobilenumber;
     private String usertype;
 }
