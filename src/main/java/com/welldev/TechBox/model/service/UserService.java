@@ -10,6 +10,6 @@ public interface UserService {
     UserDto getSingleUser(int userId);
     List<UserDto> getUserList();
 
-    UserDto updateUser(int productId, UserUpdateRequestDto userUpdateRequestDto);
+    UserDto updateUser(int userId, UserUpdateRequestDto userUpdateRequestDto);
     ProductDto deleteProduct(int user);
 }

@@ -2,8 +2,8 @@ package com.welldev.TechBox.model.dao.impl;
 
 import com.welldev.TechBox.model.dao.ProductDao;
 import com.welldev.TechBox.model.dao.UserDao;
-import com.welldev.TechBox.model.dto.Product.ProductDto;
 import com.welldev.TechBox.model.dto.UserDto.UserDto;
+import com.welldev.TechBox.model.dto.UserDto.UserUpdateRequestDto;
 import com.welldev.TechBox.model.entity.Product;
 import com.welldev.TechBox.model.entity.User;
 import com.welldev.TechBox.model.service.JwtService;
@@ -39,6 +39,22 @@ public class UserDaoImpl implements UserDao {
         session.close();
 
         return user;
+    }
+
+    @Override
+    public User updateUser(int userId, UserUpdateRequestDto userUpdateRequestDto) {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        User userToUpdate  = session.get(User.class, userId);
+        userToUpdate.setFirstname(userUpdateRequestDto.getFirstname());
+        userToUpdate.setLastname(userUpdateRequestDto.getLastname());
+        userToUpdate.setEmail(userUpdateRequestDto.getEmail());
+        userToUpdate.setMobilenumber(userUpdateRequestDto.getMobileNumber());
+
+        session.beginTransaction();
+        session.update(userToUpdate);
+        session.getTransaction().commit();
+        session.close();
+        return userToUpdate;
     }
 
     public User findByUsername(String Username) {

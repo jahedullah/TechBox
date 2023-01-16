@@ -7,5 +7,5 @@ public class UserUpdateRequestDto {
     private String firstname;
     private String lastname;
     private String email;
-    private String mobilenumber;
+    private String mobileNumber;
 }

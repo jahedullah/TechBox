@@ -1,7 +1,9 @@
 package com.welldev.TechBox.model.dao;
 
 
+import com.welldev.TechBox.model.dto.Product.ProductUpdateRequestDto;
 import com.welldev.TechBox.model.dto.UserDto.UserDto;
+import com.welldev.TechBox.model.dto.UserDto.UserUpdateRequestDto;
 import com.welldev.TechBox.model.entity.Product;
 import com.welldev.TechBox.model.entity.User;
 import org.springframework.stereotype.Component;
@@ -12,6 +14,7 @@ import java.util.List;
 @Component
 public interface UserDao {
     User getUser(int userId);
+    User updateUser(int userId, UserUpdateRequestDto userUpdateRequestDto);
     User findByUsername(String username);
 
     void save(User user);
