@@ -5,7 +5,7 @@ import com.welldev.TechBox.model.dao.UserDao;
 import com.welldev.TechBox.model.dto.AuthenticationDto.AuthenticationRequestDto;
 import com.welldev.TechBox.model.dto.AuthenticationDto.AuthenticationResponseDto;
 import com.welldev.TechBox.model.dto.UserDto.UserRegisterRequestDto;
-import com.welldev.TechBox.model.dto.UserDto.UserRegisterResponseDto;
+import com.welldev.TechBox.model.dto.UserDto.UserDto;
 import com.welldev.TechBox.model.entity.User;
 import com.welldev.TechBox.model.rolesAndPermissions.AppUserRole;
 import com.welldev.TechBox.model.service.AuthenticationService;
@@ -27,7 +27,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authManager;
 
-    public UserRegisterResponseDto register(UserRegisterRequestDto request){
+    public UserDto register(UserRegisterRequestDto request){
         User user = null;
 
 
@@ -67,7 +67,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         userDao.save(user);
-        return new UserRegisterResponseDto(
+        return new UserDto(
                 user.getId(),
                 user.getFirstname(),
                 user.getLastname(),

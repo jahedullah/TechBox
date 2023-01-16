@@ -1,15 +1,11 @@
 package com.welldev.TechBox.model.dto.UserDto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
-public class UserRegisterResponseDto {
-    private int id;
+public class UserUpdateRequestDto {
     private String firstname;
     private String lastname;
     private String email;
     private String mobilenumber;
-    private String usertype;
 }

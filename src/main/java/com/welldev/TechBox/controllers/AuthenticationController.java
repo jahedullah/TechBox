@@ -4,7 +4,7 @@ package com.welldev.TechBox.controllers;
 import com.welldev.TechBox.model.dto.AuthenticationDto.AuthenticationRequestDto;
 import com.welldev.TechBox.model.dto.AuthenticationDto.AuthenticationResponseDto;
 import com.welldev.TechBox.model.dto.UserDto.UserRegisterRequestDto;
-import com.welldev.TechBox.model.dto.UserDto.UserRegisterResponseDto;
+import com.welldev.TechBox.model.dto.UserDto.UserDto;
 import com.welldev.TechBox.model.service.AuthenticationService;
 import com.welldev.TechBox.string.AUTH_URL;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +27,14 @@ public class AuthenticationController {
 
 
     @PostMapping(AUTH_URL.USER_REGISTRATION)
-    public ResponseEntity<UserRegisterResponseDto> registerUser(
+    public ResponseEntity<UserDto> registerUser(
             @Valid @RequestBody UserRegisterRequestDto request
     ) throws IOException {
         return ResponseEntity.ok(authService.register(request));
     }
 
     @PostMapping(AUTH_URL.ADMIN_REGISTRATION)
-    public ResponseEntity<UserRegisterResponseDto> registerAdmin(
+    public ResponseEntity<UserDto> registerAdmin(
             @Valid @RequestBody UserRegisterRequestDto request,
             HttpServletResponse response
     ) throws IOException {

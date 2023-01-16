@@ -1,6 +1,7 @@
 package com.welldev.TechBox.model.dao;
 
 
+import com.welldev.TechBox.model.dto.UserDto.UserDto;
 import com.welldev.TechBox.model.entity.Product;
 import com.welldev.TechBox.model.entity.User;
 import org.springframework.stereotype.Component;
@@ -10,11 +11,14 @@ import java.util.List;
 
 @Component
 public interface UserDao {
+    User getUser(int userId);
     User findByUsername(String username);
 
     void save(User user);
 
     User findByEmail(String email);
+
+    List<UserDto> getUserList();
 
     List findAllEmail();
 

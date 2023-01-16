@@ -2,6 +2,8 @@ package com.welldev.TechBox.model.dao.impl;
 
 import com.welldev.TechBox.model.dao.ProductDao;
 import com.welldev.TechBox.model.dao.UserDao;
+import com.welldev.TechBox.model.dto.Product.ProductDto;
+import com.welldev.TechBox.model.dto.UserDto.UserDto;
 import com.welldev.TechBox.model.entity.Product;
 import com.welldev.TechBox.model.entity.User;
 import com.welldev.TechBox.model.service.JwtService;
@@ -11,6 +13,9 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +29,17 @@ public class UserDaoImpl implements UserDao {
     private final ProductDao productDao;
 
     private final JwtService jwtService;
+
+    @Override
+    public User getUser(int userId) {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        session.beginTransaction();
+        User user = session.get(User.class, userId);
+        session.getTransaction().commit();
+        session.close();
+
+        return user;
+    }
 
     public User findByUsername(String Username) {
 
@@ -60,6 +76,35 @@ public class UserDaoImpl implements UserDao {
 
         return user;
 
+    }
+
+    @Override
+    public List<UserDto> getUserList() {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        session.beginTransaction();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> root = criteriaQuery.from(User.class);
+        criteriaQuery.select(root);
+        Query<User> query = session.createQuery(criteriaQuery);
+        List<User> productList = query.getResultList();
+        List<UserDto> newUserList = new ArrayList<>();
+        productList.forEach(
+                (tempUser) -> {
+                    UserDto userDto
+                            = new UserDto(
+                            tempUser.getId(),
+                            tempUser.getFirstname(),
+                            tempUser.getLastname(),
+                            tempUser.getEmail(),
+                            tempUser.getMobilenumber(),
+                            tempUser.getUsertype());
+                    newUserList.add(userDto);
+                }
+        );
+        session.close();
+
+        return newUserList;
     }
 
     @Override

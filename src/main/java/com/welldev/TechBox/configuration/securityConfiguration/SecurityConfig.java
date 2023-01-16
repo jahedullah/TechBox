@@ -32,6 +32,7 @@ public class SecurityConfig {
                 .antMatchers("/register/user").permitAll()
                 .antMatchers(POST, "/login").permitAll()
                 .antMatchers("/users").permitAll()
+                .antMatchers("/users/{userId}").permitAll()
                 .antMatchers(GET,"/products").permitAll()
                 .antMatchers(GET, "/products/**").permitAll()
 

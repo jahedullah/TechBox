@@ -2,7 +2,11 @@ package com.welldev.TechBox.controllers;
 
 
 import com.welldev.TechBox.model.dao.UserDao;
+import com.welldev.TechBox.model.dto.Product.ProductDto;
+import com.welldev.TechBox.model.dto.UserDto.UserDto;
 import com.welldev.TechBox.model.entity.Product;
+import com.welldev.TechBox.model.service.UserService;
+import com.welldev.TechBox.string.PRODUCT_URL;
 import com.welldev.TechBox.string.USER_URL;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +16,27 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserDao userDao;
+
+    private final UserDao userDao;
+    private final UserService userService;
+
+    @GetMapping()
+    public ResponseEntity<List<UserDto>> getProductList() {
+        return ResponseEntity.ok(userService.getUserList());
+
+    }
+    @GetMapping(USER_URL.USER_WITH_ID)
+    public ResponseEntity<UserDto> getSingleProduct(@PathVariable int userId) {
+        Optional<UserDto> userDto = Optional.ofNullable(userService.getSingleUser(userId));
+        return userDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
 
     @GetMapping(USER_URL.USER_PRODUCTS_LIST)
