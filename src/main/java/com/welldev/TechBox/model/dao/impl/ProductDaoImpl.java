@@ -107,13 +107,24 @@ public class ProductDaoImpl implements ProductDao {
     }
 
 
-    public void updateProductCount(Product product) {
+    public void increaseProductCountByOne(Product product) {
         Session session = HibernateUtils.getSessionFactory().openSession();
         session.beginTransaction();
         product.setProductCount(product.getProductCount() - 1);
         session.update(product);
         session.getTransaction().commit();
         session.close();
+    }
+
+    @Override
+    public void decreaseProductCountByOne(Product product) {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        session.beginTransaction();
+        product.setProductCount(product.getProductCount() + 1);
+        session.update(product);
+        session.getTransaction().commit();
+        session.close();
+
     }
 
     @Override

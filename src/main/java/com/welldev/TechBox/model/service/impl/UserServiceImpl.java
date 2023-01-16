@@ -4,6 +4,7 @@ import com.welldev.TechBox.model.dao.ProductDao;
 import com.welldev.TechBox.model.dao.UserDao;
 import com.welldev.TechBox.model.dto.Product.ProductDto;
 import com.welldev.TechBox.model.dto.UserDto.UserDto;
+import com.welldev.TechBox.model.dto.UserDto.UserProductDto;
 import com.welldev.TechBox.model.dto.UserDto.UserUpdateRequestDto;
 import com.welldev.TechBox.model.entity.Product;
 import com.welldev.TechBox.model.entity.User;
@@ -88,7 +89,7 @@ public class UserServiceImpl implements UserService {
             Product product = productDao.getProduct(productId);
             userDao.addProduct(user, product);
             productDao.updateProductUserList(product, user);
-            productDao.updateProductCount(product);
+            productDao.increaseProductCountByOne(product);
             return new ProductDto(
                     product.getId(),
                     product.getName(),
@@ -103,21 +104,38 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<ProductDto> productList(int userId) {
+    public UserProductDto productDeleteById(int userId, int productId) {
+        if (Objects.equals(userDao.getUser(userId).getEmail(),
+                SecurityContextHolder.getContext().getAuthentication().getName())) {
+            userDao.productDeleteFromUser(userDao.getUser(userId), productId);
+            productDao.decreaseProductCountByOne(productDao.getProduct(productId));
+            Product product = productDao.getProduct(productId);
+            return new UserProductDto(
+                    product.getId(),
+                    product.getName(),
+                    product.getDescription(),
+                    product.getPrice()
+            );
+        }else {
+            return null;
+        }
+    }
+
+    @Override
+    public List<UserProductDto> productList(int userId) {
         if (Objects.equals(userDao.getUser(userId).getEmail(),
                 SecurityContextHolder.getContext().getAuthentication().getName())) {
             List<Product> productList = userDao.productList(userDao.getUser(userId));
-            List<ProductDto> newProductList = new ArrayList<>();
+            List<UserProductDto> newProductList = new ArrayList<>();
             productList.forEach(
                     (tempProduct) -> {
-                        ProductDto productDto
-                                = new ProductDto(
+                        UserProductDto userProductDto
+                                = new UserProductDto(
                                 tempProduct.getId(),
                                 tempProduct.getName(),
                                 tempProduct.getDescription(),
-                                tempProduct.getPrice(),
-                                tempProduct.getProductCount());
-                        newProductList.add(productDto);
+                                tempProduct.getPrice());
+                        newProductList.add(userProductDto);
                     });
             return newProductList;
         } else {

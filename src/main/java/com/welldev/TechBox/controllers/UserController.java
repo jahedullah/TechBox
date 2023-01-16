@@ -4,8 +4,8 @@ package com.welldev.TechBox.controllers;
 import com.welldev.TechBox.model.dao.UserDao;
 import com.welldev.TechBox.model.dto.Product.ProductDto;
 import com.welldev.TechBox.model.dto.UserDto.UserDto;
+import com.welldev.TechBox.model.dto.UserDto.UserProductDto;
 import com.welldev.TechBox.model.dto.UserDto.UserUpdateRequestDto;
-import com.welldev.TechBox.model.entity.Product;
 import com.welldev.TechBox.model.service.UserService;
 import com.welldev.TechBox.string.USER_URL;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.SignatureException;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,8 +41,8 @@ public class UserController {
 
 
     @GetMapping(value = USER_URL.USER_PRODUCT_LIST)
-    public ResponseEntity<List<ProductDto>> userProductsList(@PathVariable int userId){
-        Optional<List<ProductDto>> productDtoList = Optional.ofNullable(userService.productList(userId));
+    public ResponseEntity<List<UserProductDto>> userProductsList(@PathVariable int userId){
+        Optional<List<UserProductDto>> productDtoList = Optional.ofNullable(userService.productList(userId));
         return productDtoList.map(ResponseEntity::ok).orElseGet(() ->
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -60,14 +60,11 @@ public class UserController {
 
 
     @DeleteMapping (USER_URL.USER_PRODUCTS_DELETE_BY_ID)
-    public ResponseEntity<HttpStatus> productsDeleteById(@PathVariable int pid,
-                                                         HttpServletRequest request) {
-        try {
-            userDao.productsDeleteById(pid, request);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<UserProductDto> productsDeleteById(@PathVariable int userId,
+                                                         @PathVariable int productId){
+        Optional<UserProductDto> userProductDto = Optional.ofNullable(userService.productDeleteById(userId, productId));
+        return userProductDto.map(ResponseEntity::ok).orElseGet(() ->
+                ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
 
     }
 
@@ -79,7 +76,7 @@ public class UserController {
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    @PutMapping(value = USER_URL.USER_BUY_PRODUCT_WITH_ID)
+    @PutMapping(value = USER_URL.USER_ADD_PRODUCT_WITH_ID)
     public ResponseEntity<ProductDto> buyProduct(@PathVariable int productId,
                                                  @PathVariable int userId){
         Optional<ProductDto> productDto = Optional.ofNullable(userService.addProduct(userId,productId));

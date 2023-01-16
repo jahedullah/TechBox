@@ -2,7 +2,9 @@ package com.welldev.TechBox.model.service;
 
 import com.welldev.TechBox.model.dto.Product.ProductDto;
 import com.welldev.TechBox.model.dto.UserDto.UserDto;
+import com.welldev.TechBox.model.dto.UserDto.UserProductDto;
 import com.welldev.TechBox.model.dto.UserDto.UserUpdateRequestDto;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -13,7 +15,8 @@ public interface UserService {
     UserDto updateUser(int userId, UserUpdateRequestDto userUpdateRequestDto);
     UserDto deleteUser(int userId);
     ProductDto addProduct(int userid, int productId);
+    UserProductDto productDeleteById(int userId, int productId);
 
-    List<ProductDto> productList(int userId);
+    List<UserProductDto> productList(int userId);
 
 }

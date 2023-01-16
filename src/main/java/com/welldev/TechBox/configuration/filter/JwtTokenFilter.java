@@ -4,6 +4,7 @@ package com.welldev.TechBox.configuration.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.welldev.TechBox.model.service.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,7 +35,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+                                    FilterChain filterChain) throws  ServletException, IOException , SignatureException {
         // Grabbing the Bearer Token that is tagged as "Authorization" in the Header.
         final String authHeader = request.getHeader("Authorization");
         // Cutting the "Bearer Token " String out of the token. Basically storing the actual token.

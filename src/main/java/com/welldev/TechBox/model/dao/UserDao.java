@@ -7,7 +7,6 @@ import com.welldev.TechBox.model.entity.Product;
 import com.welldev.TechBox.model.entity.User;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Component
@@ -35,5 +34,5 @@ public interface UserDao {
 
     List<Product> productList(User user);
 
-    void productsDeleteById(int pid, HttpServletRequest request);
+    Product productDeleteFromUser(User user, int productId);
 }

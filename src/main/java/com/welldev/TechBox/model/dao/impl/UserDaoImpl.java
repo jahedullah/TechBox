@@ -185,37 +185,6 @@ public class UserDaoImpl implements UserDao {
 
     }
 
-//    @Override
-//    public void updateUserProductList(User user, Product product) {
-//        Session session = HibernateUtils.getSessionFactory().openSession();
-//        session.beginTransaction();
-//        user.getProductList().add(product);
-//        session.update(user);
-//        session.getTransaction().commit();
-//        session.close();
-//    }
-
-//    @Override
-//    public String buyProductByID(int id, HttpServletRequest request) {
-//        Session session = HibernateUtils.getSessionFactory().openSession();
-//        Product product = productDao.getProduct(id);
-//        String accessToken = request.getHeader("Authorization");
-//        if (accessToken != null) {
-//            String jwt = accessToken.substring(7);
-//            String userEmail = jwtService.extractUsername(jwt);
-//            session.beginTransaction();
-//            User user = findByEmail(userEmail);
-//            updateUserProductList(user, product);
-//            productDao.updateProductCount(product);
-//            productDao.updateProductUserList(product, user);
-//            session.getTransaction().commit();
-//            session.close();
-//
-//            return "Product " + id + " has been added to User.";
-//        } else {
-//            return "No Authentication Token Found. :(";
-//        }
-//    }
 
     public List<Product> productList(User user) {
         Session session = HibernateUtils.getSessionFactory().openSession();
@@ -225,20 +194,17 @@ public class UserDaoImpl implements UserDao {
         return productList;
     }
 
-    public void productsDeleteById(int pid, HttpServletRequest request) {
-        String accessToken = request.getHeader("Authorization");
-        String jwt = accessToken.substring(7);
-        String userEmail = jwtService.extractUsername(jwt);
-
-        User user = findByEmail(userEmail);
-        List<Product> productList = user.getProductList().stream().filter(product -> product.getId() != pid).collect(Collectors.toList());
-
+    public Product productDeleteFromUser(User user, int productId) {
+        List<Product> productList = user.getProductList().stream().filter(
+                product -> product.getId() != productId).collect(Collectors.toList());
         user.setProductList(productList);
         Session session = HibernateUtils.getSessionFactory().openSession();
         session.beginTransaction();
         session.update(user);
         session.getTransaction().commit();
         session.close();
+
+        return productDao.getProduct(productId);
 
     }
 
