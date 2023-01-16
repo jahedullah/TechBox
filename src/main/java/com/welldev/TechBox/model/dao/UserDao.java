@@ -33,7 +33,7 @@ public interface UserDao {
 
     void addProduct(User user, Product product);
 
-    List<Product> productsList(HttpServletRequest request);
+    List<Product> productList(User user);
 
     void productsDeleteById(int pid, HttpServletRequest request);
 }

@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -99,6 +100,29 @@ public class UserServiceImpl implements UserService {
             return null;
         }
 
+    }
+
+    @Override
+    public List<ProductDto> productList(int userId) {
+        if (Objects.equals(userDao.getUser(userId).getEmail(),
+                SecurityContextHolder.getContext().getAuthentication().getName())) {
+            List<Product> productList = userDao.productList(userDao.getUser(userId));
+            List<ProductDto> newProductList = new ArrayList<>();
+            productList.forEach(
+                    (tempProduct) -> {
+                        ProductDto productDto
+                                = new ProductDto(
+                                tempProduct.getId(),
+                                tempProduct.getName(),
+                                tempProduct.getDescription(),
+                                tempProduct.getPrice(),
+                                tempProduct.getProductCount());
+                        newProductList.add(productDto);
+                    });
+            return newProductList;
+        } else {
+            return null;
+        }
     }
 
 }

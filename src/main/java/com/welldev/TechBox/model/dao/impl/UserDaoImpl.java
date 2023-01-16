@@ -2,6 +2,7 @@ package com.welldev.TechBox.model.dao.impl;
 
 import com.welldev.TechBox.model.dao.ProductDao;
 import com.welldev.TechBox.model.dao.UserDao;
+import com.welldev.TechBox.model.dto.Product.ProductDto;
 import com.welldev.TechBox.model.dto.UserDto.UserDto;
 import com.welldev.TechBox.model.dto.UserDto.UserUpdateRequestDto;
 import com.welldev.TechBox.model.entity.Product;
@@ -216,15 +217,9 @@ public class UserDaoImpl implements UserDao {
 //        }
 //    }
 
-    public List<Product> productsList(HttpServletRequest request) {
-        String accessToken = request.getHeader("Authorization");
-        String jwt = accessToken.substring(7);
-        String userEmail = jwtService.extractUsername(jwt);
-        User user = findByEmail(userEmail);
+    public List<Product> productList(User user) {
         Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
         List<Product> productList = new ArrayList<>(user.getProductList());
-
         session.close();
 
         return productList;
