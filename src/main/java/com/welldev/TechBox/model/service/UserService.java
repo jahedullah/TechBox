@@ -11,5 +11,5 @@ public interface UserService {
     List<UserDto> getUserList();
 
     UserDto updateUser(int userId, UserUpdateRequestDto userUpdateRequestDto);
-    ProductDto deleteProduct(int user);
+    UserDto deleteUser(int userId);
 }

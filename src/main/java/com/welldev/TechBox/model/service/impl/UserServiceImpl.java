@@ -1,7 +1,6 @@
 package com.welldev.TechBox.model.service.impl;
 
 import com.welldev.TechBox.model.dao.UserDao;
-import com.welldev.TechBox.model.dto.Product.ProductDto;
 import com.welldev.TechBox.model.dto.UserDto.UserDto;
 import com.welldev.TechBox.model.dto.UserDto.UserUpdateRequestDto;
 import com.welldev.TechBox.model.entity.User;
@@ -20,6 +19,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
+
     @Override
     public UserDto getSingleUser(int userId) {
         Optional<User> user = Optional.ofNullable(userDao.getUser(userId));
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(int userId, UserUpdateRequestDto userUpdateRequestDto) {
         User user = userDao.getUser(userId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(Objects.equals(user.getEmail(), authentication.getName())) {
+        if (Objects.equals(user.getEmail(), authentication.getName())) {
             User userToUpdate = userDao.updateUser(userId, userUpdateRequestDto);
             return new UserDto(
                     userToUpdate.getId(),
@@ -51,13 +51,28 @@ public class UserServiceImpl implements UserService {
                     userToUpdate.getMobilenumber(),
                     userToUpdate.getUsertype()
             );
-        }else {
+        } else {
             return null;
         }
     }
 
     @Override
-    public ProductDto deleteProduct(int user) {
-        return null;
+    public UserDto deleteUser(int userId) {
+        User user = userDao.getUser(userId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (Objects.equals(user.getEmail(), authentication.getName())) {
+            User userToDelete = userDao.deleteUser(userId);
+            return new UserDto(
+                    userToDelete.getId(),
+                    userToDelete.getFirstname(),
+                    userToDelete.getLastname(),
+                    userToDelete.getEmail(),
+                    userToDelete.getMobilenumber(),
+                    userToDelete.getUsertype()
+            );
+        }else {
+            return null;
+        }
     }
+
 }

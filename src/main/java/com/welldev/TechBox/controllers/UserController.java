@@ -71,4 +71,12 @@ public class UserController {
         }
 
     }
+
+
+    @DeleteMapping(value = USER_URL.USER_DELETE_BY_ID)
+    public ResponseEntity<UserDto> deleteProduct(@PathVariable int userId) throws NullPointerException {
+        Optional<UserDto> userDto = Optional.ofNullable(userService.deleteUser(userId));
+        return userDto.map(ResponseEntity::ok).orElseGet(() ->
+                ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
 }

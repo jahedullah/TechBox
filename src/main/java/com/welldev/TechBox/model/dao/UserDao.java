@@ -15,6 +15,8 @@ import java.util.List;
 public interface UserDao {
     User getUser(int userId);
     User updateUser(int userId, UserUpdateRequestDto userUpdateRequestDto);
+
+    User deleteUser(int userId);
     User findByUsername(String username);
 
     void save(User user);

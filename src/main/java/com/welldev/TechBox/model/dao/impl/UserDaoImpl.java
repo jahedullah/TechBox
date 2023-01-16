@@ -57,6 +57,18 @@ public class UserDaoImpl implements UserDao {
         return userToUpdate;
     }
 
+    @Override
+    public User deleteUser(int userId) {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        User userToDelete = session.get(User.class, userId);
+        session.beginTransaction();
+        session.delete(userToDelete);
+        session.getTransaction().commit();
+        session.close();
+
+        return userToDelete;
+    }
+
     public User findByUsername(String Username) {
 
         Session session = HibernateUtils.getSessionFactory().openSession();
