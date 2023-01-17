@@ -2,6 +2,7 @@ package com.welldev.TechBox.configuration.filter;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.welldev.TechBox.model.dao.UserDao;
 import com.welldev.TechBox.model.service.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -17,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -31,6 +33,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 public class JwtTokenFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final UserDao userDao;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -40,8 +43,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
         // Cutting the "Bearer Token " String out of the token. Basically storing the actual token.
         final String jwt;
+
         // To Extract the user Email from the database.
         final String userEmail;
+
 
         // Checking if the authorizationHeader is empty or holding any token that does not starts with Bearer.
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -79,19 +84,25 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
             }
         } catch (ExpiredJwtException ex) {
-            String refreshToken = request.getHeader("RefreshToken");
+            String refreshToken = request.getHeader("Cookie");
             if (refreshToken != null) {
+                String newAccessToken = jwtService.generateAccessToken(
+                        userDao.findByEmail(jwtService.extractUsername(refreshToken.substring(14)))
+                );
+                String newRefreshToken = jwtService.generateRefreshToken(
+                        userDao.findByEmail(jwtService.extractUsername(refreshToken.substring(14)))
+                );
                 response.setHeader("error", ex.getMessage());
                 response.setStatus(FORBIDDEN.value());
                 Map<String, String> error = new HashMap<>();
-                error.put("error_message", ex.getMessage());
-                error.put("Use this REFRESH TOKEN", refreshToken);
+                error.put("ERROR MESSAGE", ex.getMessage());
+                error.put("USE THIS NEW ACCESS TOKEN", newAccessToken);
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                response.addCookie(new Cookie("refresh_token",newRefreshToken));
                 new ObjectMapper().writeValue(response.getOutputStream(), error);
             }
 
         }
-
 
         // pass the response to next filter-chain if there is any to make the api being executed and pass the data.
         filterChain.doFilter(request, response);

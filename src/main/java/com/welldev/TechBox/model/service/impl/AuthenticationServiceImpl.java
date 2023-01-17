@@ -17,6 +17,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 
 @Service
 @RequiredArgsConstructor
@@ -76,7 +79,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 user.getUsertype());
     }
 
-    public AuthenticationResponseDto authenticate(AuthenticationRequestDto request) {
+    public AuthenticationResponseDto authenticate(AuthenticationRequestDto request, HttpServletResponse response) {
         var user = userDao.findByEmail(request.getEmail());
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -85,6 +88,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 )
         );
         var jwtAccessToken = jwtService.generateAccessToken(user);
+        var jwtRefreshToken = jwtService.generateRefreshToken(user);
+        Cookie refreshCookie = new Cookie("refresh_token", jwtRefreshToken);
+        refreshCookie.setHttpOnly(true);
+        refreshCookie.setPath("/");
+        response.addCookie(refreshCookie);
         return new AuthenticationResponseDto(
                 jwtAccessToken,
                 user.getId(),
