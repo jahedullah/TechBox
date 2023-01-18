@@ -1,6 +1,6 @@
 package com.welldev.TechBox.product.controller;
 
-import com.welldev.TechBox.product.service.ProductService;
+import com.welldev.TechBox.product.service.IProductService;
 import com.welldev.TechBox.constant.PRODUCT_URL;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,7 @@ import java.util.Optional;
 @RequestMapping(value = "/products")
 public class ProductController {
 
-    private final ProductService productService;
+    private final IProductService productService;
 
     @GetMapping(PRODUCT_URL.PRODUCT_WITH_ID)
     public ResponseEntity<ProductDto> getSingleProduct(@PathVariable int productId) {

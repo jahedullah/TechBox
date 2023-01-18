@@ -2,7 +2,7 @@ package com.welldev.TechBox.user.controller;
 
 
 import com.welldev.TechBox.constant.ADMIN_URL;
-import com.welldev.TechBox.user.dao.UserDao;
+import com.welldev.TechBox.user.dao.IUserDao;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AdminController {
 
-    private final UserDao userDao;
+    private final IUserDao userDao;
 
     @DeleteMapping(ADMIN_URL.USER_DELETE_BY_EMAIL)
     public ResponseEntity<HttpStatus> userDelete(@PathVariable int uid) {

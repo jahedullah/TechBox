@@ -1,7 +1,7 @@
 package com.welldev.TechBox.authentication.configuration.securityConfiguration;
 
 
-import com.welldev.TechBox.user.dao.UserDao;
+import com.welldev.TechBox.user.dao.IUserDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final UserDao userDao;
+    private final IUserDao userDao;
 
     @Bean
     public UserDetailsService userDetailsService() {

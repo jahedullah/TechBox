@@ -3,7 +3,7 @@ package com.welldev.TechBox.authentication.controller;
 
 import com.welldev.TechBox.authentication.dto.AuthenticationRequestDto;
 import com.welldev.TechBox.authentication.dto.AuthenticationResponseDto;
-import com.welldev.TechBox.authentication.service.AuthenticationService;
+import com.welldev.TechBox.authentication.service.IAuthenticationService;
 import com.welldev.TechBox.constant.AUTH_URL;
 import com.welldev.TechBox.user.dto.UserDto;
 import com.welldev.TechBox.user.dto.UserRegisterRequestDto;
@@ -23,7 +23,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    private final AuthenticationService authService;
+    private final IAuthenticationService authService;
 
 
     @PostMapping(AUTH_URL.USER_REGISTRATION)

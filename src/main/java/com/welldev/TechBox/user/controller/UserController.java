@@ -7,7 +7,7 @@ import com.welldev.TechBox.product.dto.ProductDto;
 import com.welldev.TechBox.user.dto.UserDto;
 import com.welldev.TechBox.user.dto.UserProductDto;
 import com.welldev.TechBox.user.dto.UserUpdateRequestDto;
-import com.welldev.TechBox.user.service.UserService;
+import com.welldev.TechBox.user.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ import java.util.Optional;
 public class UserController {
 
 
-    private final UserService userService;
+    private final IUserService userService;
 
     @GetMapping()
     public ResponseEntity<List<UserDto>> getUserList() {

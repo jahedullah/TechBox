@@ -1,38 +1,207 @@
 package com.welldev.TechBox.user.dao;
 
-
+import com.welldev.TechBox.authentication.configuration.jwt.JwtService;
+import com.welldev.TechBox.product.dao.IProductDao;
 import com.welldev.TechBox.product.entity.Product;
 import com.welldev.TechBox.user.dto.UserDto;
-import com.welldev.TechBox.user.dto.UserUpdateRequestDto;
 import com.welldev.TechBox.user.entity.User;
-import org.springframework.stereotype.Component;
+import com.welldev.TechBox.utils.HibernateUtils;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
+import com.welldev.TechBox.user.dto.UserUpdateRequestDto;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Component
-public interface UserDao {
-    User getUser(int userId);
-    User updateUser(int userId, UserUpdateRequestDto userUpdateRequestDto);
 
-    User deleteUser(int userId);
-    User findByUsername(String username);
+@Repository
+@RequiredArgsConstructor
+public class UserDao implements IUserDao {
 
-    void save(User user);
+    private final IProductDao productDao;
 
-    User findByEmail(String email);
+    private final JwtService jwtService;
 
-    List<UserDto> getUserList();
+    @Override
+    public User getUser(int userId) {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        session.beginTransaction();
+        User user = session.get(User.class, userId);
+        session.getTransaction().commit();
+        session.close();
 
-    List findAllEmail();
+        return user;
+    }
 
-    void deleteByEmail(String email);
-    void deleteById(int uid);
+    @Override
+    public User updateUser(int userId, UserUpdateRequestDto userUpdateRequestDto) {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        User userToUpdate  = session.get(User.class, userId);
+        userToUpdate.setFirstname(userUpdateRequestDto.getFirstname());
+        userToUpdate.setLastname(userUpdateRequestDto.getLastname());
+        userToUpdate.setEmail(userUpdateRequestDto.getEmail());
+        userToUpdate.setMobilenumber(userUpdateRequestDto.getMobileNumber());
 
-//    String buyProductByID(int id, HttpServletRequest request);
+        session.beginTransaction();
+        session.update(userToUpdate);
+        session.getTransaction().commit();
+        session.close();
+        return userToUpdate;
+    }
 
-    void addProduct(User user, Product product);
+    @Override
+    public User deleteUser(int userId) {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        User userToDelete = session.get(User.class, userId);
+        session.beginTransaction();
+        session.delete(userToDelete);
+        session.getTransaction().commit();
+        session.close();
 
-    List<Product> productList(User user);
+        return userToDelete;
+    }
 
-    Product productDeleteFromUser(User user, int productId);
+    public User findByUsername(String Username) {
+
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        session.beginTransaction();
+        User user = session.get(User.class, Username);
+        session.getTransaction().commit();
+        session.close();
+
+        return user;
+
+    }
+
+    @Override
+    public void save(User user) {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        session.beginTransaction();
+        session.save(user);
+        session.getTransaction().commit();
+        session.close();
+
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        session.beginTransaction();
+        String query = "from User where email = :e";
+        Query q = session.createQuery(query);
+        q.setParameter("e", email);
+        User user = (User) q.uniqueResult();
+        session.getTransaction().commit();
+        session.close();
+
+        return user;
+
+    }
+
+    @Override
+    public List<UserDto> getUserList() {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        session.beginTransaction();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> root = criteriaQuery.from(User.class);
+        criteriaQuery.select(root);
+        Query<User> query = session.createQuery(criteriaQuery);
+        List<User> productList = query.getResultList();
+        List<UserDto> newUserList = new ArrayList<>();
+        productList.forEach(
+                (tempUser) -> {
+                    UserDto userDto
+                            = new UserDto(
+                            tempUser.getId(),
+                            tempUser.getFirstname(),
+                            tempUser.getLastname(),
+                            tempUser.getEmail(),
+                            tempUser.getMobilenumber(),
+                            tempUser.getUsertype());
+                    newUserList.add(userDto);
+                }
+        );
+        session.close();
+
+        return newUserList;
+    }
+
+    @Override
+    public List findAllEmail() {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        session.beginTransaction();
+        String query = "select email from User";
+        Query q = session.createQuery(query);
+        ArrayList<String> emailList = (ArrayList<String>) q.list();
+        session.getTransaction().commit();
+        session.close();
+
+        return emailList;
+    }
+
+    @Override
+    public void deleteByEmail(String email) {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        User user = findByEmail(email);
+        int userId = user.getId();
+        User userToDelete = session.get(User.class, userId);
+        session.beginTransaction();
+        session.delete(userToDelete);
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    @Override
+    public void deleteById(int uid) {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        session.beginTransaction();
+        String query = "from User where id = :id";
+        Query q = session.createQuery(query);
+        q.setParameter("id", uid);
+        User user = (User) q.uniqueResult();
+        session.delete(user);
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    @Override
+    public void addProduct(User user, Product product) {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        session.beginTransaction();
+        user.getProductList().add(product);
+        session.update(user);
+        session.getTransaction().commit();
+        session.close();
+    }
+
+
+    public List<Product> productList(User user) {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        List<Product> productList = new ArrayList<>(user.getProductList());
+        session.close();
+
+        return productList;
+    }
+
+    public Product productDeleteFromUser(User user, int productId) {
+        List<Product> productList = user.getProductList().stream().filter(
+                product -> product.getId() != productId).collect(Collectors.toList());
+        user.setProductList(productList);
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        session.beginTransaction();
+        session.update(user);
+        session.getTransaction().commit();
+        session.close();
+
+        return productDao.getProduct(productId);
+
+    }
+
 }

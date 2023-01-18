@@ -1,6 +1,6 @@
 package com.welldev.TechBox.authentication.configuration.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.welldev.TechBox.user.dao.UserDao;
+import com.welldev.TechBox.user.dao.IUserDao;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 public class JwtTokenFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    private final UserDao userDao;
+    private final IUserDao userDao;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
