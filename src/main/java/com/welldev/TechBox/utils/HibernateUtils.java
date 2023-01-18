@@ -1,9 +1,9 @@
 package com.welldev.TechBox.utils;
 
 
-import com.welldev.TechBox.model.entity.Product;
-import com.welldev.TechBox.model.entity.User;
-import com.welldev.TechBox.model.entity.UserProduct;
+import com.welldev.TechBox.product.entity.Product;
+import com.welldev.TechBox.user.entity.User;
+import com.welldev.TechBox.userProductJoin.entity.UserProduct;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
