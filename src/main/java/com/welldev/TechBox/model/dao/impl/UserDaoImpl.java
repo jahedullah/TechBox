@@ -7,6 +7,7 @@ import com.welldev.TechBox.model.dto.UserDto.UserDto;
 import com.welldev.TechBox.model.dto.UserDto.UserUpdateRequestDto;
 import com.welldev.TechBox.model.entity.Product;
 import com.welldev.TechBox.model.entity.User;
+import com.welldev.TechBox.model.entity.UserProduct;
 import com.welldev.TechBox.model.service.JwtService;
 import com.welldev.TechBox.utils.HibernateUtils;
 import lombok.RequiredArgsConstructor;
@@ -182,7 +183,6 @@ public class UserDaoImpl implements UserDao {
         session.update(user);
         session.getTransaction().commit();
         session.close();
-
     }
 
 

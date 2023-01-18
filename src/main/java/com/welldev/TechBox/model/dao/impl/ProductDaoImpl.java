@@ -110,7 +110,7 @@ public class ProductDaoImpl implements ProductDao {
     public void increaseProductCountByOne(Product product) {
         Session session = HibernateUtils.getSessionFactory().openSession();
         session.beginTransaction();
-        product.setProductCount(product.getProductCount() - 1);
+        product.setProductCount(product.getProductCount() + 1);
         session.update(product);
         session.getTransaction().commit();
         session.close();
@@ -120,7 +120,7 @@ public class ProductDaoImpl implements ProductDao {
     public void decreaseProductCountByOne(Product product) {
         Session session = HibernateUtils.getSessionFactory().openSession();
         session.beginTransaction();
-        product.setProductCount(product.getProductCount() + 1);
+        product.setProductCount(product.getProductCount() - 1);
         session.update(product);
         session.getTransaction().commit();
         session.close();
@@ -128,7 +128,7 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public void updateProductUserList(Product product, User user) {
+    public void addUser(Product product, User user) {
         Session session = HibernateUtils.getSessionFactory().openSession();
         session.beginTransaction();
         product.getUserList().add(user);

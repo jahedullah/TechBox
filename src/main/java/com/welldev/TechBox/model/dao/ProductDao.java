@@ -26,7 +26,7 @@ public interface ProductDao {
     void increaseProductCountByOne(Product product);
     void decreaseProductCountByOne(Product product);
 
-    void updateProductUserList(Product product, User user);
+    void addUser(Product product, User user);
     ArrayList<String> findAllProductName();
 
 

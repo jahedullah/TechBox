@@ -2,12 +2,14 @@ package com.welldev.TechBox.model.service.impl;
 
 import com.welldev.TechBox.model.dao.ProductDao;
 import com.welldev.TechBox.model.dao.UserDao;
+import com.welldev.TechBox.model.dao.UserProductDao;
 import com.welldev.TechBox.model.dto.Product.ProductDto;
 import com.welldev.TechBox.model.dto.UserDto.UserDto;
 import com.welldev.TechBox.model.dto.UserDto.UserProductDto;
 import com.welldev.TechBox.model.dto.UserDto.UserUpdateRequestDto;
 import com.welldev.TechBox.model.entity.Product;
 import com.welldev.TechBox.model.entity.User;
+import com.welldev.TechBox.model.entity.UserProduct;
 import com.welldev.TechBox.model.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -22,6 +24,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private final UserProductDao userProductDao;
 
     private final UserDao userDao;
     private final ProductDao productDao;
@@ -85,36 +88,52 @@ public class UserServiceImpl implements UserService {
     public ProductDto addProduct(int userId, int productId) {
         if (Objects.equals(userDao.getUser(userId).getEmail(),
                 SecurityContextHolder.getContext().getAuthentication().getName())) {
-            User user = userDao.getUser(userId);
+            boolean exist = userProductDao.isUserAndProductRowExist(userId, productId);
             Product product = productDao.getProduct(productId);
-            userDao.addProduct(user, product);
-            productDao.updateProductUserList(product, user);
-            productDao.increaseProductCountByOne(product);
+            User user = userDao.getUser(userId);
+            if(exist){
+                userProductDao.increaseUserProductRowQuantityByOne(userId, productId);
+                productDao.decreaseProductCountByOne(product);
+            }else {
+                userDao.addProduct(user, product);
+                productDao.addUser(product, user);
+                userProductDao.setUserProductRowQuantityToOne(userId, productId);
+                productDao.decreaseProductCountByOne(product);
+            }
+            UserProduct userProduct = userProductDao.getUserProductRow(userId, productId);
             return new ProductDto(
                     product.getId(),
                     product.getName(),
                     product.getDescription(),
                     product.getPrice(),
-                    product.getProductCount()
-            );
+                    userProduct.getQuantity());
         }else {
             return null;
         }
-
     }
 
     @Override
     public UserProductDto productDeleteById(int userId, int productId) {
         if (Objects.equals(userDao.getUser(userId).getEmail(),
                 SecurityContextHolder.getContext().getAuthentication().getName())) {
-            userDao.productDeleteFromUser(userDao.getUser(userId), productId);
-            productDao.decreaseProductCountByOne(productDao.getProduct(productId));
+            boolean exist = userProductDao.isUserAndProductRowExist(userId, productId);
             Product product = productDao.getProduct(productId);
+            User user = userDao.getUser(userId);
+            if(exist){
+                userProductDao.decreaseUserProductRowQuantityByOne(userId, productId);
+                productDao.increaseProductCountByOne(product);
+            }else {
+                userDao.productDeleteFromUser(user, productId);
+                productDao.increaseProductCountByOne(product);
+            }
+            UserProduct userProduct = userProductDao.getUserProductRow(userId, productId);
             return new UserProductDto(
                     product.getId(),
                     product.getName(),
                     product.getDescription(),
-                    product.getPrice()
+                    product.getPrice(),
+                    userProduct.getQuantity()
+
             );
         }else {
             return null;
@@ -129,12 +148,15 @@ public class UserServiceImpl implements UserService {
             List<UserProductDto> newProductList = new ArrayList<>();
             productList.forEach(
                     (tempProduct) -> {
+                        int quantity = userProductDao.getProductQuantityByUserIdAndProductId(userId,tempProduct.getId());
                         UserProductDto userProductDto
                                 = new UserProductDto(
                                 tempProduct.getId(),
                                 tempProduct.getName(),
                                 tempProduct.getDescription(),
-                                tempProduct.getPrice());
+                                tempProduct.getPrice(),
+                                quantity
+                        );
                         newProductList.add(userProductDto);
                     });
             return newProductList;

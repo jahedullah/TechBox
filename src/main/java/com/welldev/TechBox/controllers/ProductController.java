@@ -21,7 +21,6 @@ import java.util.Optional;
 @RequestMapping(value = "/products")
 public class ProductController {
 
-    private final ProductDao productDao;
     private final ProductService productService;
 
     @GetMapping(PRODUCT_URL.PRODUCT_WITH_ID)

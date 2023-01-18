@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -46,7 +45,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         // To Extract the user Email from the database.
         final String userEmail;
-
 
         // Checking if the authorizationHeader is empty or holding any token that does not starts with Bearer.
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -98,7 +96,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 error.put("ERROR MESSAGE", ex.getMessage());
                 error.put("USE THIS NEW ACCESS TOKEN", newAccessToken);
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                response.addCookie(new Cookie("refresh_token",newRefreshToken));
+                Cookie refreshCookie = new Cookie("refresh_token",newRefreshToken);
+                refreshCookie.setHttpOnly(true);
+                response.addCookie(refreshCookie);
                 new ObjectMapper().writeValue(response.getOutputStream(), error);
             }
 

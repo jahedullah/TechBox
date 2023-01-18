@@ -28,9 +28,9 @@ public class User implements UserDetails {
     private String mobilenumber;
     private String usertype;
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_prod_join",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    @JoinTable(name = "user_product_join",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "productId"))
     private List<Product> productList;
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;

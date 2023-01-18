@@ -3,6 +3,7 @@ package com.welldev.TechBox.utils;
 
 import com.welldev.TechBox.model.entity.Product;
 import com.welldev.TechBox.model.entity.User;
+import com.welldev.TechBox.model.entity.UserProduct;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -31,6 +32,7 @@ public class HibernateUtils {
             configuration.setProperties(properties);
             configuration.addAnnotatedClass(Product.class);
             configuration.addAnnotatedClass(User.class);
+            configuration.addAnnotatedClass(UserProduct.class);
 
 
             //create session factory

@@ -91,7 +91,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var jwtRefreshToken = jwtService.generateRefreshToken(user);
         Cookie refreshCookie = new Cookie("refresh_token", jwtRefreshToken);
         refreshCookie.setHttpOnly(true);
-        refreshCookie.setPath("/");
+//        refreshCookie.setPath("/");
         response.addCookie(refreshCookie);
         return new AuthenticationResponseDto(
                 jwtAccessToken,
