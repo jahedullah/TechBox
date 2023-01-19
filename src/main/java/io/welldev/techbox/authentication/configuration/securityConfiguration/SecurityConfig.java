@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .antMatchers("/users/{userId}").permitAll()
                 .antMatchers(GET,"/products").permitAll()
                 .antMatchers(GET, "/products/**").permitAll()
+                .antMatchers(PUT, "/refreshtoken").permitAll()
 
                 .antMatchers(DELETE, "/admin/**").hasAnyRole(ADMIN.name(), SUPER_ADMIN.name())
                 .antMatchers(POST, "/register/admin").hasRole(SUPER_ADMIN.name())

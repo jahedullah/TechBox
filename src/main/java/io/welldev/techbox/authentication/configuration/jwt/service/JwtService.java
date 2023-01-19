@@ -7,7 +7,9 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.welldev.techbox.authentication.configuration.jwt.dao.JwtDao;
 import io.welldev.techbox.authentication.configuration.jwt.entity.Jwt;
+import io.welldev.techbox.authentication.dto.AccessTokenDto;
 import io.welldev.techbox.authentication.dto.AuthenticationResponseDto;
+import io.welldev.techbox.user.dao.UserDao;
 import io.welldev.techbox.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.var;
@@ -24,6 +26,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtService {
     private final JwtDao jwtDao;
+    private final UserDao userDao;
 
     private static final String SECRET_KEY = "58703273357638782F413F4428472B4B6250655368566D597133743677397A24";
 
@@ -128,6 +131,20 @@ public class JwtService {
             );
 
         }
+    }
+
+    public AccessTokenDto newAccessToken(String refreshToken){
+        String userEmail = extractUsername(refreshToken);
+        User user = userDao.findByEmail(userEmail);
+        String newAccessToken = generateAccessToken(user);
+        jwtDao.updateTokenForUser(user, newAccessToken);
+
+        return new AccessTokenDto(
+                newAccessToken
+        );
+
+
+
     }
 
 }
