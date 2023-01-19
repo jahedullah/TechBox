@@ -1,7 +1,6 @@
 package io.welldev.techbox.authentication.service;
 
 
-import io.welldev.techbox.authentication.configuration.jwt.dao.JwtDao;
 import io.welldev.techbox.authentication.configuration.jwt.service.JwtService;
 import io.welldev.techbox.authentication.dto.AuthenticationRequestDto;
 import io.welldev.techbox.authentication.dto.AuthenticationResponseDto;
@@ -28,24 +27,11 @@ public class AuthenticationService implements IAuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authManager;
-    private final JwtDao jwtDao;
+
 
     public UserDto register(UserRegisterRequestDto request){
         User user = null;
-
-
         switch (request.getUsertype()) {
-            case "user":
-                user = new User();
-                user.setFirstname(request.getFirstname());
-                user.setLastname(request.getLastname());
-                user.setEmail(request.getEmail());
-                user.setMobilenumber(request.getMobilenumber());
-                user.setPassword(passwordEncoder.encode(request.getPassword()));
-                user.setUsertype(request.getUsertype());
-                user.setAppUserRole(AppUserRole.USER);
-
-                break;
             case "admin":
                 user = new User();
                 user.setFirstname(request.getFirstname());
@@ -66,6 +52,17 @@ public class AuthenticationService implements IAuthenticationService {
                 user.setPassword(passwordEncoder.encode(request.getPassword()));
                 user.setUsertype(request.getUsertype());
                 user.setAppUserRole(AppUserRole.SUPER_ADMIN);
+
+                break;
+            default:
+                user = new User();
+                user.setFirstname(request.getFirstname());
+                user.setLastname(request.getLastname());
+                user.setEmail(request.getEmail());
+                user.setMobilenumber(request.getMobilenumber());
+                user.setPassword(passwordEncoder.encode(request.getPassword()));
+                user.setUsertype(request.getUsertype());
+                user.setAppUserRole(AppUserRole.USER);
                 break;
         }
 
@@ -87,13 +84,11 @@ public class AuthenticationService implements IAuthenticationService {
                         request.getPassword()
                 )
         );
-
-        AuthenticationResponseDto authenticationResponseDto = jwtService.saveTokenForUser(user);
 //        Cookie refreshCookie = new Cookie("refresh_token", jwtRefreshToken);
 //        refreshCookie.setHttpOnly(true);
 //
 //        response.addCookie(refreshCookie);
-        return authenticationResponseDto;
+        return jwtService.saveTokenForUser(user);
 
     }
 }

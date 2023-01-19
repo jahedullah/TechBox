@@ -7,7 +7,8 @@ import org.hibernate.validator.constraints.Range;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Getter @Setter
+@Getter
+@Setter
 public class ProductRegisterRequestDto {
 
     @NotBlank

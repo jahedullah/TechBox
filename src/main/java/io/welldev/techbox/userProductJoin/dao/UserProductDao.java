@@ -14,10 +14,10 @@ public class UserProductDao implements IUserProductDao {
         Session session = HibernateUtils.getSessionFactory().openSession();
         session.beginTransaction();
         String hql = "SELECT quantity FROM UserProduct WHERE userId = :userId AND productId = :productId";
-        Query query = session.createQuery(hql);
+        Query<Integer> query = session.createQuery(hql);
         query.setParameter("userId", userId);
         query.setParameter("productId", productId);
-        Integer quantity = (Integer) query.uniqueResult();
+        Integer quantity = query.uniqueResult();
         session.close();
         return quantity == null ? 0 : quantity;
 
@@ -27,15 +27,12 @@ public class UserProductDao implements IUserProductDao {
     public boolean isUserAndProductRowExist(int userId, int productId) {
         Session session = HibernateUtils.getSessionFactory().openSession();
         String hql = "FROM UserProduct WHERE userId = :userId AND productId = :productId";
-        Query query = session.createQuery(hql);
+        Query<UserProduct> query = session.createQuery(hql);
         query.setParameter("userId", userId);
         query.setParameter("productId", productId);
-        UserProduct userProduct = (UserProduct) query.uniqueResult();
+        UserProduct userProduct = query.uniqueResult();
         session.close();
-        if(userProduct == null){
-            return false;
-        }
-        return true;
+        return userProduct != null;
     }
 
     @Override
@@ -43,10 +40,10 @@ public class UserProductDao implements IUserProductDao {
         Session session = HibernateUtils.getSessionFactory().openSession();
         session.beginTransaction();
         String hql = "FROM UserProduct WHERE userId = :userId AND productId = :productId";
-        Query query = session.createQuery(hql);
+        Query<UserProduct> query = session.createQuery(hql);
         query.setParameter("userId", userId);
         query.setParameter("productId", productId);
-        UserProduct userProduct = (UserProduct) query.uniqueResult();
+        UserProduct userProduct = query.uniqueResult();
         userProduct.setQuantity(userProduct.getQuantity() + 1);
         session.update(userProduct);
         session.getTransaction().commit();
@@ -58,10 +55,10 @@ public class UserProductDao implements IUserProductDao {
         Session session = HibernateUtils.getSessionFactory().openSession();
         session.beginTransaction();
         String hql = "FROM UserProduct WHERE userId = :userId AND productId = :productId";
-        Query query = session.createQuery(hql);
+        Query<UserProduct> query = session.createQuery(hql);
         query.setParameter("userId", userId);
         query.setParameter("productId", productId);
-        UserProduct userProduct = (UserProduct) query.uniqueResult();
+        UserProduct userProduct = query.uniqueResult();
         userProduct.setQuantity(userProduct.getQuantity() - 1);
         session.update(userProduct);
         session.getTransaction().commit();
@@ -83,10 +80,10 @@ public class UserProductDao implements IUserProductDao {
     public UserProduct getUserProductRow(int userId, int productId) {
         Session session = HibernateUtils.getSessionFactory().openSession();
         String hql = "FROM UserProduct WHERE userId = :userId AND productId = :productId";
-        Query query = session.createQuery(hql);
+        Query<UserProduct> query = session.createQuery(hql);
         query.setParameter("userId", userId);
         query.setParameter("productId", productId);
-        UserProduct userProduct = (UserProduct) query.uniqueResult();
+        UserProduct userProduct = query.uniqueResult();
         session.close();
         return userProduct;
     }

@@ -25,12 +25,12 @@ public class ProductDao implements IProductDao {
     //creating Products here
     public Product createProduct(
             Product productToCreate) {
-            Session session = HibernateUtils.getSessionFactory().openSession();
-            session.beginTransaction();
-            session.save(productToCreate);
-            session.getTransaction().commit();
-            session.close();
-            return productToCreate;
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        session.beginTransaction();
+        session.save(productToCreate);
+        session.getTransaction().commit();
+        session.close();
+        return productToCreate;
 
     }
 
@@ -74,7 +74,7 @@ public class ProductDao implements IProductDao {
         List<Product> productList = query.getResultList();
         List<ProductDto> newProductList = new ArrayList<>();
         productList.forEach(
-                (tempProduct) -> {
+                tempProduct -> {
                     ProductDto productDto
                             = new ProductDto(
                             tempProduct.getId(),
@@ -90,7 +90,6 @@ public class ProductDao implements IProductDao {
         return newProductList;
 
     }
-
 
 
     //Deleting the Product
@@ -134,18 +133,6 @@ public class ProductDao implements IProductDao {
         session.update(product);
         session.getTransaction().commit();
         session.close();
-    }
-
-    public ArrayList<String> findAllProductName() {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
-        String query = "select name from Product";
-        Query q = session.createQuery(query);
-        ArrayList<String> productNameList = (ArrayList<String>) q.list();
-        session.getTransaction().commit();
-        session.close();
-
-        return productNameList;
     }
 
 

@@ -12,10 +12,12 @@ import java.util.List;
 public interface IProductService {
 
     ProductDto getSingleProduct(int productId);
+
     List<ProductDto> getProductList();
 
     ProductRegisterResponseDto addProduct(ProductRegisterRequestDto productRegisterRequestDto);
 
     ProductDto updateProduct(int productId, ProductUpdateRequestDto productUpdateRequestDto);
+
     ProductDto deleteProduct(int productId);
 }

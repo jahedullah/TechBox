@@ -15,12 +15,11 @@ import java.io.Serializable;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class UserProduct implements Serializable{
+public class UserProduct implements Serializable {
 
     @Id
     private int userId;
 
-    @Id
     private int productId;
 
     @Column(columnDefinition = "INT default 1")

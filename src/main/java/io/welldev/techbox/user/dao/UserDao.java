@@ -1,7 +1,5 @@
 package io.welldev.techbox.user.dao;
 
-import io.welldev.techbox.authentication.configuration.jwt.JwtTokenFilter;
-import io.welldev.techbox.authentication.configuration.jwt.service.JwtService;
 import io.welldev.techbox.product.dao.IProductDao;
 import io.welldev.techbox.product.entity.Product;
 import io.welldev.techbox.user.dto.UserDto;
@@ -27,7 +25,6 @@ public class UserDao implements IUserDao {
 
     private final IProductDao productDao;
 
-    private final JwtService jwtService;
 
     @Override
     public User getUser(int userId) {
@@ -43,7 +40,7 @@ public class UserDao implements IUserDao {
     @Override
     public User updateUser(int userId, UserUpdateRequestDto userUpdateRequestDto) {
         Session session = HibernateUtils.getSessionFactory().openSession();
-        User userToUpdate  = session.get(User.class, userId);
+        User userToUpdate = session.get(User.class, userId);
         userToUpdate.setFirstname(userUpdateRequestDto.getFirstname());
         userToUpdate.setLastname(userUpdateRequestDto.getLastname());
         userToUpdate.setEmail(userUpdateRequestDto.getEmail());
@@ -68,17 +65,6 @@ public class UserDao implements IUserDao {
         return userToDelete;
     }
 
-    public User findByUsername(String Username) {
-
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
-        User user = session.get(User.class, Username);
-        session.getTransaction().commit();
-        session.close();
-
-        return user;
-
-    }
 
     @Override
     public void save(User user) {
@@ -95,9 +81,9 @@ public class UserDao implements IUserDao {
         Session session = HibernateUtils.getSessionFactory().openSession();
         session.beginTransaction();
         String query = "from User where email = :e";
-        Query q = session.createQuery(query);
+        Query<User> q = session.createQuery(query);
         q.setParameter("e", email);
-        User user = (User) q.uniqueResult();
+        User user = q.uniqueResult();
         session.getTransaction().commit();
         session.close();
 
@@ -117,7 +103,7 @@ public class UserDao implements IUserDao {
         List<User> productList = query.getResultList();
         List<UserDto> newUserList = new ArrayList<>();
         productList.forEach(
-                (tempUser) -> {
+                tempUser -> {
                     UserDto userDto
                             = new UserDto(
                             tempUser.getId(),
@@ -134,39 +120,15 @@ public class UserDao implements IUserDao {
         return newUserList;
     }
 
-    @Override
-    public List findAllEmail() {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
-        String query = "select email from User";
-        Query q = session.createQuery(query);
-        ArrayList<String> emailList = (ArrayList<String>) q.list();
-        session.getTransaction().commit();
-        session.close();
-
-        return emailList;
-    }
-
-    @Override
-    public void deleteByEmail(String email) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        User user = findByEmail(email);
-        int userId = user.getId();
-        User userToDelete = session.get(User.class, userId);
-        session.beginTransaction();
-        session.delete(userToDelete);
-        session.getTransaction().commit();
-        session.close();
-    }
 
     @Override
     public void deleteById(int uid) {
         Session session = HibernateUtils.getSessionFactory().openSession();
         session.beginTransaction();
         String query = "from User where id = :id";
-        Query q = session.createQuery(query);
+        Query<User> q = session.createQuery(query);
         q.setParameter("id", uid);
-        User user = (User) q.uniqueResult();
+        User user = q.uniqueResult();
         session.delete(user);
         session.getTransaction().commit();
         session.close();

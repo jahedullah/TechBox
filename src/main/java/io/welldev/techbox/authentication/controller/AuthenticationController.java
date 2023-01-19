@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
 
 @RestController
 @RequestMapping
@@ -29,15 +28,14 @@ public class AuthenticationController {
     @PostMapping(AUTH_URL.USER_REGISTRATION)
     public ResponseEntity<UserDto> registerUser(
             @Valid @RequestBody UserRegisterRequestDto request
-    ) throws IOException {
+    ) {
         return ResponseEntity.ok(authService.register(request));
     }
 
     @PostMapping(AUTH_URL.ADMIN_REGISTRATION)
     public ResponseEntity<UserDto> registerAdmin(
-            @Valid @RequestBody UserRegisterRequestDto request,
-            HttpServletResponse response
-    ) throws IOException {
+            @Valid @RequestBody UserRegisterRequestDto request
+    ) {
         return ResponseEntity.ok(authService.register(request));
     }
 

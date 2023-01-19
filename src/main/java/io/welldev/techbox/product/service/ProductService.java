@@ -23,16 +23,12 @@ public class ProductService implements IProductService {
     @Override
     public ProductDto getSingleProduct(int productId) {
         Optional<Product> product = Optional.ofNullable(productDao.getProduct(productId));
-        if (product.isPresent()) {
-            return new ProductDto(
-                    product.get().getId(),
-                    product.get().getName(),
-                    product.get().getDescription(),
-                    product.get().getPrice(),
-                    product.get().getProductCount());
-        }else {
-            return null;
-        }
+        return product.map(value -> new ProductDto(
+                value.getId(),
+                value.getName(),
+                value.getDescription(),
+                value.getPrice(),
+                value.getProductCount())).orElse(null);
     }
 
     @Override
@@ -43,26 +39,26 @@ public class ProductService implements IProductService {
 
     @Override
     public ProductRegisterResponseDto addProduct(ProductRegisterRequestDto productRegisterRequestDto) {
-            Product productToCreate = new Product(
-                    productRegisterRequestDto.getName(),
-                    productRegisterRequestDto.getDescription(),
-                    productRegisterRequestDto.getPrice(),
-                    productRegisterRequestDto.getProductCount());
+        Product productToCreate = new Product(
+                productRegisterRequestDto.getName(),
+                productRegisterRequestDto.getDescription(),
+                productRegisterRequestDto.getPrice(),
+                productRegisterRequestDto.getProductCount());
 
-            Product product = productDao.createProduct(productToCreate);
-            return new ProductRegisterResponseDto(
-                    product.getId(),
-                    product.getName(),
-                    product.getDescription(),
-                    product.getPrice(),
-                    product.getProductCount()
-            );
+        Product product = productDao.createProduct(productToCreate);
+        return new ProductRegisterResponseDto(
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getPrice(),
+                product.getProductCount()
+        );
     }
 
 
     @Override
     public ProductDto updateProduct(int productId, ProductUpdateRequestDto productUpdateRequestDto) {
-        Product productToUpdate = productDao.updateProduct(productId,productUpdateRequestDto);
+        Product productToUpdate = productDao.updateProduct(productId, productUpdateRequestDto);
         return new ProductDto(
                 productToUpdate.getId(),
                 productToUpdate.getName(),

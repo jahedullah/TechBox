@@ -78,7 +78,7 @@ public class UserService implements IUserService {
                     userToDelete.getMobilenumber(),
                     userToDelete.getUsertype()
             );
-        }else {
+        } else {
             return null;
         }
     }
@@ -90,10 +90,10 @@ public class UserService implements IUserService {
             boolean exist = userProductDao.isUserAndProductRowExist(userId, productId);
             Product product = productDao.getProduct(productId);
             User user = userDao.getUser(userId);
-            if(exist){
+            if (exist) {
                 userProductDao.increaseUserProductRowQuantityByOne(userId, productId);
                 productDao.decreaseProductCountByOne(product);
-            }else {
+            } else {
                 userDao.addProduct(user, product);
                 productDao.addUser(product, user);
                 userProductDao.setUserProductRowQuantityToOne(userId, productId);
@@ -106,7 +106,7 @@ public class UserService implements IUserService {
                     product.getDescription(),
                     product.getPrice(),
                     userProduct.getQuantity());
-        }else {
+        } else {
             return null;
         }
     }
@@ -118,10 +118,10 @@ public class UserService implements IUserService {
             boolean exist = userProductDao.isUserAndProductRowExist(userId, productId);
             Product product = productDao.getProduct(productId);
             User user = userDao.getUser(userId);
-            if(exist){
+            if (exist) {
                 userProductDao.decreaseUserProductRowQuantityByOne(userId, productId);
                 productDao.increaseProductCountByOne(product);
-            }else {
+            } else {
                 userDao.productDeleteFromUser(user, productId);
                 productDao.increaseProductCountByOne(product);
             }
@@ -134,7 +134,7 @@ public class UserService implements IUserService {
                     userProduct.getQuantity()
 
             );
-        }else {
+        } else {
             return null;
         }
     }
@@ -147,7 +147,7 @@ public class UserService implements IUserService {
             List<UserProductDto> newProductList = new ArrayList<>();
             productList.forEach(
                     (tempProduct) -> {
-                        int quantity = userProductDao.getProductQuantityByUserIdAndProductId(userId,tempProduct.getId());
+                        int quantity = userProductDao.getProductQuantityByUserIdAndProductId(userId, tempProduct.getId());
                         UserProductDto userProductDto
                                 = new UserProductDto(
                                 tempProduct.getId(),

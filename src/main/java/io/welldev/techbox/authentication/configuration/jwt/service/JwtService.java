@@ -108,8 +108,8 @@ public class JwtService {
 
     public AuthenticationResponseDto saveTokenForUser(User user) {
         boolean exist = jwtDao.isUserExist(user.getId());
+        var jwtAccessToken = generateAccessToken(user);
         if (exist) {
-            var jwtAccessToken = generateAccessToken(user);
             jwtDao.updateTokenForUser(user, jwtAccessToken);
             Jwt jwtRow = jwtDao.getTheRowOfJwt(user.getId());
             return new AuthenticationResponseDto(
@@ -118,7 +118,6 @@ public class JwtService {
             );
 
         } else {
-            var jwtAccessToken = generateAccessToken(user);
             var jwtRefreshToken = generateRefreshToken(user);
 
             jwtDao.saveTokenForUser(user, jwtAccessToken, jwtRefreshToken);

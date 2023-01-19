@@ -2,7 +2,6 @@ package io.welldev.techbox.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import io.welldev.techbox.authentication.configuration.jwt.entity.Jwt;
 import io.welldev.techbox.product.entity.Product;
 import io.welldev.techbox.roleAndPermission.AppUserRole;
 import lombok.Getter;
@@ -19,7 +18,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "user")
+@Table
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User implements UserDetails {
     @Id

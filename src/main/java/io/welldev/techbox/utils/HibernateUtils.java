@@ -9,9 +9,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.cfg.Environment;
 
 import java.util.Properties;
+
+import static org.hibernate.cfg.AvailableSettings.*;
 
 public class HibernateUtils {
 
@@ -22,13 +23,13 @@ public class HibernateUtils {
         if (sessionFactory == null) {
             Configuration configuration = new Configuration();
             Properties properties = new Properties();
-            properties.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
-            properties.put(Environment.URL, "jdbc:mysql://127.0.0.1:3306/ProjectV1");
-            properties.put(Environment.USER, "root");
-            properties.put(Environment.PASS, "Feelslikedope");
-            properties.put(Environment.DIALECT, "org.hibernate.dialect.MySQL5Dialect");
-            properties.put(Environment.HBM2DDL_AUTO, "update");
-            properties.put(Environment.SHOW_SQL, true);
+            properties.put(DRIVER, "com.mysql.cj.jdbc.Driver");
+            properties.put(URL, "jdbc:mysql://127.0.0.1:3306/ProjectV1");
+            properties.put(USER, "root");
+            properties.put(PASS, "Feelslikedope");
+            properties.put(DIALECT, "org.hibernate.dialect.MySQL5Dialect");
+            properties.put(HBM2DDL_AUTO, "update");
+            properties.put(SHOW_SQL, true);
 
             configuration.setProperties(properties);
             configuration.addAnnotatedClass(Product.class);
