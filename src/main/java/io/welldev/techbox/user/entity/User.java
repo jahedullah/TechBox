@@ -24,12 +24,12 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
-    private String mobilenumber;
-    private String usertype;
+    private String mobileNumber;
+    private String userType;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_product_join",
             joinColumns = @JoinColumn(name = "userId"),

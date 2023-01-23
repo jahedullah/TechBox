@@ -7,9 +7,9 @@ import lombok.Getter;
 @Getter
 public class UserDto {
     private int id;
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
     private String email;
-    private String mobilenumber;
-    private String usertype;
+    private String mobileNumber;
+    private String userType;
 }

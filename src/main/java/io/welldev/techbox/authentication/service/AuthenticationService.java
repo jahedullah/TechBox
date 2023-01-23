@@ -34,34 +34,34 @@ public class AuthenticationService implements IAuthenticationService {
         switch (request.getUsertype()) {
             case "admin":
                 user = new User();
-                user.setFirstname(request.getFirstname());
-                user.setLastname(request.getLastname());
+                user.setFirstName(request.getFirstname());
+                user.setLastName(request.getLastname());
                 user.setEmail(request.getEmail());
-                user.setMobilenumber(request.getMobilenumber());
+                user.setMobileNumber(request.getMobilenumber());
                 user.setPassword(passwordEncoder.encode(request.getPassword()));
-                user.setUsertype(request.getUsertype());
+                user.setUserType(request.getUsertype());
                 user.setAppUserRole(AppUserRole.ADMIN);
 
                 break;
             case "superadmin":
                 user = new User();
-                user.setFirstname(request.getFirstname());
-                user.setLastname(request.getLastname());
+                user.setFirstName(request.getFirstname());
+                user.setLastName(request.getLastname());
                 user.setEmail(request.getEmail());
-                user.setMobilenumber(request.getMobilenumber());
+                user.setMobileNumber(request.getMobilenumber());
                 user.setPassword(passwordEncoder.encode(request.getPassword()));
-                user.setUsertype(request.getUsertype());
+                user.setUserType(request.getUsertype());
                 user.setAppUserRole(AppUserRole.SUPER_ADMIN);
 
                 break;
             default:
                 user = new User();
-                user.setFirstname(request.getFirstname());
-                user.setLastname(request.getLastname());
+                user.setFirstName(request.getFirstname());
+                user.setLastName(request.getLastname());
                 user.setEmail(request.getEmail());
-                user.setMobilenumber(request.getMobilenumber());
+                user.setMobileNumber(request.getMobilenumber());
                 user.setPassword(passwordEncoder.encode(request.getPassword()));
-                user.setUsertype(request.getUsertype());
+                user.setUserType(request.getUsertype());
                 user.setAppUserRole(AppUserRole.USER);
                 break;
         }
@@ -69,11 +69,11 @@ public class AuthenticationService implements IAuthenticationService {
         userDao.save(user);
         return new UserDto(
                 user.getId(),
-                user.getFirstname(),
-                user.getLastname(),
+                user.getFirstName(),
+                user.getLastName(),
                 user.getEmail(),
-                user.getMobilenumber(),
-                user.getUsertype());
+                user.getMobileNumber(),
+                user.getUserType());
     }
 
     public AuthenticationResponseDto authenticate(AuthenticationRequestDto request, HttpServletResponse response) {

@@ -41,10 +41,10 @@ public class UserDao implements IUserDao {
     public User updateUser(int userId, UserUpdateRequestDto userUpdateRequestDto) {
         Session session = HibernateUtils.getSessionFactory().openSession();
         User userToUpdate = session.get(User.class, userId);
-        userToUpdate.setFirstname(userUpdateRequestDto.getFirstname());
-        userToUpdate.setLastname(userUpdateRequestDto.getLastname());
+        userToUpdate.setFirstName(userUpdateRequestDto.getFirstname());
+        userToUpdate.setLastName(userUpdateRequestDto.getLastname());
         userToUpdate.setEmail(userUpdateRequestDto.getEmail());
-        userToUpdate.setMobilenumber(userUpdateRequestDto.getMobileNumber());
+        userToUpdate.setMobileNumber(userUpdateRequestDto.getMobileNumber());
 
         session.beginTransaction();
         session.update(userToUpdate);
@@ -107,11 +107,11 @@ public class UserDao implements IUserDao {
                     UserDto userDto
                             = new UserDto(
                             tempUser.getId(),
-                            tempUser.getFirstname(),
-                            tempUser.getLastname(),
+                            tempUser.getFirstName(),
+                            tempUser.getLastName(),
                             tempUser.getEmail(),
-                            tempUser.getMobilenumber(),
-                            tempUser.getUsertype());
+                            tempUser.getMobileNumber(),
+                            tempUser.getUserType());
                     newUserList.add(userDto);
                 }
         );

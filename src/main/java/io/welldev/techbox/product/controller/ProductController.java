@@ -41,7 +41,7 @@ public class ProductController {
     public ResponseEntity<ProductRegisterResponseDto>
     addProduct(@Valid @RequestBody
                ProductRegisterRequestDto productRegisterRequestDto) {
-            return ResponseEntity.ok(productService.addProduct(productRegisterRequestDto));
+            return ResponseEntity.status(HttpStatus.CREATED).body(productService.addProduct(productRegisterRequestDto));
 
     }
 

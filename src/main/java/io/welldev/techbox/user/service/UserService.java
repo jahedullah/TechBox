@@ -33,11 +33,11 @@ public class UserService implements IUserService {
         Optional<User> user = Optional.ofNullable(userDao.getUser(userId));
         return user.map(value -> new UserDto(
                 value.getId(),
-                value.getFirstname(),
-                value.getLastname(),
+                value.getFirstName(),
+                value.getLastName(),
                 value.getEmail(),
-                value.getMobilenumber(),
-                value.getUsertype())).orElse(null);
+                value.getMobileNumber(),
+                value.getUserType())).orElse(null);
     }
 
     @Override
@@ -53,11 +53,11 @@ public class UserService implements IUserService {
             User userToUpdate = userDao.updateUser(userId, userUpdateRequestDto);
             return new UserDto(
                     userToUpdate.getId(),
-                    userToUpdate.getFirstname(),
-                    userToUpdate.getLastname(),
+                    userToUpdate.getFirstName(),
+                    userToUpdate.getLastName(),
                     userToUpdate.getEmail(),
-                    userToUpdate.getMobilenumber(),
-                    userToUpdate.getUsertype()
+                    userToUpdate.getMobileNumber(),
+                    userToUpdate.getUserType()
             );
         } else {
             return null;
@@ -72,11 +72,11 @@ public class UserService implements IUserService {
             User userToDelete = userDao.deleteUser(userId);
             return new UserDto(
                     userToDelete.getId(),
-                    userToDelete.getFirstname(),
-                    userToDelete.getLastname(),
+                    userToDelete.getFirstName(),
+                    userToDelete.getLastName(),
                     userToDelete.getEmail(),
-                    userToDelete.getMobilenumber(),
-                    userToDelete.getUsertype()
+                    userToDelete.getMobileNumber(),
+                    userToDelete.getUserType()
             );
         } else {
             return null;
