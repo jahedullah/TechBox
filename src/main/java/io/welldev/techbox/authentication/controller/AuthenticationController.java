@@ -44,4 +44,6 @@ public class AuthenticationController {
             @Valid @RequestBody AuthenticationRequestDto request, HttpServletResponse response) {
         return ResponseEntity.ok(authService.authenticate(request, response));
     }
+
+
 }

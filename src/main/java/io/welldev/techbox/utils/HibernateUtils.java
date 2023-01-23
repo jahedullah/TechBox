@@ -29,7 +29,8 @@ public class HibernateUtils {
             properties.put(PASS, "Feelslikedope");
             properties.put(DIALECT, "org.hibernate.dialect.MySQL5Dialect");
             properties.put(HBM2DDL_AUTO, "update");
-            properties.put(SHOW_SQL, false);
+            properties.put(SHOW_SQL, true);
+            properties.put(FORMAT_SQL, true);
 
             configuration.setProperties(properties);
             configuration.addAnnotatedClass(Product.class);
