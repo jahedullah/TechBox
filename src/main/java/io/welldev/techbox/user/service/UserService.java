@@ -119,11 +119,13 @@ public class UserService implements IUserService {
             Product product = productDao.getProduct(productId);
             User user = userDao.getUser(userId);
             if (exist) {
-                userProductDao.decreaseUserProductRowQuantityByOne(userId, productId);
-                productDao.increaseProductCountByOne(product);
-            } else {
-                userDao.productDeleteFromUser(user, productId);
-                productDao.increaseProductCountByOne(product);
+                if(userProductDao.getProductQuantityByUserIdAndProductId(userId, productId) > 1) {
+                    userProductDao.decreaseUserProductRowQuantityByOne(userId, productId);
+                    productDao.increaseProductCountByOne(product);
+                }else {
+                    userDao.productDeleteFromUser(user, productId);
+                    productDao.increaseProductCountByOne(product);
+                }
             }
             UserProduct userProduct = userProductDao.getUserProductRow(userId, productId);
             return new UserProductDto(
