@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import io.welldev.techbox.authentication.configuration.jwt.service.JwtService;
+import io.welldev.techbox.exceptionHandler.InvalidJwtAuthenticationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.MediaType;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,6 +34,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 public class JwtTokenFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final CacheManager cacheManager;
 
 
     @Override
@@ -55,6 +58,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         try {
             // Because "Bearer Token " String character counts upto 13. So the real token appears from index 13.
             jwt = authHeader.substring(7);
+            // Check if the token is in the blacklist cache
+            if (cacheManager.getCache("jwtBlacklistCache").get(jwt) != null)
+                throw new InvalidJwtAuthenticationException("Token blacklisted");
             userEmail = jwtService.extractUsername(jwt);
 
             // if we have the userEmail and the user is not Authenticated Yet.
@@ -76,8 +82,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                     authenticationToken.setDetails(
                             new WebAuthenticationDetailsSource().buildDetails(request)
                     );
+                    authenticationToken.setDetails(
+                            jwt
+                    );
 
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
                 }
 
             }

@@ -8,11 +8,9 @@ import io.welldev.techbox.constant.AUTH_URL;
 import io.welldev.techbox.user.dto.UserDto;
 import io.welldev.techbox.user.dto.UserRegisterRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -23,6 +21,7 @@ import javax.validation.Valid;
 public class AuthenticationController {
 
     private final IAuthenticationService authService;
+    private final CacheManager cacheManager;
 
 
     @PostMapping(AUTH_URL.USER_REGISTRATION)
@@ -45,5 +44,14 @@ public class AuthenticationController {
         return ResponseEntity.ok(authService.authenticate(request, response));
     }
 
+
+
+//    @PostMapping(AUTH_URL.USER_LOGOUT)
+//    public ResponseEntity<?> logout() {
+//         String token = (String) SecurityContextHolder.getContext().getAuthentication().getDetails();
+//        // Remove the token from the cache
+//        cacheManager.getCache("jwtBlacklistCache").put(token, true);
+//        return ResponseEntity.ok().build();
+//    }
 
 }

@@ -12,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
 import static io.welldev.techbox.roleAndPermission.AppUserPermission.PRODUCT_WRITE;
 import static io.welldev.techbox.roleAndPermission.AppUserRole.ADMIN;
 import static io.welldev.techbox.roleAndPermission.AppUserRole.SUPER_ADMIN;
@@ -37,6 +38,7 @@ public class SecurityConfig {
                 .antMatchers(GET, "/products/**").permitAll()
                 .antMatchers(PUT, "/refreshtoken").permitAll()
 
+
                 .antMatchers(DELETE, "/admin/**").hasAnyRole(ADMIN.name(), SUPER_ADMIN.name())
                 .antMatchers(POST, "/register/admin").hasRole(SUPER_ADMIN.name())
                 .antMatchers(DELETE, "/products/**").hasAuthority(PRODUCT_WRITE.getPermission())
@@ -53,6 +55,7 @@ public class SecurityConfig {
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
 
 
         http.csrf().disable();

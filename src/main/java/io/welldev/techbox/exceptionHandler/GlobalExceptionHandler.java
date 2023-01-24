@@ -62,4 +62,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
+    @ExceptionHandler(InvalidJwtAuthenticationException.class)
+    public ResponseEntity<?> handleInvalidJwtAuthentication(InvalidJwtAuthenticationException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
+
 }

@@ -84,10 +84,6 @@ public class AuthenticationService implements IAuthenticationService {
                         request.getPassword()
                 )
         );
-//        Cookie refreshCookie = new Cookie("refresh_token", jwtRefreshToken);
-//        refreshCookie.setHttpOnly(true);
-//
-//        response.addCookie(refreshCookie);
         return jwtService.saveTokenForUser(user);
 
     }
