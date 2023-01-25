@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -25,6 +26,7 @@ public class UserService implements IUserService {
     private final IProductDao productDao;
 
     @Override
+    @Transactional
     public UserDto getSingleUser(int userId) {
         Optional<User> user = Optional.ofNullable(userDao.getUser(userId));
         return user.map(value -> new UserDto(
@@ -37,11 +39,13 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public List<UserDto> getUserList() {
         return userDao.getUserList();
     }
 
     @Override
+    @Transactional
     public UserDto updateUser(int userId, UserUpdateRequestDto userUpdateRequestDto) {
         User user = userDao.getUser(userId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -61,6 +65,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public UserDto deleteUser(int userId) {
         User user = userDao.getUser(userId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -80,6 +85,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public ProductDto productAddById(int userId, int productId) {
         User user = userDao.getUser(userId);
         if(user == null) {
@@ -105,6 +111,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public void productDeleteById(int userId, int productId) {
         User user = userDao.getUser(userId);
         if(user == null) {
@@ -130,6 +137,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public Set<UserProductDto> productList(int userId) {
         if (Objects.equals(userDao.getUser(userId).getEmail(),
                 SecurityContextHolder.getContext().getAuthentication().getName())) {

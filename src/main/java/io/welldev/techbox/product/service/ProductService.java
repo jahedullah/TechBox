@@ -7,8 +7,10 @@ import io.welldev.techbox.product.dto.ProductRegisterResponseDto;
 import io.welldev.techbox.product.dto.ProductUpdateRequestDto;
 import io.welldev.techbox.product.entity.Product;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +23,7 @@ public class ProductService implements IProductService {
 
 
     @Override
+    @Transactional
     public ProductDto getSingleProduct(int productId) {
         Optional<Product> product = Optional.ofNullable(productDao.getProduct(productId));
         return product.map(value -> new ProductDto(
@@ -31,16 +34,18 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional
     public List<ProductDto> getProductList() {
         return productDao.getProducts();
     }
 
     @Override
+    @Transactional
     public List<ProductDto> getProductsByVendor(String vendor) {
         return productDao.getProductsByVendor(vendor);
     }
 
-
+    @Transactional
     @Override
     public ProductRegisterResponseDto addProduct(ProductRegisterRequestDto productRegisterRequestDto) {
         Product productToCreate = new Product(
@@ -59,6 +64,7 @@ public class ProductService implements IProductService {
 
 
     @Override
+    @Transactional
     public ProductDto updateProduct(int productId, ProductUpdateRequestDto productUpdateRequestDto) {
         Product productToUpdate = productDao.updateProduct(productId, productUpdateRequestDto);
         return new ProductDto(
@@ -71,6 +77,7 @@ public class ProductService implements IProductService {
 
 
     @Override
+    @Transactional
     public ProductDto deleteProduct(int productId) {
         Product productToDelete = productDao.deleteProduct(productId);
         return new ProductDto(

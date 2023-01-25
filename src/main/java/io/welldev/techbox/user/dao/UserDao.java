@@ -4,16 +4,18 @@ import io.welldev.techbox.product.dao.IProductDao;
 import io.welldev.techbox.product.entity.Product;
 import io.welldev.techbox.user.dto.UserDto;
 import io.welldev.techbox.user.entity.User;
-import io.welldev.techbox.utils.HibernateUtils;
+
 import io.welldev.techbox.user.dto.UserUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -25,43 +27,44 @@ import java.util.stream.Collectors;
 public class UserDao implements IUserDao {
 
     private final IProductDao productDao;
+    private final SessionFactory sessionFactory;
 
 
     @Override
     public User getUser(int userId) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
+        Session session = sessionFactory.getCurrentSession();
+//beginTransaction
         User user = session.get(User.class, userId);
-        session.getTransaction().commit();
-        session.close();
+//commitTransaction
+//closeTransaction
 
         return user;
     }
 
     @Override
     public User updateUser(int userId, UserUpdateRequestDto userUpdateRequestDto) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
+        Session session = sessionFactory.getCurrentSession();
         User userToUpdate = session.get(User.class, userId);
         userToUpdate.setFirstName(userUpdateRequestDto.getFirstname());
         userToUpdate.setLastName(userUpdateRequestDto.getLastname());
         userToUpdate.setEmail(userUpdateRequestDto.getEmail());
         userToUpdate.setMobileNumber(userUpdateRequestDto.getMobileNumber());
 
-        session.beginTransaction();
+//beginTransaction
         session.update(userToUpdate);
-        session.getTransaction().commit();
-        session.close();
+//commitTransaction
+//closeTransaction
         return userToUpdate;
     }
 
     @Override
     public User deleteUser(int userId) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
+        Session session = sessionFactory.getCurrentSession();
         User userToDelete = session.get(User.class, userId);
-        session.beginTransaction();
+//beginTransaction
         session.delete(userToDelete);
-        session.getTransaction().commit();
-        session.close();
+//commitTransaction
+//closeTransaction
 
         return userToDelete;
     }
@@ -69,24 +72,25 @@ public class UserDao implements IUserDao {
 
     @Override
     public void save(User user) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
+        Session session = sessionFactory.getCurrentSession();
+//beginTransaction
         session.save(user);
-        session.getTransaction().commit();
-        session.close();
+//commitTransaction
+//closeTransaction
 
     }
 
     @Override
+    @Transactional
     public User findByEmail(String email) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
+        Session session = sessionFactory.getCurrentSession();
+//beginTransaction
         String query = "from User where email = :e";
         Query<User> q = session.createQuery(query);
         q.setParameter("e", email);
         User user = q.uniqueResult();
-        session.getTransaction().commit();
-        session.close();
+//commitTransaction
+//closeTransaction
 
         return user;
 
@@ -94,8 +98,8 @@ public class UserDao implements IUserDao {
 
     @Override
     public List<UserDto> getUserList() {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
+        Session session = sessionFactory.getCurrentSession();
+//beginTransaction
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> root = criteriaQuery.from(User.class);
@@ -116,7 +120,7 @@ public class UserDao implements IUserDao {
                     newUserList.add(userDto);
                 }
         );
-        session.close();
+//closeTransaction
 
         return newUserList;
     }
@@ -124,32 +128,32 @@ public class UserDao implements IUserDao {
 
     @Override
     public void deleteById(int uid) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
+        Session session = sessionFactory.getCurrentSession();
+//beginTransaction
         String query = "from User where id = :id";
         Query<User> q = session.createQuery(query);
         q.setParameter("id", uid);
         User user = q.uniqueResult();
         session.delete(user);
-        session.getTransaction().commit();
-        session.close();
+//commitTransaction
+//closeTransaction
     }
 
     @Override
     public void addProduct(User user, Product product) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
+        Session session = sessionFactory.getCurrentSession();
+//beginTransaction
         user.getProductList().add(product);
         session.update(user);
-        session.getTransaction().commit();
-        session.close();
+//commitTransaction
+//closeTransaction
     }
 
 
     public Set<Product> productList(User user) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
+        Session session = sessionFactory.getCurrentSession();
         Set<Product> productList = user.getProductList();
-        session.close();
+//closeTransaction
 
         return productList;
     }
@@ -158,11 +162,11 @@ public class UserDao implements IUserDao {
         Set<Product> productList = user.getProductList().stream().filter(
                 product -> product.getId() != productId).collect(Collectors.toSet());
         user.setProductList(productList);
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
+        Session session = sessionFactory.getCurrentSession();
+//beginTransaction
         session.update(user);
-        session.getTransaction().commit();
-        session.close();
+//commitTransaction
+//closeTransaction
 
         return productDao.getProduct(productId);
 

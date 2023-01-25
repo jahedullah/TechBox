@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 
 @Service
@@ -28,7 +29,7 @@ public class AuthenticationService implements IAuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authManager;
 
-
+    @Transactional
     public UserDto register(UserRegisterRequestDto request){
         User user = null;
         switch (request.getUsertype()) {
@@ -75,7 +76,7 @@ public class AuthenticationService implements IAuthenticationService {
                 user.getMobileNumber(),
                 user.getUserType());
     }
-
+    @Transactional
     public AuthenticationResponseDto authenticate(AuthenticationRequestDto request, HttpServletResponse response) {
         var user = userDao.findByEmail(request.getEmail());
         authManager.authenticate(

@@ -16,6 +16,7 @@ import lombok.var;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -108,7 +109,7 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY); // decode the key in BASE64
         return Keys.hmacShaKeyFor(keyBytes); // run through the algorithm to extract.
     }
-
+    @Transactional
     public AuthenticationResponseDto saveTokenForUser(User user) {
         boolean exist = jwtDao.isUserExist(user.getId());
         var jwtAccessToken = generateAccessToken(user);
@@ -132,7 +133,7 @@ public class JwtService {
 
         }
     }
-
+    @Transactional
     public AccessTokenDto newAccessToken(String refreshToken){
         String userEmail = extractUsername(refreshToken);
         User user = userDao.findByEmail(userEmail);

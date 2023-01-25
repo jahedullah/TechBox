@@ -5,9 +5,9 @@ import io.welldev.techbox.product.dto.ProductDto;
 import io.welldev.techbox.product.dto.ProductUpdateRequestDto;
 import io.welldev.techbox.product.entity.Product;
 import io.welldev.techbox.user.entity.User;
-import io.welldev.techbox.utils.HibernateUtils;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
@@ -20,51 +20,53 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class ProductDao implements IProductDao {
+    private final SessionFactory sessionFactory;
 
 
     //creating Products here
     public Product createProduct(
             Product productToCreate) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
+        Session session = sessionFactory.getCurrentSession();
+//beginTransaction
         session.save(productToCreate);
-        session.getTransaction().commit();
-        session.close();
+//commitTransaction
+//closeTransaction
         return productToCreate;
 
     }
 
     //update product
     public Product updateProduct(int productId, ProductUpdateRequestDto productUpdateRequestDto) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
+        Session session = sessionFactory.getCurrentSession();
         Product productToUpdate = session.get(Product.class, productId);
         productToUpdate.setName(productUpdateRequestDto.getName());
-        productToUpdate.setVendor(productUpdateRequestDto.getDescription());
+        productToUpdate.setVendor(productUpdateRequestDto.getVendor());
         productToUpdate.setPrice(productUpdateRequestDto.getPrice());
 
-        session.beginTransaction();
+//beginTransaction
         session.update(productToUpdate);
-        session.getTransaction().commit();
-        session.close();
+//commitTransaction
+//closeTransaction
         return productToUpdate;
     }
 
 
+
     @Override
     public Product getProduct(int productId) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
+        Session session = sessionFactory.getCurrentSession();
+//beginTransaction
         Product product = session.get(Product.class, productId);
-        session.getTransaction().commit();
-        session.close();
+//commitTransaction
+//closeTransaction
 
         return product;
     }
 
     //get all Products
     public List<ProductDto> getProducts() {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
+        Session session = sessionFactory.getCurrentSession();
+//beginTransaction
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
         Root<Product> root = criteriaQuery.from(Product.class);
@@ -83,7 +85,7 @@ public class ProductDao implements IProductDao {
                     newProductList.add(productDto);
                 }
         );
-        session.close();
+//closeTransaction
 
         return newProductList;
 
@@ -91,9 +93,10 @@ public class ProductDao implements IProductDao {
 
     @Override
     public List<ProductDto> getProductsByVendor(String vendor) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+
+        Session session = sessionFactory.getCurrentSession();
+                //beginTransaction
+                CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
         Root<Product> root = criteriaQuery.from(Product.class);
         criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("vendor"), vendor));
@@ -111,7 +114,7 @@ public class ProductDao implements IProductDao {
                     newProductList.add(productDto);
                 }
         );
-        session.close();
+//closeTransaction
 
         return newProductList;
     }
@@ -119,24 +122,24 @@ public class ProductDao implements IProductDao {
 
     //Deleting the Product
     public Product deleteProduct(int pid) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
+        Session session = sessionFactory.getCurrentSession();
         Product productToDelete = session.get(Product.class, pid);
-        session.beginTransaction();
+//beginTransaction
         session.delete(productToDelete);
-        session.getTransaction().commit();
-        session.close();
+//commitTransaction
+//closeTransaction
 
         return productToDelete;
     }
 
     @Override
     public void addUser(Product product, User user) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
+        Session session = sessionFactory.getCurrentSession();
+//beginTransaction
         product.getUserList().add(user);
         session.update(product);
-        session.getTransaction().commit();
-        session.close();
+//commitTransaction
+//closeTransaction
     }
 
 
