@@ -1,5 +1,7 @@
 package io.welldev.techbox.user.service;
 
+import io.welldev.techbox.exceptionHandler.ResourceNotFoundException;
+import io.welldev.techbox.exceptionHandler.UnauthorizedException;
 import io.welldev.techbox.product.dao.IProductDao;
 import io.welldev.techbox.product.dto.ProductDto;
 import io.welldev.techbox.product.entity.Product;
@@ -96,20 +98,27 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserProductDto productDeleteById(int userId, int productId) {
+    public void productDeleteById(int userId, int productId) {
+        User user = userDao.getUser(userId);
+        if(user == null) {
+            throw new ResourceNotFoundException("User with id " + userId + " not found.");
+        }
         if (Objects.equals(userDao.getUser(userId).getEmail(),
                 SecurityContextHolder.getContext().getAuthentication().getName())) {
-            Product product = productDao.getProduct(productId);
-            User user = userDao.getUser(userId);
+        Set<Product> userProducts = user.getProductList();
+        boolean isProductExist = false;
+        for(Product product: userProducts){
+            if(product.getId() == productId){
+                isProductExist = true;
+                break;
+            }
+        }
+        if(!isProductExist){
+            throw new ResourceNotFoundException("Product with id " + productId + " not found in user's product list.");
+        }
             userDao.productDeleteFromUser(user, productId);
-
-            return new UserProductDto(
-                    product.getId(),
-                    product.getName(),
-                    product.getDescription(),
-                    product.getPrice());
         } else {
-            return null;
+            throw new UnauthorizedException("You are not authorized for this operation");
         }
     }
 

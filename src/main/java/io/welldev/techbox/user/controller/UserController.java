@@ -2,8 +2,10 @@ package io.welldev.techbox.user.controller;
 
 
 import io.welldev.techbox.constant.USER_URL;
+import io.welldev.techbox.exceptionHandler.UnauthorizedException;
 import io.welldev.techbox.product.dto.ProductDto;
 
+import io.welldev.techbox.exceptionHandler.dto.ErrorResponse;
 import io.welldev.techbox.user.dto.UserDto;
 import io.welldev.techbox.user.dto.UserProductDto;
 import io.welldev.techbox.user.dto.UserUpdateRequestDto;
@@ -85,15 +87,16 @@ public class UserController {
 
 
     @PatchMapping(USER_URL.USER_PRODUCT_DELETE_BY_ID)
-    public ResponseEntity<UserProductDto> productDeleteById(@PathVariable int userId,
-                                                            @PathVariable int productId) {
-        Optional<UserProductDto> userProductDto = Optional.ofNullable(userService.productDeleteById(userId, productId));
-        return userProductDto
-                .map(ResponseEntity::ok)
-                .orElseGet(() ->
-                        ResponseEntity
-                                .status(HttpStatus.UNAUTHORIZED)
-                                .build());
+    public ResponseEntity<ErrorResponse> productDeleteById(@PathVariable int userId,
+                                                           @PathVariable int productId) {
+        try {
+            userService.productDeleteById(userId, productId);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } catch (UnauthorizedException e) {
+            ErrorResponse error = new ErrorResponse();
+            error.setMessage(e.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+        }
 
     }
 

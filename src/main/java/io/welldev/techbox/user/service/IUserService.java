@@ -19,7 +19,7 @@ public interface IUserService {
 
     ProductDto addProduct(int userid, int productId);
 
-    UserProductDto productDeleteById(int userId, int productId);
+    void productDeleteById(int userId, int productId);
 
     Set<UserProductDto> productList(int userId);
 

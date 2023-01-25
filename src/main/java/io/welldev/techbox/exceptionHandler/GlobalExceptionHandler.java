@@ -2,6 +2,7 @@ package io.welldev.techbox.exceptionHandler;
 
 
 import io.jsonwebtoken.security.SignatureException;
+import io.welldev.techbox.exceptionHandler.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -52,19 +53,32 @@ public class GlobalExceptionHandler {
         Map<String, String> response = new HashMap<>();
         response.put("Specific Input Format Required", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-    }
+}
 
-    @ExceptionHandler(io.jsonwebtoken.security.SignatureException.class)
-    public ResponseEntity<Map<String, String>> handleSignatureException(
-            SignatureException ex){
-        Map<String, String> response = new HashMap<>();
-        response.put("Wrong Token", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-    }
 
     @ExceptionHandler(InvalidJwtAuthenticationException.class)
     public ResponseEntity<?> handleInvalidJwtAuthentication(InvalidJwtAuthenticationException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<Map<String,String >> handleUnauthorizedException(UnauthorizedException e){
+        Map<String, String> response = new HashMap<>();
+        response.put("Error :", e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<Map<String, String>> handleSignatureException(SignatureException e){
+        Map<String, String> response = new HashMap<>();
+        response.put("Error :", e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException e) {
+        ErrorResponse error = new ErrorResponse();
+        error.setMessage(e.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 }
