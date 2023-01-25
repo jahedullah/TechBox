@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .antMatchers(POST, "/login").permitAll()
                 .antMatchers("/users").permitAll()
                 .antMatchers("/users/{userId}").permitAll()
-                .antMatchers(GET,"/products").permitAll()
+                .antMatchers(GET, "/products").permitAll()
                 .antMatchers(GET, "/products/**").permitAll()
                 .antMatchers(PUT, "/refreshtoken").permitAll()
 
@@ -46,8 +46,6 @@ public class SecurityConfig {
                 .antMatchers(POST, "/products/**").hasAuthority(PRODUCT_WRITE.getPermission())
 
 
-
-
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
@@ -55,7 +53,6 @@ public class SecurityConfig {
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-
 
 
         http.csrf().disable();

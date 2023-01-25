@@ -34,6 +34,7 @@ public class HibernateConfig {
         sessionFactory.setAnnotatedClasses(Product.class, User.class, Jwt.class);
         return sessionFactory;
     }
+
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();

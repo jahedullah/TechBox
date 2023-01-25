@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 public class RefreshTokenController {
     private final JwtService jwtService;
 
-    @PutMapping ("/refreshtoken")
-    public ResponseEntity<AccessTokenDto> getAccessToken(@RequestBody RefreshTokenDto refreshTokenDto){
+    @PutMapping("/refreshtoken")
+    public ResponseEntity<AccessTokenDto> getAccessToken(@RequestBody RefreshTokenDto refreshTokenDto) {
         AccessTokenDto accessTokenDto = jwtService.newAccessToken(refreshTokenDto.getRefreshToken());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(accessTokenDto);

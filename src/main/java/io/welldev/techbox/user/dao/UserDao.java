@@ -29,15 +29,10 @@ public class UserDao implements IUserDao {
     private final IProductDao productDao;
     private final SessionFactory sessionFactory;
 
-
     @Override
     public User getUser(int userId) {
         Session session = sessionFactory.getCurrentSession();
-//beginTransaction
         User user = session.get(User.class, userId);
-//commitTransaction
-//closeTransaction
-
         return user;
     }
 
@@ -49,11 +44,7 @@ public class UserDao implements IUserDao {
         userToUpdate.setLastName(userUpdateRequestDto.getLastname());
         userToUpdate.setEmail(userUpdateRequestDto.getEmail());
         userToUpdate.setMobileNumber(userUpdateRequestDto.getMobileNumber());
-
-//beginTransaction
         session.update(userToUpdate);
-//commitTransaction
-//closeTransaction
         return userToUpdate;
     }
 
@@ -61,11 +52,7 @@ public class UserDao implements IUserDao {
     public User deleteUser(int userId) {
         Session session = sessionFactory.getCurrentSession();
         User userToDelete = session.get(User.class, userId);
-//beginTransaction
         session.delete(userToDelete);
-//commitTransaction
-//closeTransaction
-
         return userToDelete;
     }
 
@@ -73,33 +60,23 @@ public class UserDao implements IUserDao {
     @Override
     public void save(User user) {
         Session session = sessionFactory.getCurrentSession();
-//beginTransaction
         session.save(user);
-//commitTransaction
-//closeTransaction
-
     }
 
     @Override
     @Transactional
     public User findByEmail(String email) {
         Session session = sessionFactory.getCurrentSession();
-//beginTransaction
         String query = "from User where email = :e";
         Query<User> q = session.createQuery(query);
         q.setParameter("e", email);
         User user = q.uniqueResult();
-//commitTransaction
-//closeTransaction
-
         return user;
-
     }
 
     @Override
     public List<UserDto> getUserList() {
         Session session = sessionFactory.getCurrentSession();
-//beginTransaction
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> root = criteriaQuery.from(User.class);
@@ -120,8 +97,6 @@ public class UserDao implements IUserDao {
                     newUserList.add(userDto);
                 }
         );
-//closeTransaction
-
         return newUserList;
     }
 
@@ -129,32 +104,24 @@ public class UserDao implements IUserDao {
     @Override
     public void deleteById(int uid) {
         Session session = sessionFactory.getCurrentSession();
-//beginTransaction
         String query = "from User where id = :id";
         Query<User> q = session.createQuery(query);
         q.setParameter("id", uid);
         User user = q.uniqueResult();
         session.delete(user);
-//commitTransaction
-//closeTransaction
     }
 
     @Override
     public void addProduct(User user, Product product) {
         Session session = sessionFactory.getCurrentSession();
-//beginTransaction
         user.getProductList().add(product);
         session.update(user);
-//commitTransaction
-//closeTransaction
     }
 
 
     public Set<Product> productList(User user) {
         Session session = sessionFactory.getCurrentSession();
         Set<Product> productList = user.getProductList();
-//closeTransaction
-
         return productList;
     }
 
@@ -163,13 +130,8 @@ public class UserDao implements IUserDao {
                 product -> product.getId() != productId).collect(Collectors.toSet());
         user.setProductList(productList);
         Session session = sessionFactory.getCurrentSession();
-//beginTransaction
         session.update(user);
-//commitTransaction
-//closeTransaction
-
         return productDao.getProduct(productId);
-
     }
 
 }

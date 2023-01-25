@@ -13,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ComponentScan
 public class ProjectConfig {
 
-
     @Bean
     PasswordEncoder getPassWordEncoder() {
         return new BCryptPasswordEncoder();

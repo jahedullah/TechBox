@@ -27,10 +27,7 @@ public class ProductDao implements IProductDao {
     public Product createProduct(
             Product productToCreate) {
         Session session = sessionFactory.getCurrentSession();
-//beginTransaction
         session.save(productToCreate);
-//commitTransaction
-//closeTransaction
         return productToCreate;
 
     }
@@ -42,31 +39,21 @@ public class ProductDao implements IProductDao {
         productToUpdate.setName(productUpdateRequestDto.getName());
         productToUpdate.setVendor(productUpdateRequestDto.getVendor());
         productToUpdate.setPrice(productUpdateRequestDto.getPrice());
-
-//beginTransaction
         session.update(productToUpdate);
-//commitTransaction
-//closeTransaction
         return productToUpdate;
     }
-
 
 
     @Override
     public Product getProduct(int productId) {
         Session session = sessionFactory.getCurrentSession();
-//beginTransaction
         Product product = session.get(Product.class, productId);
-//commitTransaction
-//closeTransaction
-
         return product;
     }
 
     //get all Products
     public List<ProductDto> getProducts() {
         Session session = sessionFactory.getCurrentSession();
-//beginTransaction
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
         Root<Product> root = criteriaQuery.from(Product.class);
@@ -85,18 +72,14 @@ public class ProductDao implements IProductDao {
                     newProductList.add(productDto);
                 }
         );
-//closeTransaction
-
         return newProductList;
 
     }
 
     @Override
     public List<ProductDto> getProductsByVendor(String vendor) {
-
         Session session = sessionFactory.getCurrentSession();
-                //beginTransaction
-                CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
         Root<Product> root = criteriaQuery.from(Product.class);
         criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("vendor"), vendor));
@@ -114,8 +97,6 @@ public class ProductDao implements IProductDao {
                     newProductList.add(productDto);
                 }
         );
-//closeTransaction
-
         return newProductList;
     }
 
@@ -124,23 +105,14 @@ public class ProductDao implements IProductDao {
     public Product deleteProduct(int pid) {
         Session session = sessionFactory.getCurrentSession();
         Product productToDelete = session.get(Product.class, pid);
-//beginTransaction
         session.delete(productToDelete);
-//commitTransaction
-//closeTransaction
-
         return productToDelete;
     }
 
     @Override
     public void addUser(Product product, User user) {
         Session session = sessionFactory.getCurrentSession();
-//beginTransaction
         product.getUserList().add(user);
         session.update(product);
-//commitTransaction
-//closeTransaction
     }
-
-
 }

@@ -52,7 +52,6 @@ public class ProductService implements IProductService {
                 productRegisterRequestDto.getName(),
                 productRegisterRequestDto.getVendor(),
                 productRegisterRequestDto.getPrice());
-
         Product product = productDao.createProduct(productToCreate);
         return new ProductRegisterResponseDto(
                 product.getId(),
@@ -86,6 +85,5 @@ public class ProductService implements IProductService {
                 productToDelete.getVendor(),
                 productToDelete.getPrice());
     }
-
 
 }

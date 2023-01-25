@@ -17,48 +17,42 @@ public class JwtDao implements IJwtDao {
 
     @Override
     public void saveTokenForUser(User user, String jwtAccessToken, String jwtRefreshToken) {
-Session session = sessionFactory.getCurrentSession();
-//beginTransaction
+        Session session = sessionFactory.getCurrentSession();
         Jwt jwt = new Jwt();
         jwt.setUser(user);
         jwt.setAccessToken(jwtAccessToken);
         jwt.setRefreshToken(jwtRefreshToken);
         session.save(jwt);
-//commitTransaction
-//closeTransaction
     }
 
     @Override
     public boolean isUserExist(int userId) {
-Session session = sessionFactory.getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         String hql = "FROM Jwt WHERE  user.id = :userId";
         Query<Jwt> query = session.createQuery(hql);
         query.setParameter("userId", userId);
         Jwt jwt = query.uniqueResult();
-//closeTransaction
+
         return jwt != null;
     }
 
     @Override
     public void updateTokenForUser(User user, String jwtAccessToken) {
-Session session = sessionFactory.getCurrentSession();
-//beginTransaction
+        Session session = sessionFactory.getCurrentSession();
         Jwt jwtToUpdate = getTheRowOfJwt(user.getId());
         jwtToUpdate.setAccessToken(jwtAccessToken);
         session.update(jwtToUpdate);
-//commitTransaction
-//closeTransaction
+
+
     }
 
     @Override
     public Jwt getTheRowOfJwt(int userId) {
-Session session = sessionFactory.getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         String hql = "FROM Jwt WHERE  user.id = :userId";
         Query<Jwt> query = session.createQuery(hql);
         query.setParameter("userId", userId);
-        Jwt jwt = query.uniqueResult();
-//closeTransaction
-        return jwt;
+        return query.uniqueResult();
     }
 
 }

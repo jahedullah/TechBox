@@ -30,7 +30,7 @@ public class AuthenticationService implements IAuthenticationService {
     private final AuthenticationManager authManager;
 
     @Transactional
-    public UserDto register(UserRegisterRequestDto request){
+    public UserDto register(UserRegisterRequestDto request) {
         User user = null;
         switch (request.getUsertype()) {
             case "admin":
@@ -76,6 +76,7 @@ public class AuthenticationService implements IAuthenticationService {
                 user.getMobileNumber(),
                 user.getUserType());
     }
+
     @Transactional
     public AuthenticationResponseDto authenticate(AuthenticationRequestDto request, HttpServletResponse response) {
         var user = userDao.findByEmail(request.getEmail());
