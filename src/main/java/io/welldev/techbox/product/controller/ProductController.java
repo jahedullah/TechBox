@@ -31,9 +31,13 @@ public class ProductController {
 
 
     @GetMapping()
-    public ResponseEntity<List<ProductDto>> getProductList() {
-        return ResponseEntity.ok(productService.getProductList());
-
+    public ResponseEntity<List<ProductDto>> getProductList(@RequestParam(value = "vendor", required = false)
+                                                           String vendor) {
+        if(vendor != null){
+            return ResponseEntity.ok(productService.getProductsByVendor(vendor));
+        }else {
+            return ResponseEntity.ok(productService.getProductList());
+        }
     }
 
 
@@ -41,7 +45,7 @@ public class ProductController {
     public ResponseEntity<ProductRegisterResponseDto>
     addProduct(@Valid @RequestBody
                ProductRegisterRequestDto productRegisterRequestDto) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(productService.addProduct(productRegisterRequestDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(productService.addProduct(productRegisterRequestDto));
 
     }
 
@@ -51,9 +55,9 @@ public class ProductController {
     updateProduct(@Valid @PathVariable int productId,
                   @Valid @RequestBody ProductUpdateRequestDto productUpdateRequestDto) throws NullPointerException {
 
-            ProductDto productDto =
-                    productService.updateProduct(productId, productUpdateRequestDto);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(productDto);
+        ProductDto productDto =
+                productService.updateProduct(productId, productUpdateRequestDto);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(productDto);
 
     }
 

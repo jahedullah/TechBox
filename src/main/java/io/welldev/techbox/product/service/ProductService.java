@@ -35,6 +35,11 @@ public class ProductService implements IProductService {
         return productDao.getProducts();
     }
 
+    @Override
+    public List<ProductDto> getProductsByVendor(String vendor) {
+        return productDao.getProductsByVendor(vendor);
+    }
+
 
     @Override
     public ProductRegisterResponseDto addProduct(ProductRegisterRequestDto productRegisterRequestDto) {

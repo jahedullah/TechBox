@@ -89,6 +89,33 @@ public class ProductDao implements IProductDao {
 
     }
 
+    @Override
+    public List<ProductDto> getProductsByVendor(String vendor) {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        session.beginTransaction();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
+        Root<Product> root = criteriaQuery.from(Product.class);
+        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("vendor"), vendor));
+        Query<Product> query = session.createQuery(criteriaQuery);
+        List<Product> productList = query.getResultList();
+        List<ProductDto> newProductList = new ArrayList<>();
+        productList.forEach(
+                tempProduct -> {
+                    ProductDto productDto
+                            = new ProductDto(
+                            tempProduct.getId(),
+                            tempProduct.getName(),
+                            tempProduct.getVendor(),
+                            tempProduct.getPrice());
+                    newProductList.add(productDto);
+                }
+        );
+        session.close();
+
+        return newProductList;
+    }
+
 
     //Deleting the Product
     public Product deleteProduct(int pid) {

@@ -15,6 +15,7 @@ public interface IProductDao {
     Product createProduct(Product productToCreate);
 
     List<ProductDto> getProducts();
+    List<ProductDto> getProductsByVendor(String vendor);
 
     Product deleteProduct(int pid);
 

@@ -14,10 +14,13 @@ public interface IProductService {
     ProductDto getSingleProduct(int productId);
 
     List<ProductDto> getProductList();
+    List<ProductDto> getProductsByVendor(String vendor);
 
     ProductRegisterResponseDto addProduct(ProductRegisterRequestDto productRegisterRequestDto);
 
     ProductDto updateProduct(int productId, ProductUpdateRequestDto productUpdateRequestDto);
 
     ProductDto deleteProduct(int productId);
+
+
 }
