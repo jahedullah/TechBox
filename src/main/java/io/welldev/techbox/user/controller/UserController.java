@@ -89,29 +89,15 @@ public class UserController {
     @PatchMapping(USER_URL.USER_PRODUCT_DELETE_BY_ID)
     public ResponseEntity<ErrorResponse> productDeleteById(@PathVariable int userId,
                                                            @PathVariable int productId) {
-        try {
-            userService.productDeleteById(userId, productId);
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
-        } catch (UnauthorizedException e) {
-            ErrorResponse error = new ErrorResponse();
-            error.setMessage(e.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
-        }
-
+        userService.productDeleteById(userId, productId);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
 
     @PatchMapping(value = USER_URL.USER_ADD_PRODUCT_WITH_ID)
-    public ResponseEntity<ProductDto> addProduct(@PathVariable int productId,
-                                                 @PathVariable int userId) {
-        Optional<ProductDto> productDto = Optional.ofNullable(userService.addProduct(userId, productId));
-        return productDto
-                .map(ResponseEntity::ok)
-                .orElseGet(() ->
-                        ResponseEntity
-                                .status(HttpStatus.UNAUTHORIZED)
-                                .build());
+    public ResponseEntity<ProductDto> addProduct(@PathVariable int productId, @PathVariable int userId) {
+        ProductDto productDto = userService.productAddById(userId, productId);
+        return new ResponseEntity<>(productDto, HttpStatus.OK);
     }
-
 
 }

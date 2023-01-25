@@ -17,7 +17,7 @@ public interface IUserService {
 
     UserDto deleteUser(int userId);
 
-    ProductDto addProduct(int userid, int productId);
+    ProductDto productAddById(int userid, int productId);
 
     void productDeleteById(int userId, int productId);
 

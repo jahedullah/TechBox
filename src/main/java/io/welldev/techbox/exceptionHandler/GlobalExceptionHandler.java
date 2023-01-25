@@ -62,10 +62,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<Map<String,String >> handleUnauthorizedException(UnauthorizedException e){
-        Map<String, String> response = new HashMap<>();
-        response.put("Error :", e.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    public ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException e){
+        ErrorResponse error = new ErrorResponse();
+        error.setMessage(e.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(SignatureException.class)

@@ -80,11 +80,18 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ProductDto addProduct(int userId, int productId) {
+    public ProductDto productAddById(int userId, int productId) {
+        User user = userDao.getUser(userId);
+        if(user == null) {
+            throw new ResourceNotFoundException("User with id " + userId + " not found.");
+        }
+
         if (Objects.equals(userDao.getUser(userId).getEmail(),
                 SecurityContextHolder.getContext().getAuthentication().getName())) {
             Product product = productDao.getProduct(productId);
-            User user = userDao.getUser(userId);
+            if(product == null) {
+                throw new ResourceNotFoundException("Product with id " + productId + " not found.");
+            }
             userDao.addProduct(user, product);
             productDao.addUser(product, user);
             return new ProductDto(
@@ -93,7 +100,7 @@ public class UserService implements IUserService {
                     product.getDescription(),
                     product.getPrice());
         } else {
-            return null;
+            throw new UnauthorizedException("You are not authorized for this operation");
         }
     }
 
