@@ -26,7 +26,7 @@ public class ProductService implements IProductService {
         return product.map(value -> new ProductDto(
                 value.getId(),
                 value.getName(),
-                value.getDescription(),
+                value.getVendor(),
                 value.getPrice())).orElse(null);
     }
 
@@ -40,14 +40,14 @@ public class ProductService implements IProductService {
     public ProductRegisterResponseDto addProduct(ProductRegisterRequestDto productRegisterRequestDto) {
         Product productToCreate = new Product(
                 productRegisterRequestDto.getName(),
-                productRegisterRequestDto.getDescription(),
+                productRegisterRequestDto.getVendor(),
                 productRegisterRequestDto.getPrice());
 
         Product product = productDao.createProduct(productToCreate);
         return new ProductRegisterResponseDto(
                 product.getId(),
                 product.getName(),
-                product.getDescription(),
+                product.getVendor(),
                 product.getPrice()
         );
     }
@@ -59,7 +59,7 @@ public class ProductService implements IProductService {
         return new ProductDto(
                 productToUpdate.getId(),
                 productToUpdate.getName(),
-                productToUpdate.getDescription(),
+                productToUpdate.getVendor(),
                 productToUpdate.getPrice()
         );
     }
@@ -71,7 +71,7 @@ public class ProductService implements IProductService {
         return new ProductDto(
                 productToDelete.getId(),
                 productToDelete.getName(),
-                productToDelete.getDescription(),
+                productToDelete.getVendor(),
                 productToDelete.getPrice());
     }
 

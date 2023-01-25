@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class ProductRegisterResponseDto {
     private int id;
     private String name;
-    private String description;
+    private String vendor;
     private double price;
 }

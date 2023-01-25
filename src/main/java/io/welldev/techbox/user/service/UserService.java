@@ -97,7 +97,7 @@ public class UserService implements IUserService {
             return new ProductDto(
                     product.getId(),
                     product.getName(),
-                    product.getDescription(),
+                    product.getVendor(),
                     product.getPrice());
         } else {
             throw new UnauthorizedException("You are not authorized for this operation");
@@ -142,7 +142,7 @@ public class UserService implements IUserService {
                                 = new UserProductDto(
                                 tempProduct.getId(),
                                 tempProduct.getName(),
-                                tempProduct.getDescription(),
+                                tempProduct.getVendor(),
                                 tempProduct.getPrice());
                         newProductList.add(userProductDto);
                     });

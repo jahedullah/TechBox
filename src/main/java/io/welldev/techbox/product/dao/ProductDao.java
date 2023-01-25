@@ -39,7 +39,7 @@ public class ProductDao implements IProductDao {
         Session session = HibernateUtils.getSessionFactory().openSession();
         Product productToUpdate = session.get(Product.class, productId);
         productToUpdate.setName(productUpdateRequestDto.getName());
-        productToUpdate.setDescription(productUpdateRequestDto.getDescription());
+        productToUpdate.setVendor(productUpdateRequestDto.getDescription());
         productToUpdate.setPrice(productUpdateRequestDto.getPrice());
 
         session.beginTransaction();
@@ -78,7 +78,7 @@ public class ProductDao implements IProductDao {
                             = new ProductDto(
                             tempProduct.getId(),
                             tempProduct.getName(),
-                            tempProduct.getDescription(),
+                            tempProduct.getVendor(),
                             tempProduct.getPrice());
                     newProductList.add(productDto);
                 }

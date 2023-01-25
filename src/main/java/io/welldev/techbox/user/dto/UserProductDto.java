@@ -9,7 +9,7 @@ import lombok.Getter;
 public class UserProductDto {
     private int id;
     private String name;
-    private String description;
+    private String vendor;
     private double price;
 
 }
