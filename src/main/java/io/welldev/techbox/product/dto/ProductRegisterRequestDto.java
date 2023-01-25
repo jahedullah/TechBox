@@ -20,7 +20,5 @@ public class ProductRegisterRequestDto {
 
     @Range(min = 1, max = 200000)
     private double price;
-    @Range(min = 1, max = 1000)
-    private int productCount;
 
 }

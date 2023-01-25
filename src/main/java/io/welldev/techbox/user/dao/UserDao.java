@@ -16,6 +16,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -145,17 +146,17 @@ public class UserDao implements IUserDao {
     }
 
 
-    public List<Product> productList(User user) {
+    public Set<Product> productList(User user) {
         Session session = HibernateUtils.getSessionFactory().openSession();
-        List<Product> productList = new ArrayList<>(user.getProductList());
+        Set<Product> productList = user.getProductList();
         session.close();
 
         return productList;
     }
 
     public Product productDeleteFromUser(User user, int productId) {
-        List<Product> productList = user.getProductList().stream().filter(
-                product -> product.getId() != productId).collect(Collectors.toList());
+        Set<Product> productList = user.getProductList().stream().filter(
+                product -> product.getId() != productId).collect(Collectors.toSet());
         user.setProductList(productList);
         Session session = HibernateUtils.getSessionFactory().openSession();
         session.beginTransaction();

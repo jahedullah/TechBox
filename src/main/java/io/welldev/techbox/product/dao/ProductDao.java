@@ -41,7 +41,6 @@ public class ProductDao implements IProductDao {
         productToUpdate.setName(productUpdateRequestDto.getName());
         productToUpdate.setDescription(productUpdateRequestDto.getDescription());
         productToUpdate.setPrice(productUpdateRequestDto.getPrice());
-        productToUpdate.setProductCount(productUpdateRequestDto.getProductCount());
 
         session.beginTransaction();
         session.update(productToUpdate);
@@ -80,8 +79,7 @@ public class ProductDao implements IProductDao {
                             tempProduct.getId(),
                             tempProduct.getName(),
                             tempProduct.getDescription(),
-                            tempProduct.getPrice(),
-                            tempProduct.getProductCount());
+                            tempProduct.getPrice());
                     newProductList.add(productDto);
                 }
         );
@@ -102,27 +100,6 @@ public class ProductDao implements IProductDao {
         session.close();
 
         return productToDelete;
-    }
-
-
-    public void increaseProductCountByOne(Product product) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
-        product.setProductCount(product.getProductCount() + 1);
-        session.update(product);
-        session.getTransaction().commit();
-        session.close();
-    }
-
-    @Override
-    public void decreaseProductCountByOne(Product product) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
-        product.setProductCount(product.getProductCount() - 1);
-        session.update(product);
-        session.getTransaction().commit();
-        session.close();
-
     }
 
     @Override

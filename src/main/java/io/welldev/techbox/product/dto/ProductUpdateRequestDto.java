@@ -19,7 +19,5 @@ public class ProductUpdateRequestDto {
 
     @Range(min = 1, max = 200000)
     private double price;
-    @Range(min = 0, max = 1000)
-    private int productCount;
 
 }

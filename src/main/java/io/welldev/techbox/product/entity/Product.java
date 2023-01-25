@@ -24,15 +24,13 @@ public class Product {
     private String description;
 
     private double price;
-    private int productCount;
     @ManyToMany(mappedBy = "productList", fetch = FetchType.EAGER)
     private List<User> userList;
 
-    public Product(String name, String description, double price, int productCount) {
+    public Product(String name, String description, double price) {
         this.name = name;
         this.description = description;
         this.price = price;
-        this.productCount = productCount;
     }
 
 }

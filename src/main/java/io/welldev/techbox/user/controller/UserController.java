@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping()
@@ -60,8 +61,8 @@ public class UserController {
 
 
     @GetMapping(value = USER_URL.USER_PRODUCT_LIST)
-    public ResponseEntity<List<UserProductDto>> userProductsList(@PathVariable int userId) {
-        Optional<List<UserProductDto>> productDtoList = Optional.ofNullable(userService.productList(userId));
+    public ResponseEntity<Set<UserProductDto>> userProductsList(@PathVariable int userId) {
+        Optional<Set<UserProductDto>> productDtoList = Optional.ofNullable(userService.productList(userId));
         return productDtoList
                 .map(ResponseEntity::ok)
                 .orElseGet(() ->

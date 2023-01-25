@@ -6,6 +6,7 @@ import io.welldev.techbox.user.dto.UserProductDto;
 import io.welldev.techbox.user.dto.UserUpdateRequestDto;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IUserService {
     UserDto getSingleUser(int userId);
@@ -20,6 +21,6 @@ public interface IUserService {
 
     UserProductDto productDeleteById(int userId, int productId);
 
-    List<UserProductDto> productList(int userId);
+    Set<UserProductDto> productList(int userId);
 
 }

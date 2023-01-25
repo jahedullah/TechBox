@@ -8,6 +8,7 @@ import io.welldev.techbox.user.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 public interface IUserDao {
@@ -29,7 +30,7 @@ public interface IUserDao {
 
     void addProduct(User user, Product product);
 
-    List<Product> productList(User user);
+    Set<Product> productList(User user);
 
     Product productDeleteFromUser(User user, int productId);
 }

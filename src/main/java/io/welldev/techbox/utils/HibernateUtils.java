@@ -4,7 +4,6 @@ package io.welldev.techbox.utils;
 import io.welldev.techbox.authentication.configuration.jwt.entity.Jwt;
 import io.welldev.techbox.product.entity.Product;
 import io.welldev.techbox.user.entity.User;
-import io.welldev.techbox.userProductJoin.entity.UserProduct;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -35,7 +34,6 @@ public class HibernateUtils {
             configuration.setProperties(properties);
             configuration.addAnnotatedClass(Product.class);
             configuration.addAnnotatedClass(User.class);
-            configuration.addAnnotatedClass(UserProduct.class);
             configuration.addAnnotatedClass(Jwt.class);
 
 

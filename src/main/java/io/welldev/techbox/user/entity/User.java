@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -34,7 +35,7 @@ public class User implements UserDetails {
     @JoinTable(name = "user_product_join",
             joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "productId"))
-    private List<Product> productList;
+    private Set<Product> productList;
 
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;

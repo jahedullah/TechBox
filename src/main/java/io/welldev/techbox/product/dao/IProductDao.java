@@ -22,10 +22,6 @@ public interface IProductDao {
 
     Product updateProduct(int productId, ProductUpdateRequestDto productUpdateRequestDto);
 
-    void increaseProductCountByOne(Product product);
-
-    void decreaseProductCountByOne(Product product);
-
     void addUser(Product product, User user);
 
 }

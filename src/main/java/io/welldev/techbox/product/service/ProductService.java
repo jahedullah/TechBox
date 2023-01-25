@@ -27,8 +27,7 @@ public class ProductService implements IProductService {
                 value.getId(),
                 value.getName(),
                 value.getDescription(),
-                value.getPrice(),
-                value.getProductCount())).orElse(null);
+                value.getPrice())).orElse(null);
     }
 
     @Override
@@ -42,16 +41,14 @@ public class ProductService implements IProductService {
         Product productToCreate = new Product(
                 productRegisterRequestDto.getName(),
                 productRegisterRequestDto.getDescription(),
-                productRegisterRequestDto.getPrice(),
-                productRegisterRequestDto.getProductCount());
+                productRegisterRequestDto.getPrice());
 
         Product product = productDao.createProduct(productToCreate);
         return new ProductRegisterResponseDto(
                 product.getId(),
                 product.getName(),
                 product.getDescription(),
-                product.getPrice(),
-                product.getProductCount()
+                product.getPrice()
         );
     }
 
@@ -63,8 +60,7 @@ public class ProductService implements IProductService {
                 productToUpdate.getId(),
                 productToUpdate.getName(),
                 productToUpdate.getDescription(),
-                productToUpdate.getPrice(),
-                productToUpdate.getProductCount()
+                productToUpdate.getPrice()
         );
     }
 
@@ -76,9 +72,7 @@ public class ProductService implements IProductService {
                 productToDelete.getId(),
                 productToDelete.getName(),
                 productToDelete.getDescription(),
-                productToDelete.getPrice(),
-                productToDelete.getProductCount()
-        );
+                productToDelete.getPrice());
     }
 
 
