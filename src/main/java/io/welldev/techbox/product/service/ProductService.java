@@ -7,7 +7,6 @@ import io.welldev.techbox.product.dto.ProductRegisterResponseDto;
 import io.welldev.techbox.product.dto.ProductUpdateRequestDto;
 import io.welldev.techbox.product.entity.Product;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

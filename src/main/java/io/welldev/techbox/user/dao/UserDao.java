@@ -32,8 +32,7 @@ public class UserDao implements IUserDao {
     @Override
     public User getUser(int userId) {
         Session session = sessionFactory.getCurrentSession();
-        User user = session.get(User.class, userId);
-        return user;
+        return session.get(User.class, userId);
     }
 
     @Override
@@ -70,8 +69,7 @@ public class UserDao implements IUserDao {
         String query = "from User where email = :e";
         Query<User> q = session.createQuery(query);
         q.setParameter("e", email);
-        User user = q.uniqueResult();
-        return user;
+        return q.uniqueResult();
     }
 
     @Override
@@ -120,9 +118,7 @@ public class UserDao implements IUserDao {
 
 
     public Set<Product> productList(User user) {
-        Session session = sessionFactory.getCurrentSession();
-        Set<Product> productList = user.getProductList();
-        return productList;
+        return user.getProductList();
     }
 
     public Product productDeleteFromUser(User user, int productId) {

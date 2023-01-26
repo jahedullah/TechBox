@@ -11,13 +11,13 @@ import javax.validation.constraints.Size;
 public class ProductUpdateRequestDto {
 
     @NotBlank
-    @Size(min = 3, max = 20)
+    @Size(min = 3, max = 30)
     private String name;
     @NotBlank
-    @Size(min = 5, max = 40)
+    @Size(min = 1, max = 30)
     private String vendor;
 
-    @Range(min = 1, max = 200000)
+    @Range(min = 1, max = 1000000)
     private double price;
 
 

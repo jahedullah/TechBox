@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.*;
 
+import static io.welldev.techbox.constant.MESSAGE.*;
+
 @Service
 @RequiredArgsConstructor
 public class UserService implements IUserService {
@@ -37,6 +39,7 @@ public class UserService implements IUserService {
                 value.getMobileNumber(),
                 value.getUserType())).orElse(null);
     }
+
 
     @Override
     @Transactional
@@ -64,9 +67,10 @@ public class UserService implements IUserService {
                     userToDelete.getUserType()
             );
         } else {
-            throw new UnauthorizedException("You are not authorized for this operation");
+            throw new UnauthorizedException(UNAUTHORIZED);
         }
     }
+
 
     @Override
     @Transactional
@@ -86,22 +90,23 @@ public class UserService implements IUserService {
                     userToUpdate.getMobileNumber(),
                     userToUpdate.getUserType());
         } else {
-            throw new UnauthorizedException("You are not authorized for this operation");
+            throw new UnauthorizedException(UNAUTHORIZED);
         }
     }
+
 
     @Override
     @Transactional
     public ProductDto productAddById(int userId, int productId) {
         User user = userDao.getUser(userId);
         if (user == null) {
-            throw new ResourceNotFoundException("User with id " + userId + " not found.");
+            throw new ResourceNotFoundException(USER_NOT_FOUND);
         }
         if (Objects.equals(userDao.getUser(userId).getEmail(),
                 SecurityContextHolder.getContext().getAuthentication().getName())) {
             Product product = productDao.getProduct(productId);
             if (product == null) {
-                throw new ResourceNotFoundException("Product with id " + productId + " not found.");
+                throw new ResourceNotFoundException(PRODUCT_NOT_FOUND);
             }
             userDao.addProduct(user, product);
             productDao.addUser(product, user);
@@ -111,16 +116,17 @@ public class UserService implements IUserService {
                     product.getVendor(),
                     product.getPrice());
         } else {
-            throw new UnauthorizedException("You are not authorized for this operation");
+            throw new UnauthorizedException(UNAUTHORIZED);
         }
     }
+
 
     @Override
     @Transactional
     public void productDeleteById(int userId, int productId) {
         User user = userDao.getUser(userId);
         if (user == null) {
-            throw new ResourceNotFoundException("User with id " + userId + " not found.");
+            throw new ResourceNotFoundException(USER_NOT_FOUND);
         }
         if (Objects.equals(userDao.getUser(userId).getEmail(),
                 SecurityContextHolder.getContext().getAuthentication().getName())) {
@@ -133,13 +139,14 @@ public class UserService implements IUserService {
                 }
             }
             if (!isProductExist) {
-                throw new ResourceNotFoundException("Product with id " + productId + " not found in user's product list.");
+                throw new ResourceNotFoundException(USERS_PRODUCT_NOT_FOUND);
             }
             userDao.productDeleteFromUser(user, productId);
         } else {
-            throw new UnauthorizedException("You are not authorized for this operation");
+            throw new UnauthorizedException(UNAUTHORIZED);
         }
     }
+
 
     @Override
     @Transactional

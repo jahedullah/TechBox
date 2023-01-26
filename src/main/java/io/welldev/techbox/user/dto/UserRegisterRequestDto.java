@@ -15,11 +15,11 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class UserRegisterRequestDto {
     @NotBlank
-    @Size(min = 3, max = 20)
+    @Size(min = 1, max = 20)
     private String firstname;
 
     @NotBlank
-    @Size(min = 3, max = 20)
+    @Size(min = 1, max = 20)
     private String lastname;
 
     @Pattern(regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
@@ -39,7 +39,7 @@ public class UserRegisterRequestDto {
     private String mobilenumber;
 
     @NotBlank
-    @Size(min = 4, max = 10)
+    @Size(min = 1, max = 20)
     private String usertype;
 
 }

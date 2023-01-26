@@ -1,7 +1,6 @@
 package io.welldev.techbox.user.controller;
 
 
-import io.welldev.techbox.constant.MESSAGE;
 import io.welldev.techbox.constant.USER_URL;
 import io.welldev.techbox.exceptionHandler.ResourceNotFoundException;
 import io.welldev.techbox.product.dto.ProductDto;
