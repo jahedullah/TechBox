@@ -20,7 +20,6 @@ public class Jwt {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
-
     private String accessToken;
     private String refreshToken;
 
