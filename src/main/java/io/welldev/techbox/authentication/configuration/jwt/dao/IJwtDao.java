@@ -5,6 +5,7 @@ import io.welldev.techbox.user.entity.User;
 
 public interface IJwtDao {
     void saveTokenForUser(User user, String jwtAccessToken, String jwtRefreshToken);
+    String getUserEmail(String refreshToken);
 
     boolean isUserExist(int userId);
 

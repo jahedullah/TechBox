@@ -70,8 +70,6 @@ public class JwtService {
     ) {
         return Jwts
                 .builder()
-                .setClaims(extractClaims)
-                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 // token is valid for 1 day. It is converted into MilliSeconds.
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
@@ -135,7 +133,7 @@ public class JwtService {
 
     @Transactional
     public AccessTokenDto newAccessToken(String refreshToken) {
-        String userEmail = extractUsername(refreshToken);
+        String userEmail = jwtDao.getUserEmail(refreshToken);
         User user = userDao.findByEmail(userEmail);
         String newAccessToken = generateAccessToken(user);
         jwtDao.updateAccessTokenForUser(user, newAccessToken);

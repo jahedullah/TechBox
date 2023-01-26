@@ -1,6 +1,7 @@
 package io.welldev.techbox.exceptionHandler;
 
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import io.welldev.techbox.exceptionHandler.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -87,5 +88,11 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse();
         error.setMessage(e.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ErrorResponse handleResourceNotFound(ExpiredJwtException e) {
+        ErrorResponse error = new ErrorResponse();
+        error.setMessage(e.getMessage());
+        return error;
     }
 }

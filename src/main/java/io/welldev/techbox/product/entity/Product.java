@@ -23,7 +23,7 @@ public class Product {
     private String vendor;
 
     private double price;
-    @ManyToMany(mappedBy = "productList", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "productList", fetch = FetchType.LAZY)
     private Set<User> userList;
 
     public Product(String name, String vendor, double price) {

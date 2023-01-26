@@ -1,6 +1,7 @@
 package io.welldev.techbox.authentication.configuration.jwt.dao;
 
 import io.welldev.techbox.authentication.configuration.jwt.entity.Jwt;
+import io.welldev.techbox.user.dao.UserDao;
 import io.welldev.techbox.user.entity.User;
 
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class JwtDao implements IJwtDao {
     private final SessionFactory sessionFactory;
+    private final UserDao userDao;
 
 
     @Override
@@ -23,6 +25,17 @@ public class JwtDao implements IJwtDao {
         jwt.setAccessToken(jwtAccessToken);
         jwt.setRefreshToken(jwtRefreshToken);
         session.save(jwt);
+    }
+
+    @Override
+    public String getUserEmail(String refreshToken) {
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "FROM Jwt WHERE  refreshToken = :refreshToken";
+        Query<Jwt> query = session.createQuery(hql);
+        query.setParameter("refreshToken", refreshToken);
+        Jwt jwt = query.uniqueResult();
+        User user = userDao.getUser(jwt.getUser().getId());
+        return user.getEmail();
     }
 
     @Override
