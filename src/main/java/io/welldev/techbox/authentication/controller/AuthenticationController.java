@@ -31,12 +31,6 @@ public class AuthenticationController {
         return ResponseEntity.ok(authService.register(request));
     }
 
-    @PostMapping(AUTH_URL.ADMIN_REGISTRATION)
-    public ResponseEntity<UserDto> registerAdmin(
-            @Valid @RequestBody UserRegisterRequestDto request
-    ) {
-        return ResponseEntity.ok(authService.register(request));
-    }
 
     @PostMapping(AUTH_URL.AUTHENTICATE)
     public ResponseEntity<AuthenticationResponseDto> authenticate(

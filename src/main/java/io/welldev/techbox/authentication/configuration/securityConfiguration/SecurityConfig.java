@@ -30,9 +30,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests()
-                .antMatchers("/register/user").permitAll()
                 .antMatchers(POST, "/login").permitAll()
-                .antMatchers("/users").permitAll()
+                .antMatchers(GET,"/users").permitAll()
+                .antMatchers(POST,"/users").permitAll()
                 .antMatchers("/users/{userId}").permitAll()
                 .antMatchers(GET, "/products").permitAll()
                 .antMatchers(GET, "/products/**").permitAll()
