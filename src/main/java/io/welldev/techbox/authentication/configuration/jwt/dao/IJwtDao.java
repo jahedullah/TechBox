@@ -8,7 +8,8 @@ public interface IJwtDao {
 
     boolean isUserExist(int userId);
 
-    void updateTokenForUser(User user, String jwtAccessToken);
+    void updateTokenForUser(User user, String jwtAccessToken, String jwtRefreshToken);
+    void updateAccessTokenForUser(User user, String newAccessToken);
 
     Jwt getTheRowOfJwt(int userId);
 }

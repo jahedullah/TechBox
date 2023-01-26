@@ -37,12 +37,20 @@ public class JwtDao implements IJwtDao {
     }
 
     @Override
-    public void updateTokenForUser(User user, String jwtAccessToken) {
+    public void updateTokenForUser(User user, String jwtAccessToken, String jwtRefreshToken) {
         Session session = sessionFactory.getCurrentSession();
         Jwt jwtToUpdate = getTheRowOfJwt(user.getId());
         jwtToUpdate.setAccessToken(jwtAccessToken);
+        jwtToUpdate.setRefreshToken(jwtRefreshToken);
         session.update(jwtToUpdate);
+    }
 
+    @Override
+    public void updateAccessTokenForUser(User user, String newAccessToken) {
+        Session session = sessionFactory.getCurrentSession();
+        Jwt jwtToUpdate = getTheRowOfJwt(user.getId());
+        jwtToUpdate.setAccessToken(newAccessToken);
+        session.update(jwtToUpdate);
 
     }
 

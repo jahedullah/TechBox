@@ -114,8 +114,9 @@ public class JwtService {
     public AuthenticationResponseDto saveTokenForUser(User user) {
         boolean exist = jwtDao.isUserExist(user.getId());
         var jwtAccessToken = generateAccessToken(user);
+        var jwtRefreshToken = generateRefreshToken(user);
         if (exist) {
-            jwtDao.updateTokenForUser(user, jwtAccessToken);
+            jwtDao.updateTokenForUser(user, jwtAccessToken, jwtRefreshToken);
             Jwt jwtRow = jwtDao.getTheRowOfJwt(user.getId());
             return new AuthenticationResponseDto(
                     jwtRow.getAccessToken(),
@@ -123,10 +124,7 @@ public class JwtService {
             );
 
         } else {
-            var jwtRefreshToken = generateRefreshToken(user);
-
             jwtDao.saveTokenForUser(user, jwtAccessToken, jwtRefreshToken);
-
             return new AuthenticationResponseDto(
                     jwtAccessToken,
                     jwtRefreshToken
@@ -140,7 +138,7 @@ public class JwtService {
         String userEmail = extractUsername(refreshToken);
         User user = userDao.findByEmail(userEmail);
         String newAccessToken = generateAccessToken(user);
-        jwtDao.updateTokenForUser(user, newAccessToken);
+        jwtDao.updateAccessTokenForUser(user, newAccessToken);
 
         return new AccessTokenDto(
                 newAccessToken
