@@ -44,30 +44,14 @@ public class UserService implements IUserService {
         return userDao.getUserList();
     }
 
-    @Override
-    @Transactional
-    public UserDto updateUser(int userId, UserUpdateRequestDto userUpdateRequestDto) {
-        User user = userDao.getUser(userId);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (Objects.equals(user.getEmail(), authentication.getName())) {
-            User userToUpdate = userDao.updateUser(userId, userUpdateRequestDto);
-            return new UserDto(
-                    userToUpdate.getId(),
-                    userToUpdate.getFirstName(),
-                    userToUpdate.getLastName(),
-                    userToUpdate.getEmail(),
-                    userToUpdate.getMobileNumber(),
-                    userToUpdate.getUserType()
-            );
-        } else {
-            return null;
-        }
-    }
 
     @Override
     @Transactional
-    public UserDto deleteUser(int userId) {
+    public UserDto deleteUserById(int userId) {
         User user = userDao.getUser(userId);
+        if (user == null) {
+            return null;
+        }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (Objects.equals(user.getEmail(), authentication.getName())) {
             User userToDelete = userDao.deleteUser(userId);
@@ -80,7 +64,29 @@ public class UserService implements IUserService {
                     userToDelete.getUserType()
             );
         } else {
+            throw new UnauthorizedException("You are not authorized for this operation");
+        }
+    }
+
+    @Override
+    @Transactional
+    public UserDto updateUser(int userId, UserUpdateRequestDto userUpdateRequestDto) {
+        User user = userDao.getUser(userId);
+        if (user == null) {
             return null;
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (Objects.equals(user.getEmail(), authentication.getName())) {
+            User userToUpdate = userDao.updateUser(userId, userUpdateRequestDto);
+            return new UserDto(
+                    userToUpdate.getId(),
+                    userToUpdate.getFirstName(),
+                    userToUpdate.getLastName(),
+                    userToUpdate.getEmail(),
+                    userToUpdate.getMobileNumber(),
+                    userToUpdate.getUserType());
+        } else {
+            throw new UnauthorizedException("You are not authorized for this operation");
         }
     }
 
@@ -88,14 +94,13 @@ public class UserService implements IUserService {
     @Transactional
     public ProductDto productAddById(int userId, int productId) {
         User user = userDao.getUser(userId);
-        if(user == null) {
+        if (user == null) {
             throw new ResourceNotFoundException("User with id " + userId + " not found.");
         }
-
         if (Objects.equals(userDao.getUser(userId).getEmail(),
                 SecurityContextHolder.getContext().getAuthentication().getName())) {
             Product product = productDao.getProduct(productId);
-            if(product == null) {
+            if (product == null) {
                 throw new ResourceNotFoundException("Product with id " + productId + " not found.");
             }
             userDao.addProduct(user, product);
@@ -114,22 +119,22 @@ public class UserService implements IUserService {
     @Transactional
     public void productDeleteById(int userId, int productId) {
         User user = userDao.getUser(userId);
-        if(user == null) {
+        if (user == null) {
             throw new ResourceNotFoundException("User with id " + userId + " not found.");
         }
         if (Objects.equals(userDao.getUser(userId).getEmail(),
                 SecurityContextHolder.getContext().getAuthentication().getName())) {
-        Set<Product> userProducts = user.getProductList();
-        boolean isProductExist = false;
-        for(Product product: userProducts){
-            if(product.getId() == productId){
-                isProductExist = true;
-                break;
+            Set<Product> userProducts = user.getProductList();
+            boolean isProductExist = false;
+            for (Product product : userProducts) {
+                if (product.getId() == productId) {
+                    isProductExist = true;
+                    break;
+                }
             }
-        }
-        if(!isProductExist){
-            throw new ResourceNotFoundException("Product with id " + productId + " not found in user's product list.");
-        }
+            if (!isProductExist) {
+                throw new ResourceNotFoundException("Product with id " + productId + " not found in user's product list.");
+            }
             userDao.productDeleteFromUser(user, productId);
         } else {
             throw new UnauthorizedException("You are not authorized for this operation");

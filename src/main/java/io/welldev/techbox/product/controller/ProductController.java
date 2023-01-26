@@ -16,6 +16,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+import static io.welldev.techbox.constant.MESSAGE.PRODUCT_NOT_FOUND;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -28,14 +30,12 @@ public class ProductController {
     public ResponseEntity<ProductDto> getSingleProduct(@PathVariable int productId) {
         Optional<ProductDto> productDto = Optional.ofNullable(productService.getSingleProduct(productId));
         return productDto.map(ResponseEntity::ok).
-                orElseThrow(() ->
-                        new ResourceNotFoundException("product with id " + productId + " is not found"));
+                orElseThrow(() -> new ResourceNotFoundException(PRODUCT_NOT_FOUND));
     }
 
 
     @GetMapping()
-    public ResponseEntity<List<ProductDto>> getProductList(@RequestParam(value = "vendor", required = false)
-                                                           String vendor) {
+    public ResponseEntity<List<ProductDto>> getProductList(@RequestParam(value = "vendor", required = false) String vendor) {
         if (vendor != null) {
             return ResponseEntity.ok(productService.getProductsByVendor(vendor));
         }
@@ -58,7 +58,7 @@ public class ProductController {
                   @Valid @RequestBody ProductUpdateRequestDto productUpdateRequestDto) {
         return Optional.ofNullable(productService.updateProduct(productId, productUpdateRequestDto))
                 .map(productDto -> ResponseEntity.status(HttpStatus.ACCEPTED).body(productDto))
-                .orElseThrow(() -> new ResourceNotFoundException("product with id " + productId + " is not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(PRODUCT_NOT_FOUND));
     }
 
 
@@ -66,7 +66,7 @@ public class ProductController {
     public ResponseEntity<ProductDto> deleteProduct(@PathVariable int productId) {
         return Optional.ofNullable(productService.deleteProduct(productId))
                 .map(productDto -> ResponseEntity.status(HttpStatus.ACCEPTED).body(productDto))
-                .orElseThrow(() -> new ResourceNotFoundException("product with id " + productId + " is not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(PRODUCT_NOT_FOUND));
     }
 
 }

@@ -40,8 +40,8 @@ public class UserDao implements IUserDao {
     public User updateUser(int userId, UserUpdateRequestDto userUpdateRequestDto) {
         Session session = sessionFactory.getCurrentSession();
         User userToUpdate = session.get(User.class, userId);
-        userToUpdate.setFirstName(userUpdateRequestDto.getFirstname());
-        userToUpdate.setLastName(userUpdateRequestDto.getLastname());
+        userToUpdate.setFirstName(userUpdateRequestDto.getFirstName());
+        userToUpdate.setLastName(userUpdateRequestDto.getLastName());
         userToUpdate.setEmail(userUpdateRequestDto.getEmail());
         userToUpdate.setMobileNumber(userUpdateRequestDto.getMobileNumber());
         session.update(userToUpdate);
