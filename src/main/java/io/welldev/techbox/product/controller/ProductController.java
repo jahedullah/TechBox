@@ -1,5 +1,6 @@
 package io.welldev.techbox.product.controller;
 
+import io.welldev.techbox.exceptionHandler.ResourceNotFoundException;
 import io.welldev.techbox.product.service.IProductService;
 import io.welldev.techbox.constant.PRODUCT_URL;
 import io.welldev.techbox.product.dto.ProductDto;
@@ -26,18 +27,19 @@ public class ProductController {
     @GetMapping(PRODUCT_URL.PRODUCT_WITH_ID)
     public ResponseEntity<ProductDto> getSingleProduct(@PathVariable int productId) {
         Optional<ProductDto> productDto = Optional.ofNullable(productService.getSingleProduct(productId));
-        return productDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return productDto.map(ResponseEntity::ok).
+                orElseThrow(() ->
+                        new ResourceNotFoundException("product with id " + productId + " is not found"));
     }
 
 
     @GetMapping()
     public ResponseEntity<List<ProductDto>> getProductList(@RequestParam(value = "vendor", required = false)
                                                            String vendor) {
-        if(vendor != null){
+        if (vendor != null) {
             return ResponseEntity.ok(productService.getProductsByVendor(vendor));
-        }else {
-            return ResponseEntity.ok(productService.getProductList());
         }
+        return ResponseEntity.ok(productService.getProductList());
     }
 
 
@@ -53,24 +55,18 @@ public class ProductController {
     @PutMapping(value = PRODUCT_URL.PRODUCT_UPDATE_BY_ID)
     public ResponseEntity<ProductDto>
     updateProduct(@Valid @PathVariable int productId,
-                  @Valid @RequestBody ProductUpdateRequestDto productUpdateRequestDto) throws NullPointerException {
-
-        ProductDto productDto =
-                productService.updateProduct(productId, productUpdateRequestDto);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(productDto);
-
+                  @Valid @RequestBody ProductUpdateRequestDto productUpdateRequestDto) {
+        return Optional.ofNullable(productService.updateProduct(productId, productUpdateRequestDto))
+                .map(productDto -> ResponseEntity.status(HttpStatus.ACCEPTED).body(productDto))
+                .orElseThrow(() -> new ResourceNotFoundException("product with id " + productId + " is not found"));
     }
 
 
     @DeleteMapping(value = PRODUCT_URL.PRODUCT_DELETE_BY_ID)
-    public ResponseEntity<ProductDto> deleteProduct(@PathVariable int productId) throws NullPointerException {
-        try {
-            ProductDto productDto =
-                    productService.deleteProduct(productId);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(productDto);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<ProductDto> deleteProduct(@PathVariable int productId) {
+        return Optional.ofNullable(productService.deleteProduct(productId))
+                .map(productDto -> ResponseEntity.status(HttpStatus.ACCEPTED).body(productDto))
+                .orElseThrow(() -> new ResourceNotFoundException("product with id " + productId + " is not found"));
     }
 
 }

@@ -8,6 +8,7 @@ import io.welldev.techbox.user.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public interface IProductDao {
@@ -16,8 +17,7 @@ public interface IProductDao {
 
     List<ProductDto> getProducts();
     List<ProductDto> getProductsByVendor(String vendor);
-
-    Product deleteProduct(int pid);
+    Product deleteProduct(int productId);
 
     Product getProduct(int productId);
 

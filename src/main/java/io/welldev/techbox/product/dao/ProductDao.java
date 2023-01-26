@@ -16,6 +16,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -102,9 +103,9 @@ public class ProductDao implements IProductDao {
 
 
     //Deleting the Product
-    public Product deleteProduct(int pid) {
+    public Product deleteProduct(int productId) {
         Session session = sessionFactory.getCurrentSession();
-        Product productToDelete = session.get(Product.class, pid);
+        Product productToDelete = session.get(Product.class, productId);
         session.delete(productToDelete);
         return productToDelete;
     }

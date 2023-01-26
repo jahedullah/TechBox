@@ -65,13 +65,12 @@ public class ProductService implements IProductService {
     @Override
     @Transactional
     public ProductDto updateProduct(int productId, ProductUpdateRequestDto productUpdateRequestDto) {
-        Product productToUpdate = productDao.updateProduct(productId, productUpdateRequestDto);
-        return new ProductDto(
-                productToUpdate.getId(),
-                productToUpdate.getName(),
-                productToUpdate.getVendor(),
-                productToUpdate.getPrice()
-        );
+        Optional<Product> productToUpdate = Optional.ofNullable(productDao.updateProduct(productId, productUpdateRequestDto));
+        return productToUpdate.map(value -> new ProductDto(
+                value.getId(),
+                value.getName(),
+                value.getVendor(),
+                value.getPrice())).orElse(null);
     }
 
 

@@ -14,9 +14,12 @@ public class ProductRegisterRequestDto {
     @NotBlank
     @Size(min = 3, max = 20)
     private String name;
+
+
     @NotBlank
     @Size(min = 5, max = 40)
     private String vendor;
+
 
     @Range(min = 1, max = 200000)
     private double price;

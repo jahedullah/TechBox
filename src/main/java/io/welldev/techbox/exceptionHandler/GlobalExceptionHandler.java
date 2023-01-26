@@ -40,11 +40,11 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<Map<String, String>> handleSQLViolationException(
-            NullPointerException ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("The data does not exist", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    public ResponseEntity<ErrorResponse> handleSQLViolationException(
+            NullPointerException e) {
+        ErrorResponse error = new ErrorResponse();
+        error.setMessage("Resource id is not found");
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(NumberFormatException.class)
@@ -77,6 +77,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException e) {
+        ErrorResponse error = new ErrorResponse();
+        error.setMessage(e.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFound(IllegalArgumentException e) {
         ErrorResponse error = new ErrorResponse();
         error.setMessage(e.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
