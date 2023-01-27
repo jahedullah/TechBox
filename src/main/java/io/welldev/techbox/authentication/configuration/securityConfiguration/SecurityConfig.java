@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .antMatchers(POST, "/register/admin").hasRole(SUPER_ADMIN.name())
                 .antMatchers(DELETE, "/products/**").hasAuthority(PRODUCT_WRITE.getPermission())
                 .antMatchers(PUT, "/products/**").hasAuthority(PRODUCT_WRITE.getPermission())
+                .antMatchers(PATCH,"/products/**").hasAuthority(PRODUCT_WRITE.getPermission())
                 .antMatchers(POST, "/products/**").hasAuthority(PRODUCT_WRITE.getPermission())
 
 

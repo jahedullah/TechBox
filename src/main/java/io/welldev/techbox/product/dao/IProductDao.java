@@ -21,6 +21,7 @@ public interface IProductDao {
     Product getProduct(int productId);
 
     Product updateProduct(int productId, ProductUpdateRequestDto productUpdateRequestDto);
+    void patchProduct(Product product);
 
     void addUser(Product product, User user);
 

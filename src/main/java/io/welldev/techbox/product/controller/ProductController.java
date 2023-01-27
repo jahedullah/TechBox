@@ -1,20 +1,19 @@
 package io.welldev.techbox.product.controller;
 
 import io.welldev.techbox.exceptionHandler.ResourceNotFoundException;
+import io.welldev.techbox.product.dto.*;
 import io.welldev.techbox.product.service.IProductService;
 import io.welldev.techbox.constant.PRODUCT_URL;
-import io.welldev.techbox.product.dto.ProductDto;
-import io.welldev.techbox.product.dto.ProductRegisterRequestDto;
-import io.welldev.techbox.product.dto.ProductRegisterResponseDto;
-import io.welldev.techbox.product.dto.ProductUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static io.welldev.techbox.constant.MESSAGE.PRODUCT_NOT_FOUND;
 
@@ -57,6 +56,15 @@ public class ProductController {
     updateProduct(@Valid @PathVariable int productId,
                   @Valid @RequestBody ProductUpdateRequestDto productUpdateRequestDto) {
         return Optional.ofNullable(productService.updateProduct(productId, productUpdateRequestDto))
+                .map(productDto -> ResponseEntity.status(HttpStatus.ACCEPTED).body(productDto))
+                .orElseThrow(() -> new ResourceNotFoundException(PRODUCT_NOT_FOUND));
+    }
+
+    @PatchMapping(value = PRODUCT_URL.PRODUCT_UPDATE_BY_ID)
+    public ResponseEntity<ProductDto>
+    patchProduct(@Valid @PathVariable int productId,
+                 @RequestBody ProductPatchRequestDto productPatchRequestDto) {
+        return Optional.ofNullable(productService.patchProduct(productId, productPatchRequestDto))
                 .map(productDto -> ResponseEntity.status(HttpStatus.ACCEPTED).body(productDto))
                 .orElseThrow(() -> new ResourceNotFoundException(PRODUCT_NOT_FOUND));
     }

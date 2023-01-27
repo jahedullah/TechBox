@@ -1,7 +1,6 @@
 package io.welldev.techbox.user.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import io.welldev.techbox.product.entity.Product;
 import io.welldev.techbox.roleAndPermission.AppUserRole;
 import lombok.Getter;
@@ -26,6 +25,7 @@ public class User implements UserDetails {
     private int id;
     private String firstName;
     private String lastName;
+    @Column(unique = true)
     private String email;
     private String password;
     private String mobileNumber;
@@ -53,7 +53,6 @@ public class User implements UserDetails {
     public String getUsername() {
         return email;
     }
-
     @Override
     public boolean isAccountNonExpired() {
         return true;

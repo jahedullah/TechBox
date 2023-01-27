@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
+import java.sql.DataTruncation;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
@@ -95,4 +96,25 @@ public class GlobalExceptionHandler {
         error.setMessage(e.getMessage());
         return error;
     }
+
+    @ExceptionHandler(DataTruncation.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFound(DataTruncation e) {
+        ErrorResponse error = new ErrorResponse();
+        error.setMessage(e.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InputValidationException.class)
+    public ResponseEntity<ErrorResponse> handleInputValidation(InputValidationException e) {
+        ErrorResponse error = new ErrorResponse();
+        error.setMessage(e.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ProductValidationException.class)
+    public ResponseEntity<Object> handleProductValidation(ProductValidationException e){
+        return new ResponseEntity<>(e.getErrors(), HttpStatus.BAD_REQUEST);
+    }
+
+
 }

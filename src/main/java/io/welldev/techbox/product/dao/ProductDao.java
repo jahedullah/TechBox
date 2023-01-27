@@ -43,6 +43,12 @@ public class ProductDao implements IProductDao {
         return productToUpdate;
     }
 
+    @Override
+    public void patchProduct(Product product) {
+        Session session = sessionFactory.getCurrentSession();
+        session.update(product);
+    }
+
 
     @Override
     public Product getProduct(int productId) {
