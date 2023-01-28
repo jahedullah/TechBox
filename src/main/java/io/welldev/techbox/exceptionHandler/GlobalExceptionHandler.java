@@ -6,6 +6,7 @@ import io.jsonwebtoken.security.SignatureException;
 import io.welldev.techbox.exceptionHandler.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -109,6 +110,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ProductValidationException.class)
     public ResponseEntity<Object> handleProductValidation(ProductValidationException e){
         return new ResponseEntity<>(e.getErrors(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException e){
+        ErrorResponse error = new ErrorResponse();
+        error.setMessage(e.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
 

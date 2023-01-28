@@ -1,6 +1,7 @@
 package io.welldev.techbox.authentication.configuration.securityConfiguration;
 
 
+import com.google.common.cache.CacheBuilder;
 import io.welldev.techbox.user.dao.IUserDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.CacheManager;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 @RequiredArgsConstructor
@@ -58,7 +60,8 @@ public class ApplicationConfig {
     @Bean
     public CacheManager cacheManager() {
         SimpleCacheManager cacheManager = new SimpleCacheManager();
-        cacheManager.setCaches(Arrays.asList(new ConcurrentMapCache("jwtBlacklistCache")));
+        cacheManager.setCaches(Arrays.asList(new ConcurrentMapCache("jwtBlacklistCache",
+                CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.HOURS).build().asMap(), false)));
         return cacheManager;
     }
 }

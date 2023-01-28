@@ -5,7 +5,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import io.welldev.techbox.authentication.configuration.jwt.service.JwtService;
 import io.welldev.techbox.exceptionHandler.InvalidJwtAuthenticationException;
-import io.welldev.techbox.exceptionHandler.ResourceNotFoundException;
+import io.welldev.techbox.exceptionHandler.dto.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.MediaType;
@@ -101,16 +101,18 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             new ObjectMapper().writeValue(response.getOutputStream(), error);
 
-        }catch (InvalidJwtAuthenticationException e){
+        } catch (InvalidJwtAuthenticationException | SignatureException e) {
             response.setStatus(UNAUTHORIZED.value());
-            Map<String, String> error = new HashMap<>();
-            error.put("Error Jwt :", e.getMessage());
+            ErrorResponse error = new ErrorResponse();
+            error.setMessage(e.getMessage());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             new ObjectMapper().writeValue(response.getOutputStream(), error);
         }
 
         // pass the response to next filter-chain if there is any to make the api being executed and pass the data.
+
         filterChain.doFilter(request, response);
+
 
     }
 }
