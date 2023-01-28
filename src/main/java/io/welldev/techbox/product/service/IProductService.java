@@ -14,9 +14,9 @@ public interface IProductService {
 
     List<ProductDto> getProductsByVendor(String vendor);
 
-    ProductRegisterResponseDto addProduct(ProductRegisterRequestDto productRegisterRequestDto);
+    ProductRegisterResponseDto addProduct(ProductRequestDto productRegisterRequestDto);
 
-    ProductDto updateProduct(int productId, ProductUpdateRequestDto productUpdateRequestDto);
+    ProductDto updateProduct(int productId, ProductRequestDto productUpdateRequestDto);
     ProductDto patchProduct(int productId, ProductPatchRequestDto productPatchRequestDto);
 
     ProductDto deleteProduct(int productId);

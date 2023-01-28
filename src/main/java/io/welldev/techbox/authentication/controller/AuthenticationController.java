@@ -42,7 +42,7 @@ public class AuthenticationController {
 
     @PostMapping(AUTH_URL.USER_LOGOUT)
     public ResponseEntity<?> logout() {
-         String token = (String) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        String token = (String) SecurityContextHolder.getContext().getAuthentication().getDetails();
         // Remove the token from the cache
         cacheManager.getCache("jwtBlacklistCache").put(token, true);
         return ResponseEntity.ok().build();

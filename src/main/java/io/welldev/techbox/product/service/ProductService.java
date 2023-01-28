@@ -48,7 +48,7 @@ public class ProductService implements IProductService {
 
     @Transactional
     @Override
-    public ProductRegisterResponseDto addProduct(ProductRegisterRequestDto productRegisterRequestDto) {
+    public ProductRegisterResponseDto addProduct(ProductRequestDto productRegisterRequestDto) {
         Product productToCreate = new Product(
                 productRegisterRequestDto.getName(),
                 productRegisterRequestDto.getVendor(),
@@ -65,13 +65,20 @@ public class ProductService implements IProductService {
 
     @Override
     @Transactional
-    public ProductDto updateProduct(int productId, ProductUpdateRequestDto productUpdateRequestDto) {
-        Optional<Product> productToUpdate = Optional.ofNullable(productDao.updateProduct(productId, productUpdateRequestDto));
-        return productToUpdate.map(value -> new ProductDto(
-                value.getId(),
-                value.getName(),
-                value.getVendor(),
-                value.getPrice())).orElse(null);
+    public ProductDto updateProduct(int productId, ProductRequestDto productUpdateRequestDto) {
+        Optional<Product> productToUpdate = Optional.ofNullable(productDao.getProduct(productId));
+        if(!productToUpdate.isPresent()){
+            throw new ResourceNotFoundException(MESSAGE.PRODUCT_NOT_FOUND);
+        }
+        Product product = productToUpdate.get();
+        product.setName(productUpdateRequestDto.getName());
+        product.setVendor(productUpdateRequestDto.getVendor());
+        product.setPrice(productUpdateRequestDto.getPrice());
+        productDao.updateProduct(product);
+        return new ProductDto(product.getId(),
+                product.getName(),
+                product.getVendor(),
+                product.getPrice());
     }
 
     @Override

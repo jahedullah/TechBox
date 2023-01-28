@@ -2,7 +2,7 @@ package io.welldev.techbox.product.dao;
 
 
 import io.welldev.techbox.product.dto.ProductDto;
-import io.welldev.techbox.product.dto.ProductUpdateRequestDto;
+import io.welldev.techbox.product.dto.ProductRequestDto;
 import io.welldev.techbox.product.entity.Product;
 import io.welldev.techbox.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -33,14 +33,10 @@ public class ProductDao implements IProductDao {
     }
 
     //update product
-    public Product updateProduct(int productId, ProductUpdateRequestDto productUpdateRequestDto) {
+    public Product updateProduct(Product product) {
         Session session = sessionFactory.getCurrentSession();
-        Product productToUpdate = session.get(Product.class, productId);
-        productToUpdate.setName(productUpdateRequestDto.getName());
-        productToUpdate.setVendor(productUpdateRequestDto.getVendor());
-        productToUpdate.setPrice(productUpdateRequestDto.getPrice());
-        session.update(productToUpdate);
-        return productToUpdate;
+        session.update(product);
+        return product;
     }
 
     @Override

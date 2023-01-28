@@ -2,7 +2,7 @@ package io.welldev.techbox.product.dao;
 
 
 import io.welldev.techbox.product.dto.ProductDto;
-import io.welldev.techbox.product.dto.ProductUpdateRequestDto;
+import io.welldev.techbox.product.dto.ProductRequestDto;
 import io.welldev.techbox.product.entity.Product;
 import io.welldev.techbox.user.entity.User;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ public interface IProductDao {
 
     Product getProduct(int productId);
 
-    Product updateProduct(int productId, ProductUpdateRequestDto productUpdateRequestDto);
+    Product updateProduct(Product product);
     void patchProduct(Product product);
 
     void addUser(Product product, User user);

@@ -9,11 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static io.welldev.techbox.constant.MESSAGE.PRODUCT_NOT_FOUND;
 
@@ -45,7 +43,7 @@ public class ProductController {
     @PostMapping()
     public ResponseEntity<ProductRegisterResponseDto>
     addProduct(@Valid @RequestBody
-               ProductRegisterRequestDto productRegisterRequestDto) {
+               ProductRequestDto productRegisterRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.addProduct(productRegisterRequestDto));
 
     }
@@ -54,7 +52,7 @@ public class ProductController {
     @PutMapping(value = PRODUCT_URL.PRODUCT_UPDATE_BY_ID)
     public ResponseEntity<ProductDto>
     updateProduct(@Valid @PathVariable int productId,
-                  @Valid @RequestBody ProductUpdateRequestDto productUpdateRequestDto) {
+                  @Valid @RequestBody ProductRequestDto productUpdateRequestDto) {
         return Optional.ofNullable(productService.updateProduct(productId, productUpdateRequestDto))
                 .map(productDto -> ResponseEntity.status(HttpStatus.ACCEPTED).body(productDto))
                 .orElseThrow(() -> new ResourceNotFoundException(PRODUCT_NOT_FOUND));
