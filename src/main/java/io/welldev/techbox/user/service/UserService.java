@@ -100,9 +100,9 @@ public class UserService implements IUserService {
     public ProductDto productAddById(int userId, int productId) {
         User user = userDao.getUser(userId);
         if (user == null) {
-            throw new ResourceNotFoundException(USER_NOT_FOUND);
+            throw new UnauthorizedException(UNAUTHORIZED);
         }
-        if (Objects.equals(userDao.getUser(userId).getEmail(),
+        if (Objects.equals(user.getEmail(),
                 SecurityContextHolder.getContext().getAuthentication().getName())) {
             Product product = productDao.getProduct(productId);
             if (product == null) {
@@ -126,9 +126,9 @@ public class UserService implements IUserService {
     public void productDeleteById(int userId, int productId) {
         User user = userDao.getUser(userId);
         if (user == null) {
-            throw new ResourceNotFoundException(USER_NOT_FOUND);
+            throw new UnauthorizedException(UNAUTHORIZED);
         }
-        if (Objects.equals(userDao.getUser(userId).getEmail(),
+        if (Objects.equals(user.getEmail(),
                 SecurityContextHolder.getContext().getAuthentication().getName())) {
             Set<Product> userProducts = user.getProductList();
             boolean isProductExist = false;
