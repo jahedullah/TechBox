@@ -3,15 +3,19 @@ package io.welldev.techbox.authentication.configuration.securityConfiguration;
 
 import io.welldev.techbox.authentication.configuration.jwt.JwtTokenFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
+import javax.servlet.http.HttpServletResponse;
 
 import static io.welldev.techbox.roleAndPermission.AppUserPermission.PRODUCT_WRITE;
 import static io.welldev.techbox.roleAndPermission.AppUserRole.ADMIN;
@@ -25,6 +29,7 @@ public class SecurityConfig {
 
     private final JwtTokenFilter jwtTokenFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final CacheManager cacheManager;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -54,6 +59,7 @@ public class SecurityConfig {
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
 
 
         http.csrf().disable();

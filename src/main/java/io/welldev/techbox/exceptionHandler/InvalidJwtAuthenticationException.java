@@ -1,6 +1,12 @@
 package io.welldev.techbox.exceptionHandler;
 
-public class InvalidJwtAuthenticationException extends RuntimeException{
+import lombok.Getter;
+
+import javax.security.sasl.AuthenticationException;
+
+@Getter
+public class InvalidJwtAuthenticationException extends AuthenticationException {
+
     public InvalidJwtAuthenticationException(String message){
         super(message);
     }

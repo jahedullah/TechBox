@@ -5,6 +5,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import io.welldev.techbox.authentication.configuration.jwt.service.JwtService;
 import io.welldev.techbox.exceptionHandler.InvalidJwtAuthenticationException;
+import io.welldev.techbox.exceptionHandler.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.MediaType;
@@ -27,6 +28,7 @@ import java.util.Map;
 
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 
 @Component
@@ -99,6 +101,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             new ObjectMapper().writeValue(response.getOutputStream(), error);
 
+        }catch (InvalidJwtAuthenticationException e){
+            response.setStatus(UNAUTHORIZED.value());
+            Map<String, String> error = new HashMap<>();
+            error.put("Error Jwt :", e.getMessage());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            new ObjectMapper().writeValue(response.getOutputStream(), error);
         }
 
         // pass the response to next filter-chain if there is any to make the api being executed and pass the data.

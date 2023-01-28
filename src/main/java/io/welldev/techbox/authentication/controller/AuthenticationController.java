@@ -10,6 +10,7 @@ import io.welldev.techbox.user.dto.UserRegisterRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -39,12 +40,12 @@ public class AuthenticationController {
     }
 
 
-//    @PostMapping(AUTH_URL.USER_LOGOUT)
-//    public ResponseEntity<?> logout() {
-//         String token = (String) SecurityContextHolder.getContext().getAuthentication().getDetails();
-//        // Remove the token from the cache
-//        cacheManager.getCache("jwtBlacklistCache").put(token, true);
-//        return ResponseEntity.ok().build();
-//    }
+    @PostMapping(AUTH_URL.USER_LOGOUT)
+    public ResponseEntity<?> logout() {
+         String token = (String) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        // Remove the token from the cache
+        cacheManager.getCache("jwtBlacklistCache").put(token, true);
+        return ResponseEntity.ok().build();
+    }
 
 }
