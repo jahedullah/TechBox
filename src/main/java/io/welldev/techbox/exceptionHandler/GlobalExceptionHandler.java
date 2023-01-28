@@ -11,6 +11,8 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 
 import java.sql.DataTruncation;
@@ -51,11 +53,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NumberFormatException.class)
-    public ResponseEntity<Map<String, String>> handleNumberFormatException(
-            NumberFormatException ex){
-        Map<String, String> response = new HashMap<>();
-        response.put("Specific Input Format Required", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    public ResponseEntity<ErrorResponse> handleNumberFormatException(
+            NumberFormatException e){
+        ErrorResponse error = new ErrorResponse();
+        error.setMessage("Input format mismatch");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 }
 
 
@@ -117,6 +119,14 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse();
         error.setMessage(e.getMessage());
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+
+    @ExceptionHandler(value = { Exception.class })
+    protected ResponseEntity<ErrorResponse> handleConflict(RuntimeException ex, WebRequest request) {
+        ErrorResponse error = new ErrorResponse();
+        error.setMessage("Bad request");
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
 

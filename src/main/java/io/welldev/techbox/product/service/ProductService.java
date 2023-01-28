@@ -1,7 +1,9 @@
 package io.welldev.techbox.product.service;
 
 
+import io.welldev.techbox.constant.MESSAGE;
 import io.welldev.techbox.exceptionHandler.ProductValidationException;
+import io.welldev.techbox.exceptionHandler.ResourceNotFoundException;
 import io.welldev.techbox.product.dao.IProductDao;
 import io.welldev.techbox.product.dto.*;
 import io.welldev.techbox.product.entity.Product;
@@ -122,6 +124,10 @@ public class ProductService implements IProductService {
     @Override
     @Transactional
     public ProductDto deleteProduct(int productId) {
+        Optional<Product> product = Optional.ofNullable(productDao.getProduct(productId));
+        if(!product.isPresent()) {
+            throw new ResourceNotFoundException(MESSAGE.PRODUCT_NOT_FOUND);
+        }
         Product productToDelete = productDao.deleteProduct(productId);
         return new ProductDto(
                 productToDelete.getId(),
