@@ -45,17 +45,6 @@ public class AuthenticationService implements IAuthenticationService {
                 user.setAppUserRole(AppUserRole.ADMIN);
 
                 break;
-            case "superadmin":
-                user = new User();
-                user.setFirstName(request.getFirstname());
-                user.setLastName(request.getLastname());
-                user.setEmail(request.getEmail());
-                user.setMobileNumber(request.getMobilenumber());
-                user.setPassword(passwordEncoder.encode(request.getPassword()));
-                user.setUserType(request.getUsertype());
-                user.setAppUserRole(AppUserRole.SUPER_ADMIN);
-
-                break;
             default:
                 user = new User();
                 user.setFirstName(request.getFirstname());

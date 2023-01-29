@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.MediaType;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -72,6 +73,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         final String userEmail;
 
         // Checking if the authorizationHeader is empty or holding any token that does not start with Bearer.
+
         if (accessToken == null) {
             // The Request will be rejected.
             filterChain.doFilter(request, response);
@@ -127,6 +129,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             error.setMessage(e.getMessage());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             new ObjectMapper().writeValue(response.getOutputStream(), error);
+
         }
 
         // pass the response to next filter-chain if there is any to make the api being executed and pass the data.

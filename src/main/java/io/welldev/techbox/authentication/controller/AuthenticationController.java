@@ -45,6 +45,7 @@ public class AuthenticationController {
         String token = (String) SecurityContextHolder.getContext().getAuthentication().getDetails();
         // Remove the token from the cache
         cacheManager.getCache("jwtBlacklistCache").put(token, true);
+
         return ResponseEntity.ok().build();
     }
 
