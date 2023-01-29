@@ -44,7 +44,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException, SignatureException {
         // Grabbing the Bearer Token that is tagged as "Authorization" in the Header.
-        final String authHeader = request.getHeader("Authorization");
+        final String authHeader = request.getHeader("Cookie");
         // Cutting the "Bearer Token " String out of the token. Basically storing the actual token.
         final String jwt;
 
@@ -52,7 +52,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         final String userEmail;
 
         // Checking if the authorizationHeader is empty or holding any token that does not start with Bearer.
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer")) {
             // The Request will be rejected.
             filterChain.doFilter(request, response);
             return;

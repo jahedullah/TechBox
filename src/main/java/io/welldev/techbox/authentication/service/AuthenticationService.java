@@ -16,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
@@ -86,7 +87,17 @@ public class AuthenticationService implements IAuthenticationService {
                         request.getPassword()
                 )
         );
-        return jwtService.saveTokenForUser(user);
+        AuthenticationResponseDto authenticationResponseDto = jwtService.saveTokenForUser(user);
+        Cookie jwtCookie = new Cookie("Bearer", authenticationResponseDto.getAccessToken());
+        response.addCookie(jwtCookie);
+        return authenticationResponseDto;
+
+//        String accessToken = authenticationResponseDto.getAccessToken();
+//        String refreshToken = authenticationResponseDto.getRefreshToken();
+//        String tokens = accessToken + ":" + refreshToken;
+//        Cookie cookie = new Cookie("tokens", tokens);
+//        cookie.setMaxAge(60 * 60 * 24); // expires in 24 hours
+//        response.addCookie(cookie);
 
     }
 }

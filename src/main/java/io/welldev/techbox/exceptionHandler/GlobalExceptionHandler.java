@@ -4,6 +4,7 @@ package io.welldev.techbox.exceptionHandler;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import io.welldev.techbox.exceptionHandler.dto.ErrorResponse;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -128,5 +129,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ObjectNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleObjectNotFound(ObjectNotFoundException e){
+        ErrorResponse error = new ErrorResponse();
+        error.setMessage("Resource not found.");
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 
 }
