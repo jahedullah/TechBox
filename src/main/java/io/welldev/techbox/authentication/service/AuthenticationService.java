@@ -88,7 +88,10 @@ public class AuthenticationService implements IAuthenticationService {
                 )
         );
         AuthenticationResponseDto authenticationResponseDto = jwtService.saveTokenForUser(user);
-        Cookie jwtCookie = new Cookie("Bearer", authenticationResponseDto.getAccessToken());
+        String accessToken = authenticationResponseDto.getAccessToken();
+        String refreshToken = authenticationResponseDto.getRefreshToken();
+        String token = accessToken + ":" + refreshToken;
+        Cookie jwtCookie = new Cookie("token", token);
         response.addCookie(jwtCookie);
         return authenticationResponseDto;
 

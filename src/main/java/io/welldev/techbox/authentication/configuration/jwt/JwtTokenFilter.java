@@ -20,9 +20,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,8 +46,25 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException, SignatureException {
-        // Grabbing the Bearer Token that is tagged as "Authorization" in the Header.
-        final String authHeader = request.getHeader("Cookie");
+        Cookie[] cookies = request.getCookies();
+        String token = "";
+        String accessToken = null;
+        String refreshToken = null;
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        if (!token.isEmpty()) {
+            token = URLDecoder.decode(token, StandardCharsets.UTF_8.toString());
+            String[] tokens = token.split(":");
+            accessToken = tokens[0];
+            refreshToken = tokens[1];
+            // do something with the accessToken and refreshToken
+        }
         // Cutting the "Bearer Token " String out of the token. Basically storing the actual token.
         final String jwt;
 
@@ -52,14 +72,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         final String userEmail;
 
         // Checking if the authorizationHeader is empty or holding any token that does not start with Bearer.
-        if (authHeader == null || !authHeader.startsWith("Bearer")) {
+        if (accessToken == null) {
             // The Request will be rejected.
             filterChain.doFilter(request, response);
             return;
         }
         try {
             // Because "Bearer Token " String character counts upto 13. So the real token appears from index 13.
-            jwt = authHeader.substring(7);
+            jwt = accessToken;
             // Check if the token is in the blacklist cache
             if (cacheManager.getCache("jwtBlacklistCache").get(jwt) != null)
                 throw new InvalidJwtAuthenticationException("Token blacklisted");

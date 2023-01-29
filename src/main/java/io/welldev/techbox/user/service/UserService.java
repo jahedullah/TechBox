@@ -151,7 +151,11 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public Set<UserProductDto> productList(int userId) {
-        if (Objects.equals(userDao.getUser(userId).getEmail(),
+        User user = userDao.getUser(userId);
+        if (user == null) {
+            throw new UnauthorizedException(UNAUTHORIZED);
+        }
+        if (Objects.equals(user.getEmail(),
                 SecurityContextHolder.getContext().getAuthentication().getName())) {
             Set<Product> productList = userDao.productList(userDao.getUser(userId));
             Set<UserProductDto> newProductList = new HashSet<>();
@@ -168,7 +172,7 @@ public class UserService implements IUserService {
                     });
             return newProductList;
         } else {
-            return null;
+            throw new UnauthorizedException(UNAUTHORIZED);
         }
     }
 
