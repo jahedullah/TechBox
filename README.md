@@ -1,6 +1,7 @@
 
 
-## TechBox ![DALL·E 2023-01-30 11 59](https://user-images.githubusercontent.com/55769297/215400852-a1e559c0-d186-4c50-905a-5f944a016513.png)
+## TechBox ![2641167](https://user-images.githubusercontent.com/55769297/215401056-a60b6a99-f396-4d0c-817c-4f96f703419f.png)
+
 
 Spring MVC project with JWT based Spring Security. 
 ## Description
