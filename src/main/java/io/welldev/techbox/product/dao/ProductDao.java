@@ -2,7 +2,6 @@ package io.welldev.techbox.product.dao;
 
 
 import io.welldev.techbox.product.dto.ProductDto;
-import io.welldev.techbox.product.dto.ProductRequestDto;
 import io.welldev.techbox.product.entity.Product;
 import io.welldev.techbox.user.entity.User;
 import lombok.RequiredArgsConstructor;

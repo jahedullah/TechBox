@@ -54,22 +54,22 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NumberFormatException.class)
     public ResponseEntity<ErrorResponse> handleNumberFormatException(
-            NumberFormatException e){
+            NumberFormatException e) {
         ErrorResponse error = new ErrorResponse();
         error.setMessage("Input format mismatch");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-}
+    }
 
 
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException e){
+    public ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException e) {
         ErrorResponse error = new ErrorResponse();
         error.setMessage(e.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(SignatureException.class)
-    public ResponseEntity<Map<String, String>> handleSignatureException(SignatureException e){
+    public ResponseEntity<Map<String, String>> handleSignatureException(SignatureException e) {
         Map<String, String> response = new HashMap<>();
         response.put("Error :", e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
@@ -88,6 +88,7 @@ public class GlobalExceptionHandler {
         error.setMessage(e.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler(ExpiredJwtException.class)
     public ErrorResponse handleResourceNotFound(ExpiredJwtException e) {
         ErrorResponse error = new ErrorResponse();
@@ -110,19 +111,19 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ProductValidationException.class)
-    public ResponseEntity<Object> handleProductValidation(ProductValidationException e){
+    public ResponseEntity<Object> handleProductValidation(ProductValidationException e) {
         return new ResponseEntity<>(e.getErrors(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException e){
+    public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException e) {
         ErrorResponse error = new ErrorResponse();
         error.setMessage(e.getMessage());
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
 
-    @ExceptionHandler(value = { Exception.class })
+    @ExceptionHandler(value = {Exception.class})
     protected ResponseEntity<ErrorResponse> handleConflict(RuntimeException ex, WebRequest request) {
         ErrorResponse error = new ErrorResponse();
         error.setMessage("Bad request");
@@ -130,7 +131,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ObjectNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleObjectNotFound(ObjectNotFoundException e){
+    public ResponseEntity<ErrorResponse> handleObjectNotFound(ObjectNotFoundException e) {
         ErrorResponse error = new ErrorResponse();
         error.setMessage("Resource not found.");
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);

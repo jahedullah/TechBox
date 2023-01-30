@@ -63,7 +63,7 @@ public class UserController {
 
 
     @DeleteMapping(value = USER_URL.USER_DELETE_BY_ID)
-    public ResponseEntity<UserDto> deleteUserById(@PathVariable int userId){
+    public ResponseEntity<UserDto> deleteUserById(@PathVariable int userId) {
         Optional<UserDto> userDto = Optional.ofNullable(userService.deleteUserById(userId));
         return userDto.map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));

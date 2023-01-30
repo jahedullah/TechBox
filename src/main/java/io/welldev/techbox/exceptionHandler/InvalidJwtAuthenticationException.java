@@ -7,7 +7,7 @@ import javax.security.sasl.AuthenticationException;
 @Getter
 public class InvalidJwtAuthenticationException extends AuthenticationException {
 
-    public InvalidJwtAuthenticationException(String message){
+    public InvalidJwtAuthenticationException(String message) {
         super(message);
     }
 }

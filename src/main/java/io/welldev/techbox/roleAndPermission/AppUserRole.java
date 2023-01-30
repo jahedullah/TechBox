@@ -11,8 +11,7 @@ import static io.welldev.techbox.roleAndPermission.AppUserPermission.PRODUCT_WRI
 
 public enum AppUserRole {
     USER(Sets.newHashSet(PRODUCT_READ)),
-    ADMIN(Sets.newHashSet(PRODUCT_READ, PRODUCT_WRITE)),
-    SUPER_ADMIN(Sets.newHashSet(PRODUCT_READ, PRODUCT_WRITE));
+    ADMIN(Sets.newHashSet(PRODUCT_READ, PRODUCT_WRITE));
 
 
     private final Set<AppUserPermission> permissions;

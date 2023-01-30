@@ -14,7 +14,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
-
 import static io.welldev.techbox.roleAndPermission.AppUserPermission.PRODUCT_WRITE;
 import static io.welldev.techbox.roleAndPermission.AppUserRole.ADMIN;
 import static io.welldev.techbox.roleAndPermission.AppUserRole.SUPER_ADMIN;
@@ -33,8 +32,8 @@ public class SecurityConfig {
         http
                 .authorizeRequests()
                 .antMatchers(POST, "/login").permitAll()
-                .antMatchers(GET,"/users").permitAll()
-                .antMatchers(POST,"/users").permitAll()
+                .antMatchers(GET, "/users").permitAll()
+                .antMatchers(POST, "/users").permitAll()
                 .antMatchers("/users/{userId}").permitAll()
                 .antMatchers(GET, "/products").permitAll()
                 .antMatchers(GET, "/products/**").permitAll()
@@ -45,7 +44,7 @@ public class SecurityConfig {
                 .antMatchers(POST, "/register/admin").hasRole(SUPER_ADMIN.name())
                 .antMatchers(DELETE, "/products/**").hasAuthority(PRODUCT_WRITE.getPermission())
                 .antMatchers(PUT, "/products/**").hasAuthority(PRODUCT_WRITE.getPermission())
-                .antMatchers(PATCH,"/products/**").hasAuthority(PRODUCT_WRITE.getPermission())
+                .antMatchers(PATCH, "/products/**").hasAuthority(PRODUCT_WRITE.getPermission())
                 .antMatchers(POST, "/products/**").hasAuthority(PRODUCT_WRITE.getPermission())
 
 
@@ -56,7 +55,6 @@ public class SecurityConfig {
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-
 
 
         http.csrf().disable();

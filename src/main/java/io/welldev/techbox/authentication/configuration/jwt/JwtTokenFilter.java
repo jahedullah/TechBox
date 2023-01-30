@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.MediaType;
 
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -50,7 +49,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         Cookie[] cookies = request.getCookies();
         String token = "";
         String accessToken = null;
-        String refreshToken = null;
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
@@ -63,7 +61,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             token = URLDecoder.decode(token, StandardCharsets.UTF_8.toString());
             String[] tokens = token.split(":");
             accessToken = tokens[0];
-            refreshToken = tokens[1];
             // do something with the accessToken and refreshToken
         }
         // Cutting the "Bearer Token " String out of the token. Basically storing the actual token.

@@ -84,12 +84,5 @@ public class AuthenticationService implements IAuthenticationService {
         response.addCookie(jwtCookie);
         return authenticationResponseDto;
 
-//        String accessToken = authenticationResponseDto.getAccessToken();
-//        String refreshToken = authenticationResponseDto.getRefreshToken();
-//        String tokens = accessToken + ":" + refreshToken;
-//        Cookie cookie = new Cookie("tokens", tokens);
-//        cookie.setMaxAge(60 * 60 * 24); // expires in 24 hours
-//        response.addCookie(cookie);
-
     }
 }

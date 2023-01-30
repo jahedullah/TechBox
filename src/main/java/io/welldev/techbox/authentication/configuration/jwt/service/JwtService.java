@@ -10,7 +10,6 @@ import io.welldev.techbox.authentication.configuration.jwt.entity.Jwt;
 import io.welldev.techbox.authentication.dto.AccessTokenDto;
 import io.welldev.techbox.authentication.dto.AuthenticationResponseDto;
 import io.welldev.techbox.authentication.dto.RefreshTokenDto;
-import io.welldev.techbox.exceptionHandler.InvalidJwtAuthenticationException;
 import io.welldev.techbox.user.dao.UserDao;
 import io.welldev.techbox.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +18,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -142,23 +136,20 @@ public class JwtService {
 
     @Transactional
     public AccessTokenDto newAccessToken(RefreshTokenDto refreshTokenDto, HttpServletResponse response) {
-
-            String refreshToken = refreshTokenDto.getRefreshToken();
-
-            String userEmail = jwtDao.getUserEmail(refreshToken);
-            User user = userDao.findByEmail(userEmail);
-            String newAccessToken = generateAccessToken(user);
-            jwtDao.updateAccessTokenForUser(user, newAccessToken);
-
-            Cookie newCookie = new Cookie("token", newAccessToken + ":" + refreshToken);
-            response.addCookie(newCookie);
-            return new AccessTokenDto(
-                    newAccessToken
-            );
-        }
-
-
+        String refreshToken = refreshTokenDto.getRefreshToken();
+        String userEmail = jwtDao.getUserEmail(refreshToken);
+        User user = userDao.findByEmail(userEmail);
+        String newAccessToken = generateAccessToken(user);
+        jwtDao.updateAccessTokenForUser(user, newAccessToken);
+        Cookie newCookie = new Cookie("token", newAccessToken + ":" + refreshToken);
+        response.addCookie(newCookie);
+        return new AccessTokenDto(
+                newAccessToken
+        );
     }
+
+
+}
 
 
 
