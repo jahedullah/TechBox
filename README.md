@@ -1,6 +1,7 @@
 
 
-## TechBox ![2641167](https://user-images.githubusercontent.com/55769297/215401056-a60b6a99-f396-4d0c-817c-4f96f703419f.png)
+## TechBox ![2867321](https://user-images.githubusercontent.com/55769297/215401960-0c0d3fdb-fd25-48d1-8d27-0d1dd7cfe894.png)
+
 
 
 Spring MVC project with JWT based Spring Security. 
