@@ -1,5 +1,6 @@
 
-## TechBox ![DALL·E 2023-01-30 11 59 31 - an illustrated picture of box full of tech products](https://user-images.githubusercontent.com/55769297/215399093-1b9b4d2e-48cb-4a60-b8af-c3d9f44ab33b.png)
+
+## TechBox ![DALL·E 2023-01-30 11 59](https://user-images.githubusercontent.com/55769297/215400852-a1e559c0-d186-4c50-905a-5f944a016513.png)
 
 Spring MVC project with JWT based Spring Security. 
 ## Description
