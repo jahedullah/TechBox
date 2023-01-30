@@ -18,7 +18,7 @@ import static io.welldev.techbox.roleAndPermission.AppUserRole.ADMIN;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity(debug = false)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
