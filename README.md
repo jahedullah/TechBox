@@ -1,6 +1,7 @@
 
 
-## TechBox ![2867321](https://user-images.githubusercontent.com/55769297/215401960-0c0d3fdb-fd25-48d1-8d27-0d1dd7cfe894.png)
+## TechBox ![rsz_12867321](https://user-images.githubusercontent.com/55769297/215489068-4864c201-3c72-4607-afc6-21f55fb85f40.png)
+
 
 
 
