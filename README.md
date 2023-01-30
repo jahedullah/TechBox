@@ -7,4 +7,6 @@ Project TechBox is a cutting-edge e-commerce platform that harnesses the power o
 
 <h2>
 API calls
-  </h2>
+  </h2> 
+  
+  - Show all products
