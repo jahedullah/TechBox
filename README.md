@@ -39,6 +39,6 @@ products](https://user-images.githubusercontent.com/55769297/215487840-e210a19a-
 ![refresh token](https://user-images.githubusercontent.com/55769297/215488460-76a9d70d-0e62-4475-b392-f7138c4ffb99.png)
 
 #Video Link 
-** Hit this link for a detailed Explanation for my project and the code as well.
+** Hit this link for a detailed Explanation for my project and the code as well. Watch the video at 1.75x speed. XD
 - https://www.youtube.com/watch?v=douHirt6wi4
 
