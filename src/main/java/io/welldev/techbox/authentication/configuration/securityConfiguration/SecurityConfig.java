@@ -16,6 +16,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import static io.welldev.techbox.roleAndPermission.AppUserPermission.PRODUCT_WRITE;
 import static io.welldev.techbox.roleAndPermission.AppUserRole.ADMIN;
 import static org.springframework.http.HttpMethod.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity(debug = false)
@@ -28,6 +37,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors()
+                .configurationSource(getCorsConfigurationSource())
+                .and()
+
                 .authorizeRequests()
                 .antMatchers(POST, "/login").permitAll()
                 .antMatchers(GET, "/users").permitAll()
@@ -57,6 +70,22 @@ public class SecurityConfig {
         http.csrf().disable();
 
         return http.build();
+
+
     }
+    public CorsConfigurationSource getCorsConfigurationSource() {
+        return new CorsConfigurationSource() {
+            @Override
+            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                CorsConfiguration config = new CorsConfiguration();
+                config.setAllowedHeaders(Collections.singletonList("*"));
+                config.setAllowedMethods(Collections.singletonList("*"));
+                config.addAllowedOrigin("http://localhost:4200");
+                config.setAllowCredentials(true);
+                return config;
+            }
+        };
+    }
+
 
 }
