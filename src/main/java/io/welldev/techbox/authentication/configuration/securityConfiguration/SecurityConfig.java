@@ -16,14 +16,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import static io.welldev.techbox.roleAndPermission.AppUserPermission.PRODUCT_WRITE;
 import static io.welldev.techbox.roleAndPermission.AppUserRole.ADMIN;
 import static org.springframework.http.HttpMethod.*;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
@@ -49,6 +46,7 @@ public class SecurityConfig {
                 .antMatchers(GET, "/products").permitAll()
                 .antMatchers(GET, "/products/**").permitAll()
                 .antMatchers(PUT, "/refreshtoken").permitAll()
+
 
 
                 .antMatchers(DELETE, "/admin/**").hasAnyRole(ADMIN.name())
