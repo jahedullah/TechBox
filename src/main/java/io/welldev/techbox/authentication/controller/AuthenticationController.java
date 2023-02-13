@@ -5,6 +5,7 @@ import io.welldev.techbox.authentication.dto.AuthenticationRequestDto;
 import io.welldev.techbox.authentication.dto.AuthenticationResponseDto;
 import io.welldev.techbox.authentication.service.IAuthenticationService;
 import io.welldev.techbox.constant.AUTH_URL;
+import io.welldev.techbox.exceptionHandler.UserExistException;
 import io.welldev.techbox.user.dto.UserDto;
 import io.welldev.techbox.user.dto.UserRegisterRequestDto;
 import io.welldev.techbox.user.entity.User;
@@ -35,7 +36,9 @@ public class AuthenticationController {
     public ResponseEntity<UserDto> registerUser(
             @Valid @RequestBody UserRegisterRequestDto request
     ) {
+
         return ResponseEntity.ok(authService.register(request));
+
     }
 
 

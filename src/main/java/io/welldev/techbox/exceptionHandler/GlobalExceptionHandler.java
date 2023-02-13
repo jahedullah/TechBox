@@ -96,6 +96,13 @@ public class GlobalExceptionHandler {
         return error;
     }
 
+    @ExceptionHandler(UserExistException.class)
+    public ResponseEntity<ErrorResponse> handleUserExist(UserExistException e) {
+        ErrorResponse error = new ErrorResponse();
+        error.setMessage(e.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(DataTruncation.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFound(DataTruncation e) {
         ErrorResponse error = new ErrorResponse();

@@ -35,6 +35,7 @@ public class UserDao implements IUserDao {
         return session.get(User.class, userId);
     }
 
+
     @Override
     public User updateUser(int userId, UserUpdateRequestDto userUpdateRequestDto) {
         Session session = sessionFactory.getCurrentSession();

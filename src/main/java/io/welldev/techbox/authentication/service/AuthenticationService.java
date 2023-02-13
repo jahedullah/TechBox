@@ -4,6 +4,7 @@ package io.welldev.techbox.authentication.service;
 import io.welldev.techbox.authentication.configuration.jwt.service.JwtService;
 import io.welldev.techbox.authentication.dto.AuthenticationRequestDto;
 import io.welldev.techbox.authentication.dto.AuthenticationResponseDto;
+import io.welldev.techbox.exceptionHandler.UserExistException;
 import io.welldev.techbox.user.dao.IUserDao;
 import io.welldev.techbox.user.dto.UserDto;
 import io.welldev.techbox.user.dto.UserRegisterRequestDto;
@@ -32,29 +33,34 @@ public class AuthenticationService implements IAuthenticationService {
 
     @Transactional
     public UserDto register(UserRegisterRequestDto request) {
-        User user = null;
-        switch (request.getUsertype()) {
-            case "admin":
-                user = new User();
-                user.setFirstName(request.getFirstname());
-                user.setLastName(request.getLastname());
-                user.setEmail(request.getEmail());
-                user.setMobileNumber(request.getMobilenumber());
-                user.setPassword(passwordEncoder.encode(request.getPassword()));
-                user.setUserType(request.getUsertype());
-                user.setAppUserRole(AppUserRole.ADMIN);
+        User user = userDao.findByEmail(request.getEmail());
+        if(user != null){
+            throw new UserExistException("User with this email already exist.");
+        }else {
 
-                break;
-            default:
-                user = new User();
-                user.setFirstName(request.getFirstname());
-                user.setLastName(request.getLastname());
-                user.setEmail(request.getEmail());
-                user.setMobileNumber(request.getMobilenumber());
-                user.setPassword(passwordEncoder.encode(request.getPassword()));
-                user.setUserType(request.getUsertype());
-                user.setAppUserRole(AppUserRole.USER);
-                break;
+            switch (request.getUsertype()) {
+                case "admin":
+                    user = new User();
+                    user.setFirstName(request.getFirstname());
+                    user.setLastName(request.getLastname());
+                    user.setEmail(request.getEmail());
+                    user.setMobileNumber(request.getMobilenumber());
+                    user.setPassword(passwordEncoder.encode(request.getPassword()));
+                    user.setUserType(request.getUsertype());
+                    user.setAppUserRole(AppUserRole.ADMIN);
+
+                    break;
+                default:
+                    user = new User();
+                    user.setFirstName(request.getFirstname());
+                    user.setLastName(request.getLastname());
+                    user.setEmail(request.getEmail());
+                    user.setMobileNumber(request.getMobilenumber());
+                    user.setPassword(passwordEncoder.encode(request.getPassword()));
+                    user.setUserType(request.getUsertype());
+                    user.setAppUserRole(AppUserRole.USER);
+                    break;
+            }
         }
 
         userDao.save(user);
