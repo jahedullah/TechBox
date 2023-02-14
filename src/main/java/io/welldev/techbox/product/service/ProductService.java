@@ -31,7 +31,8 @@ public class ProductService implements IProductService {
                 value.getId(),
                 value.getName(),
                 value.getVendor(),
-                value.getPrice())).orElse(null);
+                value.getPrice(),
+                value.getImageUrl())).orElse(null);
     }
 
     @Override
@@ -52,13 +53,15 @@ public class ProductService implements IProductService {
         Product productToCreate = new Product(
                 productRegisterRequestDto.getName(),
                 productRegisterRequestDto.getVendor(),
-                productRegisterRequestDto.getPrice());
+                productRegisterRequestDto.getPrice(),
+                productRegisterRequestDto.getImageUrl());
         Product product = productDao.createProduct(productToCreate);
         return new ProductRegisterResponseDto(
                 product.getId(),
                 product.getName(),
                 product.getVendor(),
-                product.getPrice()
+                product.getPrice(),
+                product.getImageUrl()
         );
     }
 
@@ -78,7 +81,8 @@ public class ProductService implements IProductService {
         return new ProductDto(product.getId(),
                 product.getName(),
                 product.getVendor(),
-                product.getPrice());
+                product.getPrice(),
+                product.getImageUrl());
     }
 
     @Override
@@ -120,7 +124,11 @@ public class ProductService implements IProductService {
 
         if (errors.isEmpty()) {
             productDao.patchProduct(product);
-            return new ProductDto(product.getId(), product.getName(), product.getVendor(), product.getPrice());
+            return new ProductDto(product.getId(),
+                    product.getName(),
+                    product.getVendor(),
+                    product.getPrice(),
+                    product.getImageUrl());
         } else {
             throw new ProductValidationException(errors);
         }
@@ -140,7 +148,8 @@ public class ProductService implements IProductService {
                 productToDelete.getId(),
                 productToDelete.getName(),
                 productToDelete.getVendor(),
-                productToDelete.getPrice());
+                productToDelete.getPrice(),
+                productToDelete.getImageUrl());
     }
 
 }

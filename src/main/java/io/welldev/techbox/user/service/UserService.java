@@ -114,7 +114,8 @@ public class UserService implements IUserService {
                     product.getId(),
                     product.getName(),
                     product.getVendor(),
-                    product.getPrice());
+                    product.getPrice(),
+                    product.getImageUrl());
         } else {
             throw new UnauthorizedException(UNAUTHORIZED);
         }
@@ -167,7 +168,8 @@ public class UserService implements IUserService {
                                 tempProduct.getId(),
                                 tempProduct.getName(),
                                 tempProduct.getVendor(),
-                                tempProduct.getPrice());
+                                tempProduct.getPrice(),
+                                tempProduct.getImageUrl());
                         newProductList.add(userProductDto);
                     });
             return newProductList;

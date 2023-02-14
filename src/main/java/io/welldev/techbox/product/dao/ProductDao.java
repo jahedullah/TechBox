@@ -69,7 +69,8 @@ public class ProductDao implements IProductDao {
                             tempProduct.getId(),
                             tempProduct.getName(),
                             tempProduct.getVendor(),
-                            tempProduct.getPrice());
+                            tempProduct.getPrice(),
+                            tempProduct.getImageUrl());
                     newProductList.add(productDto);
                 }
         );
@@ -94,7 +95,8 @@ public class ProductDao implements IProductDao {
                             tempProduct.getId(),
                             tempProduct.getName(),
                             tempProduct.getVendor(),
-                            tempProduct.getPrice());
+                            tempProduct.getPrice(),
+                            tempProduct.getImageUrl());
                     newProductList.add(productDto);
                 }
         );

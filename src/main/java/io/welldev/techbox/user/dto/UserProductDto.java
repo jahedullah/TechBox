@@ -11,5 +11,6 @@ public class UserProductDto {
     private String name;
     private String vendor;
     private double price;
+    private String imageUrl;
 
 }

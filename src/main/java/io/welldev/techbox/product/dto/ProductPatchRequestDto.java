@@ -13,5 +13,6 @@ public class ProductPatchRequestDto {
     private String vendor;
 
     private double price;
+    private String imageUrl;
 
 }

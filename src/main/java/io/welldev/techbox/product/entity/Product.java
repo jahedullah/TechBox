@@ -24,12 +24,15 @@ public class Product {
     private String vendor;
 
     private double price;
+
+    private String imageUrl;
     @ManyToMany(mappedBy = "productList", fetch = FetchType.LAZY)
     private Set<User> userList;
 
-    public Product(String name, String vendor, double price) {
+    public Product(String name, String vendor, double price, String imageUrl) {
         this.name = name;
         this.vendor = vendor;
         this.price = price;
+        this.imageUrl = imageUrl;
     }
 }

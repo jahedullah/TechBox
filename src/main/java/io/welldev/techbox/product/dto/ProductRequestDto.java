@@ -24,4 +24,7 @@ public class ProductRequestDto {
     @Range(min = 1, max = 1000000)
     private double price;
 
+    @NotBlank
+    private String imageUrl;
+
 }
