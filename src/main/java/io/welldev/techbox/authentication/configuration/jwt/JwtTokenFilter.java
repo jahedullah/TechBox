@@ -7,6 +7,7 @@ import io.welldev.techbox.authentication.configuration.jwt.service.JwtService;
 import io.welldev.techbox.exceptionHandler.InvalidJwtAuthenticationException;
 import io.welldev.techbox.exceptionHandler.dto.ErrorResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.MediaType;
 
@@ -108,7 +109,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                     );
 
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
                 }
 
             }
@@ -120,12 +120,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             new ObjectMapper().writeValue(response.getOutputStream(), error);
 
+
         } catch (InvalidJwtAuthenticationException | SignatureException e) {
             response.setStatus(UNAUTHORIZED.value());
             ErrorResponse error = new ErrorResponse();
             error.setMessage(e.getMessage());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             new ObjectMapper().writeValue(response.getOutputStream(), error);
+
 
         }
 

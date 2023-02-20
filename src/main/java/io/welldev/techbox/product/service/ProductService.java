@@ -85,6 +85,56 @@ public class ProductService implements IProductService {
                 product.getImageUrl());
     }
 
+//    @Override
+//    @Transactional
+//    public ProductDto patchProduct(int productId, ProductPatchRequestDto productPatchRequestDto) {
+//        HashMap<String, String> errors = new HashMap<>();
+//        Optional<Product> productToUpdate = Optional.ofNullable(productDao.getProduct(productId));
+//        if (!productToUpdate.isPresent()) {
+//            return null;
+//        }
+//        Product product = productToUpdate.get();
+//
+//        if (productPatchRequestDto.getName() != null) {
+//            int length = productPatchRequestDto.getName().length();
+//            if (length == 0 || length > 40) {
+//                errors.put("name", "product name length must be within 1 and 40 inclusive.");
+//            } else {
+//                product.setName(productPatchRequestDto.getName());
+//            }
+//        }
+//
+//        if (productPatchRequestDto.getVendor() != null) {
+//            int length = productPatchRequestDto.getVendor().length();
+//            if (length == 0 || length > 20) {
+//                errors.put("vendor", "vendor name length must be within 1 and 20 inclusive.");
+//            } else {
+//                product.setVendor(productPatchRequestDto.getVendor());
+//            }
+//        }
+//
+//        if (productPatchRequestDto.getPrice() != 0.0) {
+//            double price = productPatchRequestDto.getPrice();
+//            if (price <= 0 || price >= 1000001) {
+//                errors.put("price", "price limit exceeded.");
+//            } else {
+//                product.setPrice(productPatchRequestDto.getPrice());
+//            }
+//        }
+//
+//        if (errors.isEmpty()) {
+//            productDao.patchProduct(product);
+//            return new ProductDto(product.getId(),
+//                    product.getName(),
+//                    product.getVendor(),
+//                    product.getPrice(),
+//                    product.getImageUrl());
+//        } else {
+//            throw new ProductValidationException(errors);
+//        }
+//    }
+
+
     @Override
     @Transactional
     public ProductDto patchProduct(int productId, ProductPatchRequestDto productPatchRequestDto) {
@@ -95,30 +145,45 @@ public class ProductService implements IProductService {
         }
         Product product = productToUpdate.get();
 
-        if (productPatchRequestDto.getName() != null) {
-            int length = productPatchRequestDto.getName().length();
-            if (length == 0 || length > 40) {
-                errors.put("name", "product name length must be within 1 and 40 inclusive.");
+        String name = productPatchRequestDto.getName();
+        if (name != null && !name.trim().isEmpty()) {
+            int length = name.length();
+            if(length < 1 || length > 40) {
+                errors.put("name", "product name length must be within 3 and 40 inclusive.");
             } else {
-                product.setName(productPatchRequestDto.getName());
+                product.setName(name);
             }
         }
 
-        if (productPatchRequestDto.getVendor() != null) {
-            int length = productPatchRequestDto.getVendor().length();
-            if (length == 0 || length > 20) {
-                errors.put("vendor", "vendor name length must be within 1 and 20 inclusive.");
+
+        String vendor = productPatchRequestDto.getVendor();
+        if (vendor != null && !vendor.trim().isEmpty()) {
+            int length = vendor.length();
+            if (length < 1 || length > 30) {
+                errors.put("vendor", "vendor name length must be within 1 and 30 inclusive.");
             } else {
-                product.setVendor(productPatchRequestDto.getVendor());
+                product.setVendor(vendor);
             }
         }
 
-        if (productPatchRequestDto.getPrice() != 0.0) {
-            double price = productPatchRequestDto.getPrice();
-            if (price <= 0 || price >= 1000001) {
-                errors.put("price", "price limit exceeded.");
+
+        double price = productPatchRequestDto.getPrice();
+        if (price != 0.0) {
+            if (price < 0 || price > 1000000) {
+                errors.put("price", "price must be between 0 and 1,000,000 inclusive.");
             } else {
-                product.setPrice(productPatchRequestDto.getPrice());
+                product.setPrice(price);
+            }
+        }
+
+
+        String imageUrl = productPatchRequestDto.getImageUrl();
+        if (imageUrl != null && !imageUrl.trim().isEmpty()) {
+            int length = imageUrl.length();
+            if (length < 1 || length > 150) {
+                errors.put("imageUrl", "image url length must be within 1 and 150 inclusive.");
+            } else {
+                product.setImageUrl(imageUrl);
             }
         }
 
@@ -133,6 +198,17 @@ public class ProductService implements IProductService {
             throw new ProductValidationException(errors);
         }
     }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

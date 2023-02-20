@@ -25,6 +25,7 @@ public class ProductRequestDto {
     private double price;
 
     @NotBlank
+    @Size(min = 1, max = 150)
     private String imageUrl;
 
 }
