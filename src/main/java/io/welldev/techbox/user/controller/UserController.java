@@ -6,9 +6,7 @@ import io.welldev.techbox.exceptionHandler.ResourceNotFoundException;
 import io.welldev.techbox.product.dto.ProductDto;
 
 import io.welldev.techbox.exceptionHandler.dto.ErrorResponse;
-import io.welldev.techbox.user.dto.UserDto;
-import io.welldev.techbox.user.dto.UserProductDto;
-import io.welldev.techbox.user.dto.UserUpdateRequestDto;
+import io.welldev.techbox.user.dto.*;
 import io.welldev.techbox.user.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +49,14 @@ public class UserController {
                                               @Valid @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
         Optional<UserDto> userDto = Optional.ofNullable(userService.updateUser(userId, userUpdateRequestDto));
         return userDto.map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+    }
+
+    @PutMapping(value = USER_URL.USER_PASSWORD_CHANGE)
+    public ResponseEntity<UserPassChangeResponseDto> updateUserPassword(@Valid @PathVariable int userId,
+                                                      @Valid @RequestBody UserPassChangeRequestDto userPassChangeRequestDto){
+        Optional<UserPassChangeResponseDto> userPassChangeResponseDto = Optional.ofNullable(userService.updateUserPassword(userId, userPassChangeRequestDto));
+        return userPassChangeResponseDto.map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
     }
 

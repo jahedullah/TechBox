@@ -6,5 +6,9 @@ public class MESSAGE {
     public static final String USERS_PRODUCT_NOT_FOUND = "product not found users product wishlist";
     public static final String UNAUTHORIZED = "you are not authorized for this operation";
 
+    public static final String INVALID_OLD_PASSWORD = "old password does not match.";
+    public static final String INVALID_NEW_PASSWORD = "new password does not match.";
+
+
 
 }

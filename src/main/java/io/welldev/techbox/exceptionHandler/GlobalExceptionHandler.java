@@ -82,6 +82,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<ErrorResponse> handlePasswordError(InvalidPasswordException e) {
+        ErrorResponse error = new ErrorResponse();
+        error.setMessage(e.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFound(IllegalArgumentException e) {
         ErrorResponse error = new ErrorResponse();

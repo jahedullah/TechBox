@@ -32,6 +32,8 @@ public class UserRegisterRequestDto {
                     "At least one lower case English letter, " +
                     "At least one digit, At least one special character," +
                     "Minimum eight in length.")
+
+    @Size(max = 30, message = "new password size should be less then 30.")
     private String password;
 
     @Pattern(regexp = "^0[0-9]{10}$",
