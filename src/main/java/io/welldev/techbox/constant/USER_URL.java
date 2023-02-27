@@ -9,5 +9,6 @@ public class USER_URL {
     public static final String USER_PRODUCT_DELETE_BY_ID = "/users/{userId}/products/{productId}";
     public static final String USER_ADD_PRODUCT_WITH_ID = "/users/{userId}/products/{productId}";
     public static final String USER_PASSWORD_CHANGE = "/users/{userId}/password";
+    public static final String USER_FORGOT_PASSWORD = "/users/forgot-password";
 
 }
