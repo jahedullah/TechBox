@@ -43,7 +43,6 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(POST, "/login").permitAll()
                 .antMatchers(GET, "/users").permitAll()
-                .antMatchers(POST, "/users").permitAll()
                 .antMatchers("/users/{userId}").permitAll()
                 .antMatchers(GET, "/products").permitAll()
                 .antMatchers(GET, "/products/**").permitAll()
