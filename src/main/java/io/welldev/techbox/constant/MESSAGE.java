@@ -1,6 +1,7 @@
 package io.welldev.techbox.constant;
 
 public class MESSAGE {
+    public static final String USER_NOT_FOUND_WITH_EMAIL = "no user registered with this email";
     public static final String USER_NOT_FOUND = "user not found";
     public static final String PRODUCT_NOT_FOUND = "product not found";
     public static final String USERS_PRODUCT_NOT_FOUND = "product not found users product wishlist";

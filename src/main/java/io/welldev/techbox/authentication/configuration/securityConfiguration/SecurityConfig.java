@@ -41,6 +41,7 @@ public class SecurityConfig {
                 .and()
 
                 .authorizeRequests()
+                .antMatchers(POST, "/otp/**").permitAll()
                 .antMatchers(POST, "/login").permitAll()
                 .antMatchers(GET, "/users").permitAll()
                 .antMatchers("/users/{userId}").permitAll()

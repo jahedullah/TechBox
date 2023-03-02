@@ -1,6 +1,7 @@
 package io.welldev.techbox.authentication.configuration.securityConfiguration;
 
 import io.welldev.techbox.authentication.configuration.jwt.entity.Jwt;
+import io.welldev.techbox.authentication.configuration.otp.entity.Otp;
 import io.welldev.techbox.product.entity.Product;
 import io.welldev.techbox.user.entity.User;
 import org.hibernate.SessionFactory;
@@ -31,7 +32,7 @@ public class HibernateConfig {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setHibernateProperties(hibernateProperties());
-        sessionFactory.setAnnotatedClasses(Product.class, User.class, Jwt.class);
+        sessionFactory.setAnnotatedClasses(Product.class, User.class, Jwt.class, Otp.class);
         return sessionFactory;
     }
 
