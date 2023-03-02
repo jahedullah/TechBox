@@ -32,7 +32,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 
@@ -54,24 +53,18 @@ public class JwtTokenFilter extends OncePerRequestFilter {
       if(!ignoredPaths.contains(servletPath)) {
 
         Cookie[] cookies = request.getCookies();
-        String token = "";
         String accessToken = null;
         if (cookies != null) {
           for (Cookie cookie : cookies) {
             if (cookie.getName()
-                .equals("token"))
+                .equals("accessToken"))
             {
-              token = cookie.getValue();
+              accessToken = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8.toString());
               break;
             }
           }
         }
-        if (!token.isEmpty()) {
-          token = URLDecoder.decode(token, StandardCharsets.UTF_8.toString());
-          String[] tokens = token.split(":");
-          accessToken = tokens[0];
-          // do something with the accessToken and refreshToken
-        }
+
         // Cutting the "Bearer Token " String out of the token. Basically storing the actual token.
         final String jwt;
 
@@ -116,7 +109,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
         catch (ExpiredJwtException ex) {
           response.setHeader("error", ex.getMessage());
-          response.setStatus(FORBIDDEN.value());
+          response.setStatus(UNAUTHORIZED.value());
           Map<String, String> error = new HashMap<>();
           error.put("ERROR MESSAGE", ex.getMessage());
           response.setContentType(MediaType.APPLICATION_JSON_VALUE);
