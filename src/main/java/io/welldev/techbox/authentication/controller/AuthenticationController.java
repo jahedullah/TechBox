@@ -57,6 +57,7 @@ public class AuthenticationController {
         return ResponseEntity.ok().build();
     }
 
+
     @GetMapping(AUTH_URL.CURRENT_USER)
     public UserDto getCurrentUser(Principal principal){
         Optional<User> user = Optional.ofNullable((User) userDetailsService.loadUserByUsername(principal.getName()));

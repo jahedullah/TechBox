@@ -5,5 +5,7 @@ public class AUTH_URL {
     public static final String USER_REGISTRATION = "/users";
     public static final String USER_LOGOUT = "/user/logout";
 
+    public static final String TEST_LOGOUT = "/logout";
+
     public static final String CURRENT_USER = "/current-user";
 }

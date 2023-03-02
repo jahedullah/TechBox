@@ -6,15 +6,17 @@ import io.welldev.techbox.exceptionHandler.ResourceNotFoundException;
 import io.welldev.techbox.product.dto.ProductDto;
 
 import io.welldev.techbox.exceptionHandler.dto.ErrorResponse;
-import io.welldev.techbox.user.dto.UserDto;
-import io.welldev.techbox.user.dto.UserProductDto;
-import io.welldev.techbox.user.dto.UserUpdateRequestDto;
+import io.welldev.techbox.user.dto.*;
+import io.welldev.techbox.user.entity.User;
+import io.welldev.techbox.user.service.EmailSenderService;
 import io.welldev.techbox.user.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -30,6 +32,8 @@ public class UserController {
 
 
     private final IUserService userService;
+    private final EmailSenderService emailSenderService;
+    private final UserDetailsService userDetailsService;
 
     @GetMapping("/users")
     public ResponseEntity<List<UserDto>> getUserList() {
@@ -51,6 +55,14 @@ public class UserController {
                                               @Valid @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
         Optional<UserDto> userDto = Optional.ofNullable(userService.updateUser(userId, userUpdateRequestDto));
         return userDto.map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+    }
+
+    @PutMapping(value = USER_URL.USER_PASSWORD_CHANGE)
+    public ResponseEntity<UserPassChangeResponseDto> updateUserPassword(@Valid @PathVariable int userId,
+                                                      @Valid @RequestBody UserPassChangeRequestDto userPassChangeRequestDto){
+        Optional<UserPassChangeResponseDto> userPassChangeResponseDto = Optional.ofNullable(userService.updateUserPassword(userId, userPassChangeRequestDto));
+        return userPassChangeResponseDto.map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
     }
 
@@ -83,6 +95,13 @@ public class UserController {
     public ResponseEntity<ProductDto> addProduct(@PathVariable int productId, @PathVariable int userId) {
         ProductDto productDto = userService.productAddById(userId, productId);
         return new ResponseEntity<>(productDto, OK);
+    }
+
+    @GetMapping(USER_URL.USER_FORGOT_PASSWORD)
+    public ResponseEntity<?> forgotPassword(Principal principal){
+        User user = (User) userDetailsService.loadUserByUsername(principal.getName());
+        emailSenderService.sendEmail(user.getEmail(), "Khub Dushtumi korcho kintu", "Someone is watching you");
+        return new ResponseEntity<>("Mail Sent Successfully", OK);
     }
 
 }

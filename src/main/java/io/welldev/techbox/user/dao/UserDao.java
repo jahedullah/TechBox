@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -46,6 +47,15 @@ public class UserDao implements IUserDao {
         userToUpdate.setMobileNumber(userUpdateRequestDto.getMobileNumber());
         session.update(userToUpdate);
         return userToUpdate;
+    }
+
+    @Override
+    public void updateUserPassword(int userId, String newPassword) {
+        Session session = sessionFactory.getCurrentSession();
+        User userToUpdate = session.get(User.class, userId);
+        userToUpdate.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+        session.update(userToUpdate);
+
     }
 
     @Override

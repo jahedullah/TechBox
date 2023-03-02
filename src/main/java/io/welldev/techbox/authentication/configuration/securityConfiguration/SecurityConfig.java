@@ -16,6 +16,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import static io.welldev.techbox.roleAndPermission.AppUserPermission.PRODUCT_WRITE;
 import static io.welldev.techbox.roleAndPermission.AppUserRole.ADMIN;
 import static org.springframework.http.HttpMethod.*;
+
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -41,7 +43,6 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(POST, "/login").permitAll()
                 .antMatchers(GET, "/users").permitAll()
-                .antMatchers(POST, "/users").permitAll()
                 .antMatchers("/users/{userId}").permitAll()
                 .antMatchers(GET, "/products").permitAll()
                 .antMatchers(GET, "/products/**").permitAll()
@@ -71,6 +72,7 @@ public class SecurityConfig {
 
 
     }
+
     public CorsConfigurationSource getCorsConfigurationSource() {
         return new CorsConfigurationSource() {
             @Override

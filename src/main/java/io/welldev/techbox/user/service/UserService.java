@@ -1,18 +1,18 @@
 package io.welldev.techbox.user.service;
 
+import io.welldev.techbox.exceptionHandler.InvalidPasswordException;
 import io.welldev.techbox.exceptionHandler.ResourceNotFoundException;
 import io.welldev.techbox.exceptionHandler.UnauthorizedException;
 import io.welldev.techbox.product.dao.IProductDao;
 import io.welldev.techbox.product.dto.ProductDto;
 import io.welldev.techbox.product.entity.Product;
 import io.welldev.techbox.user.dao.IUserDao;
-import io.welldev.techbox.user.dto.UserDto;
-import io.welldev.techbox.user.dto.UserProductDto;
-import io.welldev.techbox.user.dto.UserUpdateRequestDto;
+import io.welldev.techbox.user.dto.*;
 import io.welldev.techbox.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -92,6 +92,34 @@ public class UserService implements IUserService {
         } else {
             throw new UnauthorizedException(UNAUTHORIZED);
         }
+    }
+
+    @Override
+    @Transactional
+    public UserPassChangeResponseDto updateUserPassword(int userId, UserPassChangeRequestDto userPassChangeRequestDto) {
+        User user = userDao.getUser(userId);
+        if (user == null) {
+            return null;
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (Objects.equals(user.getEmail(), authentication.getName())) {
+
+            if(new BCryptPasswordEncoder().matches(userPassChangeRequestDto.getOldPassWord(), user.getPassword())) {
+                if (userPassChangeRequestDto.getNewPassWord().equals(userPassChangeRequestDto.getConfirmPassWord())) {
+                    userDao.updateUserPassword(userId, userPassChangeRequestDto.getNewPassWord());
+                } else {
+                    throw new InvalidPasswordException(INVALID_NEW_PASSWORD);
+                }
+            }else {
+                throw new InvalidPasswordException(INVALID_OLD_PASSWORD);
+            }
+            return new UserPassChangeResponseDto(
+                    userPassChangeRequestDto.getOldPassWord(),
+                    userPassChangeRequestDto.getNewPassWord());
+        } else {
+            throw new UnauthorizedException(UNAUTHORIZED);
+        }
+
     }
 
 
