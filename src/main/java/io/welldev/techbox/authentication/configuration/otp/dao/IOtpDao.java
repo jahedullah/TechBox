@@ -4,11 +4,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import io.welldev.techbox.authentication.configuration.otp.entity.Otp;
+import io.welldev.techbox.user.dao.UserDao;
 import io.welldev.techbox.user.entity.User;
 import lombok.RequiredArgsConstructor;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Repository;
 public class IOtpDao implements OtpDao{
 
   private final SessionFactory sessionFactory;
+  private final UserDao userDao;
 
   @Override
   public void saveOtpForUser(User user, String otpValue, LocalDateTime expiryTime) {
@@ -28,13 +31,22 @@ public class IOtpDao implements OtpDao{
   }
 
   @Override
+  public Otp getOtpRow(String otpValue) {
+    Session session = sessionFactory.getCurrentSession();
+    String hql = "FROM Otp WHERE otpValue = :otpValue";
+    Query<Otp> query = session.createQuery(hql);
+    query.setParameter("otpValue", otpValue);
+    return query.uniqueResult();
+  }
+
+  @Override
   public void deleteOtpForUser(Otp otp) {
 
   }
 
   @Override
-  public Otp findByUserId(Long userId) {
-    return null;
+  public User findByUserId(int userId) {
+    return userDao.getUser(userId);
   }
 
   @Override

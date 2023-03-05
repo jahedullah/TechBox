@@ -6,6 +6,7 @@ import io.welldev.techbox.authentication.configuration.otp.dto.OtpGenerateReques
 
 public interface OtpService {
   void generateOtp(OtpGenerateRequest otpGenerateRequest, int length);
-  boolean validateOtp(String otpValue);
+  boolean verifyOtp(String otpValue);
   LocalDateTime generateExpiryTime(int minutes);
+  boolean isTimeExpired(LocalDateTime time);
 }

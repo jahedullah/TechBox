@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 
 import io.welldev.techbox.authentication.configuration.otp.dao.OtpDao;
 import io.welldev.techbox.authentication.configuration.otp.dto.OtpGenerateRequest;
+import io.welldev.techbox.authentication.configuration.otp.entity.Otp;
 import io.welldev.techbox.constant.MESSAGE;
 import io.welldev.techbox.exceptionHandler.UserExistException;
 import io.welldev.techbox.user.dao.UserDao;
@@ -49,7 +50,21 @@ public class IOtpService implements OtpService{
 
   @Transactional
   @Override
-  public boolean validateOtp(String otpValue) {
+  public boolean verifyOtp(String otpValue) {
+    Optional<Otp> otp = Optional.ofNullable(otpDao.getOtpRow(otpValue));
+    if(otp.isPresent() && isTimeExpired(otp.get()
+          .getExpiryTime())){
+      Optional<User> user = Optional.of(userDao.getUser(otp.get().getUser().getId()));
+      if(user.isPresent()) {
+        emailSenderService.sendEmail(user.get().getEmail(), "TechBox", "Your Password : " + user.get().getPassword());
+        return true;
+      }
+      return false;
+
+    }
+
+
+
     return false;
   }
 
@@ -57,5 +72,11 @@ public class IOtpService implements OtpService{
   @Override
   public LocalDateTime generateExpiryTime(int minutes) {
     return LocalDateTime.now().plus(minutes, ChronoUnit.MINUTES);
+  }
+
+  @Override
+  public boolean isTimeExpired(LocalDateTime time) {
+    LocalDateTime currentTime = LocalDateTime.now();
+    return currentTime.isBefore(time);
   }
 }
